@@ -1,12 +1,12 @@
 {
     "name": "@youwol/flux-arch",
-    "version": "0.0.0-next",
+    "version": "0.0.0-next", 
     "description": "Collection of modules for geo-mechanical analysis using 3D Displacement Discontinuity Method (DDM)",
     "author": "",
     "keywords": [
         "flux"
     ],
-    "main": "dist/flux-arch.js",
+    "main": "dist/@youwol/flux-arch.js",
     "types": "src/index.ts",
     "scripts": {
         "autogen": "node scripts/auto-gen.js",
@@ -79,7 +79,7 @@
         "type": "flux-pack",
         "pipeline": {
             "name": "yw_pipeline_flux_pack",
-            "version": "0.0.0"
+            "version": "0.0.0" 
         },
         "cdnDependencies": {
             "@youwol/flux-core": "0.x",
@@ -93,8 +93,8 @@
             "@youwol/flux-dataframe": "0.x",
             "@youwol/dataframe": "0.x",
             "@youwol/flux-kepler": "0.x",
+            "@youwol/flux-three": "0.x",
             "three": "0.128.0",
-            "flux-three": "0.x",
             "three-trackballcontrols": "0.0.8",
             "@youwol/kepler": "0.x"
         }
