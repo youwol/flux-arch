@@ -4,43 +4,44 @@ import { Flux, BuilderView, Schema, Property } from '@youwol/flux-core'
 import { ConstraintBase } from './constraint-base.module'
 import { ArcheFacade } from './arche.facades';
 
-export namespace ConstraintCoulomb {
-    
+
+export namespace ModuleConstraintCoulomb {    
     
     @Schema({
-        pack: pack,
-        description: "Persistent Data of ConstraintCoulomb"
+        pack
     })
     export class PersistentData {
 
         @Property({description:""})
-        friction: number
+        friction: number = 0
 
         @Property({description:""})
-        cohesion: number
-
+        cohesion: number = 0
 
         @Property({description:""})
-        emitInitialValue: boolean
+        emitInitialValue: boolean = true
 
-        constructor({friction, cohesion, emitInitialValue} : 
-                    {friction?:number, cohesion?:number,  emitInitialValue?:boolean } = {}) {
-
-            this.friction = friction !=undefined? friction : 0
-            this.cohesion = cohesion !=undefined? cohesion : 0
-            this.emitInitialValue = emitInitialValue!=undefined ? emitInitialValue : true            
+        constructor(params : {
+            friction?:number, 
+            cohesion?:number,  
+            emitInitialValue?:boolean 
+        } = {}) {
+            Object.assign(this, params)
         }
     }
 
     @Flux({
         pack: pack,
-        namespace: ConstraintCoulomb,
-        id: "ConstraintCoulomb",
-        displayName: "ConstraintCoulomb",
-        description: "Coulomb type of surface's constraint"
+        namespace: ModuleConstraintCoulomb,
+        id: "ModuleConstraintCoulomb",
+        displayName: "Coulomb",
+        description: "Coulomb type of surface's constraint",
+        resources: {
+            'technical doc': `${pack.urlCDN}/dist/docs/modules/lib_constraint_coulomb_module.constraintcoulomb.html`
+        }
     })
     @BuilderView({
-        namespace: ConstraintCoulomb,
+        namespace: ModuleConstraintCoulomb,
         icon: ConstraintBase.svgIcon
     })
     export class Module extends ConstraintBase.Module<PersistentData> {

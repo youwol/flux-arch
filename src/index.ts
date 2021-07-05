@@ -3,4 +3,5 @@
  */
 export * from './lib/main';
 export * from './lib/boundary-condition.module'
+export * from './lib/constraint-coulomb.module'
 export * from './lib/constraint-coulomb-ortho.module'
