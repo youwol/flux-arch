@@ -1,0 +1,291 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@youwol/flux-arch</title>
+	<meta name="description" content="Documentation for @youwol/flux-arch">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@youwol/flux-arch</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>@youwol/flux-arch</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#flux-arch" id="flux-arch" style="color: inherit; text-decoration: none;">
+					<h1>flux-arch</h1>
+				</a>
+				<p>Collection of modules for geo-mechanical analysis using 3D Displacement Discontinuity Method (DDM)</p>
+				<a href="#installation-build-amp-test" id="installation-build-amp-test" style="color: inherit; text-decoration: none;">
+					<h2>Installation, Build &amp; Test</h2>
+				</a>
+				<p>To install the required dependencies:</p>
+				<pre><code class="language-shell"><span style="color: #000000">yarn </span>
+</code></pre>
+				<p>To build for development:</p>
+				<pre><code class="language-shell"><span style="color: #000000">yarn build:dev</span>
+</code></pre>
+				<p>To build for production:</p>
+				<pre><code class="language-shell"><span style="color: #000000">yarn build:prod</span>
+</code></pre>
+				<p>To test:</p>
+				<pre><code class="language-shell"><span style="color: #000000">yarn </span><span style="color: #795E26">test</span>
+</code></pre>
+				<p>To generate code documentation:</p>
+				<pre><code class="language-shell"><span style="color: #000000">yarn doc</span>
+</code></pre>
+				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+					<h2>Documentation</h2>
+				</a>
+				<p>You can find the documentation <a href="https://youwol.github.io/$flux-arch/dist/docs/index.html">here</a>.</p>
+				<a href="#contributions" id="contributions" style="color: inherit; text-decoration: none;">
+					<h2>Contributions</h2>
+				</a>
+				<p>The YouWol project is open-source as much as possible,
+				do not hesitate to contribute by creating branches and pull-requests.</p>
+				<blockquote>
+					<p>The <a href="https://pypi.org/project/youwol/">Youwol fullstack environment</a> (YouWol FSE) should be used when developing
+						<em>flux-pack</em>. It offers an immersive experience of the YouWol ecosystem, and lets
+						you work with your favorite stack. Usually you&#39;ve accessed this file using it anyway.
+					All the links in what follows assumed you&#39;ve started this environment.</p>
+				</blockquote>
+				<a href="#fetching-the-code" id="fetching-the-code" style="color: inherit; text-decoration: none;">
+					<h3>Fetching the code</h3>
+				</a>
+				<p>Create a branch and includes the github folder
+					into your workspace (as defined in your YouWol FSE&#39;s configuration file, under
+					category &#39;flux-pack&#39;). Reload the <a href="/ui/dashboard-developer/">dashboard</a>,
+				the package should now be listed (<em>My Computer=&gt;Packages</em>).</p>
+				<a href="#using-modules-in-a-flux-app" id="using-modules-in-a-flux-app" style="color: inherit; text-decoration: none;">
+					<h3>Using modules in a <em>flux-app</em></h3>
+				</a>
+				<p><em>build, test &amp; publish</em> the package from the <a href="/ui/dashboard-developer/">dashboard</a>.</p>
+				<p>Start by creating a new <em>flux-app</em>:</p>
+				<ul>
+					<li>   short version: follow <a href="/ui/flux-builder/?uri=%7B%22name%22%3A%22new%20flux-project%22%2C%22description%22%3A%22%22%2C%22runnerRendering%22%3A%7B%22layout%22%3A%22%22%2C%22style%22%3A%22%22%7D%2C%22builderRendering%22%3A%7B%22descriptionsBoxes%22%3A%5B%5D%2C%22modulesView%22%3A%5B%5D%2C%22connectionsView%22%3A%5B%5D%7D%2C%22requirements%22%3A%7B%22fluxComponents%22%3A%5B%5D%2C%22fluxPacks%22%3A%5B%5D%2C%22libraries%22%3A%7B%7D%2C%22loadingGraph%22%3A%7B%22graphType%22%3A%22sequential-v1%22%2C%22lock%22%3A%5B%5D%2C%22definition%22%3A%5B%5B%5D%5D%7D%7D%2C%22workflow%22%3A%7B%22modules%22%3A%5B%5D%2C%22connections%22%3A%5B%5D%2C%22plugins%22%3A%5B%5D%2C%22rootLayerTree%22%3A%7B%22layerId%22%3A%22rootLayer%22%2C%22moduleIds%22%3A%5B%5D%2C%22title%22%3A%22rootLayer%22%2C%22children%22%3A%5B%5D%7D%7D%7D">this link</a>, you won&#39;t be able to save your changes</li>
+					<li>  long version: from the <a href="/ui/workspace-explorer/">workspace</a>, navigate in the explorer into your <strong>private</strong> group,
+						eventually create a drive and a folder, and with a right click select <strong>new app</strong>. You can now start its construction (click
+					on <strong>construct</strong> after having selected it in your workspace).</li>
+				</ul>
+				<p>Once opened, in the top <em>builder-panel</em>:</p>
+				<ul>
+					<li>   right click + &#39;new module(s)&#39;</li>
+					<li>   expand the &#39;explorer node&#39;</li>
+					<li>   navigate to <strong>private</strong> / <strong>default-drive</strong> / <strong>{name}</strong></li>
+					<li>   select module(s) and validate</li>
+				</ul>
+				<a href="#implementing-new-features" id="implementing-new-features" style="color: inherit; text-decoration: none;">
+					<h3>Implementing new features</h3>
+				</a>
+				<p>You can start iterate in the code, <em>build, test &amp; publish</em> each time
+				you want to test your features in Flux. </p>
+				<p>Documentation about designing modules in Flux can be found in the
+				<a href="/api/assets-gateway/raw/package/QHlvdXdvbC9mbHV4LWNvcmU=/latest/dist/docs/modules/core_concepts.html">flux-core documentation</a>.</p>
+				<a href="#version-management" id="version-management" style="color: inherit; text-decoration: none;">
+					<h3>Version management</h3>
+				</a>
+				<p>In order to conveniently work within YouWol&#39;s environment, the following
+				approach regarding versioning is recommended:</p>
+				<ul>
+					<li>when you start a new version of your package (e.g. from a version <em>0.1.2</em>)
+						you append a <em>-next</em> to the version you&#39;ve started from (e.g. <em>0.1.2-next</em>).
+					Among other things, it will ensure that your browser won&#39;t cache your source code.</li>
+					<li>when iterating over the same version, just keep the <em>-next</em> and publish to the CDN
+					whenever you want to try your modules in Flux.</li>
+					<li>when you want to finalize a version: (i) pick the right version number
+						(e.g. <em>0.1.3</em>, <em>0.2.0</em>, etc ), (ii) go through &#39;build/test/publish CDN&#39;,
+					and (iii) eventually publish your package in a npm repository.</li>
+				</ul>
+				<blockquote>
+					<p>The CDN is accepting to override previous publish version, this
+						is how the <em>-next</em> trick is working and allows for a smooth integrated
+						experience. However, when a finalized version of your package is published
+						(with no <em>-next</em> suffix), it is strongly recommended to not update the
+					CDN content of your package anymore for this version.</p>
+				</blockquote>
+				<blockquote>
+					<p>If you plan to share your package, you&#39;ll need to publish it in a npm repository.
+						For public or private needs, the choice of this repository is yours.
+						For more advanced permission resolution related to YouWol&#39;s group, you&#39;ll need to use your
+					YouWol&#39;s GitLab environment (not available yet).</p>
+				</blockquote>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/auto_generated.html">auto_<wbr>generated</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_arche_facades.html">lib/arche.facades</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_boundary_condition_module.html">lib/boundary-<wbr>condition.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_constraint_base_module.html">lib/constraint-<wbr>base.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_constraint_coulomb_ortho_module.html">lib/constraint-<wbr>coulomb-<wbr>ortho.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_constraint_coulomb_module.html">lib/constraint-<wbr>coulomb.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_constraint_displacement_norm_module.html">lib/constraint-<wbr>displacement-<wbr>norm.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_constraint_displacement_module.html">lib/constraint-<wbr>displacement.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_implementation_arche_builders.html">lib/implementation/arche-<wbr>builders</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_implementation_arche_state.html">lib/implementation/arche.state</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_implementation_data.html">lib/implementation/data</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_implementation_local_environment.html">lib/implementation/local-<wbr>environment</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_implementation_serialization.html">lib/implementation/serialization</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_implementation_tree_nodes.html">lib/implementation/tree-<wbr>nodes</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_implementation_utils.html">lib/implementation/utils</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_implementation_visu3d_state.html">lib/implementation/visu3d.state</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_local_environment_module.html">lib/local-<wbr>environment.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_main.html">lib/main</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_material_module.html">lib/material.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_project_mgr_module.html">lib/project-<wbr>mgr.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_project_view_module.html">lib/project-<wbr>view.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_remote_andersonian_module.html">lib/remote-<wbr>andersonian.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_resolver_module.html">lib/resolver.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_solver_module.html">lib/solver.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_surface_builder_module.html">lib/surface-<wbr>builder.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_types_arche.html">lib/types.arche</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_views_tree_elements_view.html">lib/views/tree-<wbr>elements.view</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_workflow_manager_module.html">lib/workflow-<wbr>manager.module</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_workflow_step_plugin.html">lib/workflow-<wbr>step.plugin</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
