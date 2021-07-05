@@ -4,45 +4,41 @@ import { Flux, BuilderView, Schema, Property } from '@youwol/flux-core'
 import { ConstraintBase } from './constraint-base.module'
 import { ArcheFacade } from './arche.facades';
 
-export namespace ConstraintCoulombOrtho {
+export namespace ModuleConstraintCoulombOrtho {
     
     @Schema({
-        pack: pack,
-        description: "Persistent Data of ConstraintCoulombOrtho"
+        pack: pack
     })
     export class PersistentData {
 
         @Property({description:""})
-        theta: number
+        theta: number = 0
 
         @Property({description:""})
-        frictionDip: number
+        frictionDip: number = 0
 
         @Property({description:""})
-        frictionStrike: number
+        frictionStrike: number = 0
         
         @Property({description:""})
-        emitInitialValue: boolean
+        emitInitialValue: boolean = true
 
-        constructor({theta, frictionDip, frictionStrike, emitInitialValue} : 
+        constructor( params: 
                     {theta?: number, frictionDip?:number,  frictionStrike?:number, emitInitialValue?:boolean } = {}) {
 
-            this.theta = theta !=undefined? theta : 0
-            this.frictionDip = frictionDip !=undefined ? frictionDip : 0
-            this.frictionStrike = frictionStrike !=undefined ? frictionStrike : 0
-            this.emitInitialValue = emitInitialValue!=undefined ? emitInitialValue : true            
+            Object.assign(this, params)     
         }
     }
 
     @Flux({
         pack: pack,
-        namespace: ConstraintCoulombOrtho,
-        id: "ConstraintCoulombOrtho",
-        displayName: "ConstraintCoulombOrtho",
+        namespace: ModuleConstraintCoulombOrtho,
+        id: "ModuleConstraintCoulombOrtho",
+        displayName: "Coulomb Ortho",
         description: "Coulomb type of surface's constraint"
     })
     @BuilderView({
-        namespace: ConstraintCoulombOrtho,
+        namespace: ModuleConstraintCoulombOrtho,
         icon: ConstraintBase.svgIcon
     })
     export class Module extends ConstraintBase.Module<PersistentData> {
