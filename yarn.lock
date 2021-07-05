@@ -659,6 +659,11 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
+"@types/three@^0.128.0":
+  version "0.128.0"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.128.0.tgz#e5ce4c42d138a64dd90e83dbdb9919cf0d424d8e"
+  integrity sha512-Jwq5XYUkzAcPTo34hlGAQGUyAI0b2F3aCCFWG/v7ZhJBEG5HGcusMSr70GhDlT8Gs0f02QnSPZ2RCA1MrCOa/w==
+
 "@types/yargs-parser@*":
   version "20.2.0"
   resolved "https://registry.yarnpkg.com/@types/yargs-parser/-/yargs-parser-20.2.0.tgz#dd3e6699ba3237f0348cd085e4698780204842f9"
@@ -824,15 +829,79 @@
   resolved "https://registry.yarnpkg.com/@youwol/cdn-client/-/cdn-client-0.0.6.tgz#939c60365a469bbd7b05400f19df79e1f9c79b6f"
   integrity sha512-c0Xm2J9w1tFip8s1upgDigHtiCWUXNSp3KvYC/UXHPkGwbFQN4dqu5sMv+ndl7AL9wE6PJiskTD8vsPHVcImjg==
 
+"@youwol/dataframe@0.x":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@youwol/dataframe/-/dataframe-0.0.21.tgz#132854ab2e4e9ceebd3670062d8b8e2120c22c4b"
+  integrity sha512-R2kcELH+KHFEb7k9kJY92Xa4O6cpKbkwLmR4F8boPQZY+q2v7ynE4TBdtXy8tQCOqRAhnVyc2Mt2vx+6oMUdLQ==
+
 "@youwol/flux-core@0.x":
   version "0.0.14"
   resolved "https://registry.yarnpkg.com/@youwol/flux-core/-/flux-core-0.0.14.tgz#da79fe6006a2b761466c9c8af7e9e85fea80370e"
   integrity sha512-HUXxhH5cF2TnrireYUqzpWKNi/Zkn9BrISKJExzi+xyP4Om7WQQ/YsyV6tuhqPvtueIGfN+f+VS5FW99fOXsOA==
 
+"@youwol/flux-dataframe@0.x":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@youwol/flux-dataframe/-/flux-dataframe-0.0.3.tgz#0a8d9cfe622c1ecf14f99d5446fa4357165d9a3e"
+  integrity sha512-0x4GeA1SahdsnQtYw3h0Lclb7eAniWuLCHkd9NMZrvLifdK1wGjYHwmCPe02Me89eOBLlUlKZu3gVHG+1LGIsw==
+
+"@youwol/flux-files@0.x":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@youwol/flux-files/-/flux-files-0.0.5.tgz#8a26386289717ff1674470d4a597644c20717c4e"
+  integrity sha512-gwLz0Y8RKPISS8byuQqEF7TZUbA6wP8dtr93jbfiXCMxiNJmBSFxdNANPycoU/lEHU7fQMpgGMP75nACyS+19Q==
+
+"@youwol/flux-kepler@0.x":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@youwol/flux-kepler/-/flux-kepler-0.0.3.tgz#d780520bd50a04dccff77d6ec59d0decd60c62e6"
+  integrity sha512-ITiUb0rAmbWvuWHP2/Alt0R7BiTn84wQSav4OprMFjkunOMdvo/2+1yZre93KKFUuUGvmDZ/uORyMuJVvh3APg==
+  dependencies:
+    "@types/three" "^0.128.0"
+
+"@youwol/flux-rxjs@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@youwol/flux-rxjs/-/flux-rxjs-0.0.4.tgz#71c43bc63424cc8173db3667e8df36307cb1bd69"
+  integrity sha512-SX1motaDioZ6auulyw15tv2iCfPDwVMRDA5UDybB6aRi3JOgYnSyCja+mu5YSkaUM9XRutcrovawSxXXa1o5+A==
+
+"@youwol/flux-three@0.x":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@youwol/flux-three/-/flux-three-0.0.4.tgz#0c59fdd3449ae17de763d82f48f87cb7492dd2d4"
+  integrity sha512-5XfsgkxsXE9r26L+qri5bEZ/XdooRPqFYBCgzNX0ybY9hQZSPNuesEtWCJoEcELfKym4IaOqPMolbdu1Pne86A==
+  dependencies:
+    "@types/three" "^0.128.0"
+
 "@youwol/flux-view@0.x":
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/@youwol/flux-view/-/flux-view-0.0.8.tgz#db06d9a01dc568b75f95c400447c5b649c1419d6"
   integrity sha512-Q4mEPqqY3/eiaQhybppdyonVJG8dcUwH4ku0zSyYupQYdAsgASSmp9xfyhvfbcqUmKpHItToHvYg3PFk9vlPxA==
+
+"@youwol/fv-button@0.x":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@youwol/fv-button/-/fv-button-0.0.3.tgz#c98f13d748b07ba04e8599f0016403cf3fcb54bc"
+  integrity sha512-+1h4HbH3NT5FVfv0ps5wCDtgGgicNF0ZXMbG74K42JbUVrAyZHmSlIaXiwfkdG53r9jKHH8/b1wvLobk9Daopg==
+
+"@youwol/fv-group@0.x":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@youwol/fv-group/-/fv-group-0.0.3.tgz#d033a4004a2737540ab98c6596ac29a3f64217ce"
+  integrity sha512-IX/6VNhWcqDabunNTqP2bxWhOv0n4Mungk+15h1BQi58OCQYvDnukHaDhJNF+HBhX6q5bGnRr7eX7HdhhvKIwg==
+
+"@youwol/fv-input@0.x":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@youwol/fv-input/-/fv-input-0.0.5.tgz#cd91d7de8a09db406299f3eaec46d5bfb91a1561"
+  integrity sha512-/6uaok86L7i3kZl/sHAXDkE1QQ7QGphqRZjjkFpyOpkzb3iT1SZyDSyblfuZ5E7YfglCLRnTlVEpeJkVLMFK4g==
+
+"@youwol/fv-tree@0.x":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@youwol/fv-tree/-/fv-tree-0.0.3.tgz#e69984cee4822a0be90947a6f48ba9223588f0a0"
+  integrity sha512-QHZIpHNX9rzMafKTpOvjzx7Z2dNdzjTDbAtgUU8+AmAX5p1IB2i2Ws2N5TaYNn5xvIdVezebBedJnCRrGXlZcQ==
+
+"@youwol/io@0.x":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@youwol/io/-/io-0.0.11.tgz#88be2180785faaec3aba89b5896a0db2c7d1fa7d"
+  integrity sha512-QSWkCUGv7ZzztzfiUU9LyFxSiRxy7k1z0ywJs7L2zHH0Mr2Z4CzrBfWQhm5fiDU0I+F9TOZQOA+6JUPnYOaEeA==
+
+"@youwol/kepler@0.x":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@youwol/kepler/-/kepler-0.0.8.tgz#0e900d36cb8d2e51f213c90312d289bdfdc6c18e"
+  integrity sha512-/i9VgonacR+keaeLi4GPQKcycHAPRat/nbtqjxGNFhUamHh0VjSZMR5ohzpHAA1+/sA7xpYt5OQLAtwRFb35Aw==
 
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.5"
@@ -4105,6 +4174,16 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+
+three-trackballcontrols@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/three-trackballcontrols/-/three-trackballcontrols-0.0.8.tgz#4af85312d211387e451023f9bef576094993a118"
+  integrity sha512-9my4rB/ILaJw8E6khOcC6d8F8kEe6BvRtCer9bFJGZOh9txy4BqzwPrG7d8YCKK9MfcyTUoLsB5LKIsbtsZRTg==
+
+three@0.128.0:
+  version "0.128.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.128.0.tgz#884dacca6a330e45600a09ec5439283f50b76aa6"
+  integrity sha512-i0ap/E+OaSfzw7bD1TtYnPo3VEplkl70WX5fZqZnfZsE3k3aSFudqrrC9ldFZfYFkn1zwDmBcdGfiIm/hnbyZA==
 
 throat@^5.0.0:
   version "5.0.0"
