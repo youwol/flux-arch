@@ -4,7 +4,7 @@ import { Flux, BuilderView, ModuleFlux, Pipe, Schema, RenderView, createHTMLElem
 import { ArcheFacade } from './arche.facades';
 
 
-export namespace BoundaryCondition {
+export namespace ModuleBoundaryCondition {
     //Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
     let svgIcon = `
     <path d="M378.24,243.712l-96-80c-4.768-3.968-11.424-4.832-17.024-2.208C259.584,164.128,256,169.792,256,176v48H16    c-8.832,0-16,7.168-16,16v32c0,8.832,7.168,16,16,16h240v48c0,6.208,3.584,11.84,9.216,14.496c2.144,0.992,4.48,1.504,6.784,1.504    c3.68,0,7.328-1.248,10.24-3.712l96-80c3.68-3.04,5.76-7.552,5.76-12.288C384,251.264,381.92,246.752,378.24,243.712z"/>
@@ -15,61 +15,64 @@ export namespace BoundaryCondition {
 
 
     @Schema({
-        pack: pack,
-        description: "Axis BC"
+        pack: pack
     })
     class AxisBC{
 
         @Property({ description: "", enum:['free','fixed'] })
-        readonly type: string
+        readonly type: string = 'free'
 
         @Property({ description: "" })
-        readonly value: number
+        readonly value: number = 0
 
-        constructor( { type, value} :{ type?:string, value?:number } = {}
+        constructor( params :{ 
+            type?:string, 
+            value?:number 
+        } = {}
             ) {
-              this.type = type != undefined ? type : 'free'
-              this.value = value != undefined ? value : 0
+                Object.assign(this, params)
             }
     }
 
     @Schema({
         pack: pack,
-        description: "Persistent Data of SurfaceBuilder"
     })
     export class PersistentData {
 
         @Property({ description: "" })
-        readonly dipAxis: AxisBC
+        readonly dipAxis: AxisBC = new AxisBC()
 
         @Property({ description: "" })
-        readonly strikeAxis: AxisBC
+        readonly strikeAxis: AxisBC = new AxisBC()
 
         @Property({ description: "" })
-        readonly normalAxis: AxisBC
+        readonly normalAxis: AxisBC = new AxisBC()
 
         @Property({ description: "emit initial value" })
-        readonly emitInitialValue : boolean
+        readonly emitInitialValue : boolean = true
 
-        constructor(
-            { dipAxis, strikeAxis, normalAxis, emitInitialValue} :{ dipAxis?, strikeAxis?, normalAxis?,emitInitialValue?:boolean }= {}) {
-
-            this.dipAxis = new AxisBC( dipAxis != undefined ? dipAxis : {}) 
-            this.strikeAxis = new AxisBC( strikeAxis != undefined ? strikeAxis : {}) 
-            this.normalAxis = new AxisBC( normalAxis != undefined ? normalAxis : {}) 
-            this.emitInitialValue = emitInitialValue != undefined ? emitInitialValue : true
+        constructor( params : { 
+            dipAxis?: AxisBC, 
+            strikeAxis?: AxisBC, 
+            normalAxis?: AxisBC,
+            emitInitialValue?:boolean 
+        } = {}) {
+            Object.assign(this, params)
         }
     }
 
     @Flux({
         pack: pack,
-        namespace: BoundaryCondition,
-        id: "BoundaryCondition",
-        displayName: "BoundaryCondition",
-        description: "Anderson type of remote"
+        namespace: ModuleBoundaryCondition,
+        id: "ModuleBoundaryCondition",
+        displayName: "Boundary",
+        description: "",
+        resources: {
+            'technical doc': `${pack.urlCDN}/dist/docs/modules/lib_boundary_condition_module.boundarycondition.html`
+        }
     })
     @BuilderView({
-        namespace: BoundaryCondition,
+        namespace: ModuleBoundaryCondition,
         icon: svgIcon
     })
     export class Module extends ModuleFlux {
@@ -81,15 +84,27 @@ export namespace BoundaryCondition {
 
             this.addInput({
                 id:"input", 
-                description: `Triggerring this input construct a boundary condition to link to a surface. No data beside configuration is needed.`, 
+                description: `Triggering this input construct a boundary condition to link to a surface. No data beside configuration is needed.`, 
                 contract: freeContract(),
                 onTriggered: ({data, configuration, context}) => this.createBoundaryCondition(data,configuration, context) 
             })
             this.boundaryCondition$ = this.addOutput({id:"boundary-condition"})
 
             let conf = this.getPersistentData<PersistentData>()
-            if(conf.emitInitialValue)
-                this.createBoundaryCondition(undefined,conf, new Context("",{}))
+            if(conf.emitInitialValue){
+                let context = new Context(
+                    "Initial run",
+                    {},
+                    this.logChannels 
+                )
+                this.addJournal({
+                    title: `Initial boundary condition from static configuration`,
+                    abstract: `Boundary condition created at construction as emitInitialValue is true`,
+                    entryPoint: context
+                })
+
+                this.createBoundaryCondition(undefined,conf, context) 
+            }
         }
 
         createBoundaryCondition(_, config: PersistentData, context: Context){
