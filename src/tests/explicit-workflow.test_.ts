@@ -2,10 +2,10 @@ import { instantiateModules, parseGraph, Runner } from "@youwol/flux-core"
 import { ModulePlane } from '@youwol/flux-three'
 import { ModuleCombineLatest } from '@youwol/flux-rxjs'
 import { ArcheFacade } from '../lib/arche.facades'
-import { BoundaryCondition } from '../lib/boundary-condition.module'
-import { ConstraintCoulombOrtho } from '../lib/constraint-coulomb-ortho.module'
-import { ConstraintCoulomb } from '../lib/constraint-coulomb.module'
-import { SurfaceBuilder } from '../lib/surface-builder.module'
+import { ModuleBoundaryCondition } from '../lib/boundary-condition.module'
+import { ModuleConstraintCoulombOrtho } from '../lib/constraint-coulomb-ortho.module'
+import { ModuleConstraintCoulomb } from '../lib/constraint-coulomb.module'
+import { ModuleSurfaceBuilder } from '../lib/surface-builder.module'
 
 
 console.log = () => {}
@@ -21,10 +21,10 @@ test('new project with Andersonian remote', (done) => {
     
     let modules = instantiateModules({
         '>a' :              [ModuleCombineLatest, {nInputs:4}],  
-        bc:                 BoundaryCondition ,
-        coulomb:            [ConstraintCoulomb, {friction:1, cohesion:2}],
-        coulombOrtho:       [ConstraintCoulombOrtho, {theta:180, frictionDip:1, frictionStrike:2}],
-        surface:            SurfaceBuilder,
+        bc:                 ModuleBoundaryCondition ,
+        coulomb:            [ModuleConstraintCoulomb, {friction:1, cohesion:2}],
+        coulombOrtho:       [ModuleConstraintCoulombOrtho, {theta:180, frictionDip:1, frictionStrike:2}],
+        surface:            ModuleSurfaceBuilder,
         plane:              [ModulePlane,{widthCount:5, heightCount:5}]
     })
     let observers   = {}

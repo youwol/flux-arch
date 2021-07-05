@@ -5,14 +5,14 @@ import { ArcheDiscontinuityMeshNode, ArcheDiscontinuityNode } from '../lib/imple
 import { findChildren } from '../lib/implementation/utils'
 import { MockEnvironment } from './mock-environment'
 import { ProjectMgr } from '../lib/project-mgr.module'
-import { Material } from '../lib/material.module'
+import { ModuleMaterial } from '../lib/material.module'
 import { ModuleCombineLatest } from '@youwol/flux-rxjs'
 import { ArcheFacade } from '../lib/arche.facades'
 import { addSimpleShape, loadDiscontinuityS1 } from './test-utils'
 import { KeplerMesh } from '@youwol/flux-kepler'
 import { BufferGeometry, Mesh } from 'three'
 import { ImmutableTree } from '@youwol/fv-tree'
-import { RemoteAndersonian } from '../lib/remote-andersonian.module'
+import { ModuleRemoteAndersonian } from '../lib/remote-andersonian.module'
 
 console.log = () =>{}
 
@@ -28,7 +28,7 @@ test('new project wit material', (done) => {
         mockEnv:            MockEnvironment,
         projectMgr:         ProjectMgr,
         '>a' :              [ModuleCombineLatest, {nInputs:2}],  
-        material:           [Material, {poisson:0.25, young: 1.2, density:900}]
+        material:           [ModuleMaterial, {poisson:0.25, young: 1.2, density:900}]
     })
     let observers   = {}
     let adaptors    = {}
@@ -106,7 +106,7 @@ test('new project with Andersonian remote', (done) => {
         mockEnv:            MockEnvironment,
         projectMgr:         ProjectMgr,
         '>a' :              [ModuleCombineLatest, {nInputs:2}],  
-        remote:             [RemoteAndersonian, {HSigma:1, hSigma:0, vSigma:0, theta: 180}]
+        remote:             [ModuleRemoteAndersonian, {HSigma:1, hSigma:0, vSigma:0, theta: 180}]
     })
     let observers   = {}
     let adaptors    = {}
