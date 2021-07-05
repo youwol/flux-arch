@@ -4,7 +4,7 @@ import { Flux, BuilderView, ModuleFlux, Pipe, Schema, freeContract } from '@youw
 import { Group, Mesh, Object3D } from 'three';
 import { buildSurfacesFromThree } from './implementation/arche-builders'
 
-export namespace SurfaceBuilder {
+export namespace ModuleSurfaceBuilder {
     //Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
     let svgIcon = `
     <path d="M378.24,243.712l-96-80c-4.768-3.968-11.424-4.832-17.024-2.208C259.584,164.128,256,169.792,256,176v48H16    c-8.832,0-16,7.168-16,16v32c0,8.832,7.168,16,16,16h240v48c0,6.208,3.584,11.84,9.216,14.496c2.144,0.992,4.48,1.504,6.784,1.504    c3.68,0,7.328-1.248,10.24-3.712l96-80c3.68-3.04,5.76-7.552,5.76-12.288C384,251.264,381.92,246.752,378.24,243.712z"/>
@@ -24,13 +24,16 @@ export namespace SurfaceBuilder {
 
     @Flux({
         pack: pack,
-        namespace: SurfaceBuilder,
-        id: "SurfaceBuilder",
+        namespace: ModuleSurfaceBuilder,
+        id: "ModuleSurfaceBuilder",
         displayName: "SurfaceBuilder",
-        description: "A surface builder from Three.js object"
+        description: "A surface builder from Three.js object",
+        resources: {
+            'technical doc': `${pack.urlCDN}/dist/docs/modules/lib_surface_builder_module.surfacebuilder.html`
+        }
     })
     @BuilderView({
-        namespace: SurfaceBuilder,
+        namespace: ModuleSurfaceBuilder,
         icon: svgIcon
     })
     export class Module extends ModuleFlux {
@@ -42,7 +45,7 @@ export namespace SurfaceBuilder {
 
             this.addInput({
                 id:"objects",  
-                description: `Triggerring this input construct surface(s) for use in Arche computations from Three object(s)`,
+                description: `Triggering this input construct surface(s) for use in Arche computations from Three object(s)`,
                 contract: freeContract(),
                 onTriggered: ({data, configuration, context}) => this.createSurfaces(data, configuration, context)  
             })
