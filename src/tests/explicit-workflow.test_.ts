@@ -5,7 +5,7 @@ import { ArcheFacade } from '../lib/arche.facades'
 import { ModuleBoundaryCondition } from '../lib/boundary-condition.module'
 import { ModuleConstraintCoulombOrtho } from '../lib/constraint-coulomb-ortho.module'
 import { ModuleConstraintCoulomb } from '../lib/constraint-coulomb.module'
-import { ModuleSurfaceBuilder } from '../lib/surface-builder.module'
+import { ModuleSurface } from '../lib/surface.module'
 
 
 console.log = () => {}
@@ -24,7 +24,7 @@ test('new project with Andersonian remote', (done) => {
         bc:                 ModuleBoundaryCondition ,
         coulomb:            [ModuleConstraintCoulomb, {friction:1, cohesion:2}],
         coulombOrtho:       [ModuleConstraintCoulombOrtho, {theta:180, frictionDip:1, frictionStrike:2}],
-        surface:            ModuleSurfaceBuilder,
+        surface:            ModuleSurface,
         plane:              [ModulePlane,{widthCount:5, heightCount:5}]
     })
     let observers   = {}
