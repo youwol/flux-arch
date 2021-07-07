@@ -115,6 +115,23 @@ export namespace ArcheFacade {
         constructor(public readonly type: string, public readonly parameters) { }
     }
 
+    export class Scene{
+
+        public readonly surfaces: Array<Surface>
+
+        public readonly material: Material
+
+        public readonly remotes: Array<Remote>
+
+        constructor({ surfaces, material, remotes } : 
+            {   surfaces: Array<Surface>, 
+                material: Material, 
+                remotes: Array<Remote>}) {
+            this.surfaces = surfaces
+            this.material = material
+            this.remotes = remotes
+        }
+    }
 
     export class Model {
 
