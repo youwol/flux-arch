@@ -17,13 +17,13 @@ export namespace ModuleMaterial {
     export class PersistentData {
 
         @Property({ description: "Poisson coefficient" })
-        readonly poisson: number = 0
+        readonly poisson: number = 0.25
 
         @Property({ description: "Young modulus" })
-        readonly young: number = 0
+        readonly young: number = 1
 
         @Property({ description: "Density" })
-        readonly density: number = 0
+        readonly density: number = 1000
 
         @Property({ description: "emit initial value" })
         readonly emitInitialValue : boolean = true
