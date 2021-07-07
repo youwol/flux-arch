@@ -150,12 +150,18 @@ export namespace ArcheFacade {
             this.surfaces = surfaces
             this.material = material
             this.remotes = remotes
-
         }
     }
 
     export class Solution{
         constructor(public readonly solutionId: string, public readonly worker: Worker){}
+    }
+    export class SolutionLocal{
+        constructor(public readonly model){}
+
+        stressAt(x:number, y: number, z: number) {
+            return this.model.stressAt(x,y,z)
+        }
     }
 
     export function factory(type, parameters, arche, factoryFct = undefined) {

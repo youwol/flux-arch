@@ -1,18 +1,18 @@
 
 
-/*
-import { pack } from './factory';
-import { Flux, BuilderView, ModuleFlow, Pipe, Schema, Report, LogLevel, uuidv4 } from '@youwol/flux-lib-core'
+import { arche, pack } from './main';
+import { Flux, BuilderView, ModuleFlux, Pipe, Schema, uuidv4, contract, expectSome, expectAnyOf, expectInstanceOf, expectSingle, Context } from '@youwol/flux-core'
 import { ArcheFacade } from './arche.facades';
-import { NAME, VERSION } from '../auto-generated';
 import { retrieveThreeMeshes } from './implementation/utils';
-import { DataFrame } from '@youwol/flux-pack-dataframe';
-import { BufferGeometry, Group, Mesh } from 'three';
+import { DataFrame, Serie } from '@youwol/dataframe';
+import { BufferGeometry, Group, Mesh, MeshStandardMaterial, Object3D } from 'three';
 import * as _ from 'lodash'
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { KeplerMesh } from '@youwol/flux-kepler';
+import { createFluxThreeObject3D, defaultMaterial } from '@youwol/flux-three';
 
-export namespace Resolver {
+export namespace ModuleResolver {
 
 
     export function retrieveSolution( data: any): ArcheFacade.Solution {
@@ -60,30 +60,124 @@ export namespace Resolver {
         constructor() {}
     }
 
+    let modelContract = expectSingle({
+        when: expectInstanceOf({
+            typeName: "Model",
+            Type: ArcheFacade.SolutionLocal
+        })
+    })
+    
+    let contractMesh = expectSome({
+        when: expectAnyOf({
+            description:"Either a mesh or a group of mesh",
+            when:[
+                expectInstanceOf({
+                    typeName: "Mesh",
+                    Type: Mesh,
+                    attNames: ["mesh", "object"],
+                    normalizeTo: (d) => [d]
+                }),
+                expectInstanceOf({
+                    typeName: "Group",
+                    Type: Group,
+                    attNames: ["mesh", "object"],
+                    normalizeTo: (d: Group) => d.children.filter( child => child instanceof Mesh)
+                }),
+            ]
+        }),
+        normalizeTo: (meshes) => meshes.flat()
+    })
+    
+    let inputContract = contract({
+        description: "Get: (i) some observation mesh(es), and (ii) a mode (e.g. from Solver module)",
+        requireds: {
+            meshes: contractMesh,
+            model: modelContract
+        },
+        optionals:{}
+    })
+    
     @Flux({
         pack: pack,
-        namespace: Resolver,
-        id: "Resolver",
+        namespace: ModuleResolver,
+        id: "ModuleResolver",
         displayName: "Resolver",
         description: "Arche resolver"
     })
     @BuilderView({
-        namespace: Resolver,
+        namespace: ModuleResolver,
         icon: svgIcon
     })
-    export class Module extends ModuleFlow {
+    export class Module extends ModuleFlux {
 
-        output$: Pipe<DataFrame | Array<DataFrame>>
+        output$: Pipe<Group>
 
         static workerMessages = new Subject()
         constructor(params) {
             super(params)
 
-            this.addInput("input", inputDescription, this.resolve)
-            this.output$ = this.addOutput("solution", {})
+            this.addInput({
+                id:"input", 
+                description:`Triggering this input resolve an Arche solution on provided mesh(es).`, 
+                contract: inputContract,
+                onTriggered: ({data,configuration, context}) => {
+                    this.resolve(data.model, data.meshes, context)
+                }
+            })
+            this.output$ = this.addOutput()
         }
 
-        resolve(data: Array<ArcheFacade.Solution| GridsLike> | 
+        resolve(solution: ArcheFacade.SolutionLocal, meshes: Mesh[], context: Context){
+
+            let keplerObjects = meshes.map( (mesh: Mesh) => {
+                return this.resolveMesh(solution, mesh, context)
+            })
+            let group = new Group()
+            group.add(...keplerObjects)
+            this.output$.next({data: group, context})
+            context.terminate()
+        }
+
+        resolveMesh( solution: ArcheFacade.SolutionLocal, mesh:Mesh, context: Context){
+
+            return context.withChild("resolve on a mesh", (context) => {
+
+                context.info("Input mesh", new Mesh(mesh.geometry, new MeshStandardMaterial({wireframe:true})) )
+                let positions = mesh.geometry.getAttribute('position')
+                let ptCount =  positions.count 
+
+                let gridResult = new Float32Array( 6 * ptCount )
+                for(let i=0;i<ptCount;i++){
+                    let [x,y,z] = [positions.getX(i),positions.getY(i), positions.getZ(i)]
+                    let stress = solution.stressAt(x,y,z)
+                    stress.forEach( (v,j) => {
+                        gridResult[6*i + j] = v 
+                    })
+                }
+                let df = DataFrame.create({
+                    series:{
+                        stress: Serie.create({
+                            array: gridResult,
+                            itemSize: 6
+                        }),
+                        positions: Serie.create({                            
+                            array: positions.array as Float32Array,
+                            itemSize: 3
+                        })
+                    },
+                    userData: {}                    
+                })
+                context.info("Dataframe created", df)
+                let keplerMesh = new KeplerMesh(mesh.geometry, defaultMaterial(), df)
+                let obj = createFluxThreeObject3D({
+                    object: keplerMesh,
+                    id:mesh.name+"_resolved",
+                    displayName: mesh.userData.displayName+" resolved"
+                })
+                return obj as KeplerMesh
+            })
+        }
+        /*resolve(data: Array<ArcheFacade.Solution| GridsLike> | 
             {solution: ArcheFacade.Solution, grid: GridsLike} | 
             {solution: ArcheFacade.Solution, grids: GridsLike | Array<GridsLike> } , config: PersistentData, context: any) {
                 
@@ -148,47 +242,19 @@ export namespace Resolver {
                 }
             })
         }
+        */
     }
+    /*
+        function formatDataframe( stressArrays : Array<Float32Array>, names : Array<string> ){
 
-    function formatDataframe( stressArrays : Array<Float32Array>, names : Array<string> ){
-
-        let dataframes = stressArrays.map( (array,i) => {
-            let stress = _.chunk( new Float32Array(array), 6)
-            let df = new DataFrame({stress})
-            df.name = names[i]
-            return df
-        })
-        return dataframes
-    }
-
-    let inputDescription = {
-        description: `Triggerring this input resolve an Arche solution.`,
-        mandatory: {
-            description: 'provide a solution from arche solver and some grid(s)',
-            allOf:[
-                {   description: 'provides a solution',
-                    oneOf:[
-                        {
-                            description: 'as an element of the input array',
-                            test: (input) => Array.isArray(input)  && input.find( e => e instanceof ArcheFacade.Solution)
-                        },
-                        {
-                            description: "as the property 'solution' of the input object",
-                            test: (input) => input.solution && input.solution instanceof ArcheFacade.Solution
-                        }
-                    ] 
-                },
-                {   description: 'provides some grid(s)',
-                    oneOf:[
-                        {
-                            description: 'as elements of the input array using Three.Mesh or Three.Group',
-                            test: (input) => Array.isArray(input)  && input.find( e => e instanceof Mesh || e  instanceof Group)
-                        },
-
-                    ] 
-                },
-            ]
+            let dataframes = stressArrays.map( (array,i) => {
+                let stress = _.chunk( new Float32Array(array), 6)
+                let df = new DataFrame({stress})
+                df.name = names[i]
+                return df
+            })
+            return dataframes
         }
-    }
+    */
 }
-*/
+
