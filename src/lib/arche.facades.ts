@@ -213,13 +213,13 @@ export namespace ArcheFacade {
         if (type == "ArcheSurfaceNode"){
 
             let surfaceData: Surface = parameters
-            let surface = new arche.Surface(
-                Array.from(new Float32Array(surfaceData.positions)), 
-                Array.from(new Uint16Array(surfaceData.indexes)) )
-            surfaceData.constraints.forEach( constraint => {
+            let positions = Array.from(new Float32Array(surfaceData.positions))
+            let indexes =Array.from(new Uint16Array(surfaceData.indexes))
+            let surface = new arche.Surface( positions,  indexes )
+            /*surfaceData.constraints.forEach( constraint => {
                 surface.addConstraint( factoryFct(constraint.type, constraint.parameters, arche, factoryFct))
             })
-            /*
+            
             let bcData = surfaceData.boundaryCondition.parameters
             surface.setBC( 'dip', bcData.dipAxis.type,  bcData.dipAxis.value)
             surface.setBC( 'strike', bcData.strikeAxis.type,  bcData.strikeAxis.value)
@@ -233,19 +233,16 @@ export namespace ArcheFacade {
         if (type == "ArcheModelNode") {
         
             let model = new arche.Model()
-            let surfaces = parameters.surfaces.map( s => factoryFct("ArcheSurfaceNode", s, arche, factoryFct))
-            let remotes = parameters.remotes.map( r => factoryFct(r.type, r.parameters, arche, factoryFct))
-            let material = factoryFct("ArcheMaterialNode", parameters.material.parameters, arche, factoryFct)
-            surfaces.forEach( s => model.addSurface(s))
-            remotes.forEach( r => model.addRemote(r)) 
-            model.setMaterial(material)
             model.setHalfSpace(false)
-            /*
-            const model = new arche.Model()
-            model.setHalfSpace( false )
-            model.setMaterial ( new arche.Material(0.25, 1, 1000) )
-            model.addSurface  ( new arche.Surface([0,0,0, 1,0,0, 1,1,0], [0,1,2]) )
-            */
+            let material = factoryFct("ArcheMaterialNode", parameters.material.parameters, arche, factoryFct)
+            model.setMaterial(material)
+
+            let surfaces = parameters.surfaces.map( s => factoryFct("ArcheSurfaceNode", s, arche, factoryFct))
+            surfaces.forEach( s => model.addSurface(s))
+
+            let remotes = parameters.remotes.map( r => factoryFct(r.type, r.parameters, arche, factoryFct))
+            remotes.forEach( r => model.addRemote(r)) 
+
             return model
         }
     }
