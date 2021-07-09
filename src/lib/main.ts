@@ -2,6 +2,7 @@ import { FluxPack, IEnvironment } from '@youwol/flux-core'
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { AUTO_GENERATED } from '../auto_generated'
+import { WorkerPool } from './worker-pool';
 
 export var arche 
 
@@ -10,7 +11,21 @@ export function install(environment: IEnvironment){
     
     let loadWasm = environment.fetchJavascriptAddOn(`${AUTO_GENERATED.name}#${AUTO_GENERATED.version}~assets/arche.js`)
     .pipe(
-        mergeMap( () => {
+        mergeMap( (assets) => {
+            let src = assets[0].src
+            WorkerPool.import({
+                sources: { 
+                    "@youwol/arche": {
+                        src: src,
+                        sideEffects: (workerScope, exports) => {
+                            return exports.ArcheModule().then( (arche) => { 
+                                console.log("WASM Arche installed", arche)
+                                workerScope.arche = arche
+                            })
+                        }
+                    }
+                }
+            })
             return new Observable(subscriber => {
                 window["ArcheModule"]().then( archeMdle => { 
                     arche = archeMdle; 
