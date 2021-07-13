@@ -26,7 +26,8 @@ export function buildModel(root: ArcheNode, drive): Observable<ArcheFacade.Model
                 return new ArcheFacade.Model({
                 surfaces: surfaces,
                 material: new ArcheFacade.Material(material.parameters),
-                remotes
+                remotes,
+                solver: undefined
             })})
         )
 }

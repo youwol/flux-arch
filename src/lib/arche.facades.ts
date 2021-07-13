@@ -152,13 +152,16 @@ export namespace ArcheFacade {
 
         public readonly solver: Solver
 
-        constructor({ surfaces, material, remotes } : 
+        constructor({ surfaces, material, remotes, solver } : 
             {   surfaces: Array<Surface>, 
                 material: Material, 
-                remotes: Array<Remote>}) {
+                remotes: Array<Remote>,
+                solver: Solver
+            }) {
             this.surfaces = surfaces
             this.material = material
             this.remotes = remotes
+            this.solver = solver
         }
     }
 
