@@ -62,10 +62,11 @@ export namespace ModuleSurface {
         description: "Get some mesh with some constraints and a boundary condition",
         requireds: {
             meshes: contractMesh,
-            bc: contractBoundaryCondition,
-            constraints: contractConstraints
+            bc: contractBoundaryCondition
         },
-        optionals:{}
+        optionals:{
+            constraints: contractConstraints
+        }
     })
 
     @Flux({
@@ -99,7 +100,7 @@ export namespace ModuleSurface {
         }
 
         createSurfaces(
-            {meshes, bc, constraints}: {meshes: Mesh[], bc:  ArcheFacade.BoundaryCondition, constraints: ArcheFacade.Constraint[]} , 
+            {meshes, bc, constraints}: {meshes: Mesh[], bc:  ArcheFacade.BoundaryCondition, constraints?: ArcheFacade.Constraint[]} , 
             config: PersistentData, 
             context: Context ){
             
@@ -108,7 +109,12 @@ export namespace ModuleSurface {
                 let bufferGeom = mesh.geometry as BufferGeometry
                 let indexes = Uint16Array.from(bufferGeom.index.array)
                 let positions = Float32Array.from(bufferGeom.attributes.position.array)
-                let surface =new ArcheFacade.Surface({positions,indexes, constraints,boundaryCondition:bc})
+                let surface = new ArcheFacade.Surface({
+                    positions,
+                    indexes, 
+                    constraints: constraints || [],
+                    boundaryCondition:bc
+                })
                 return surface
             })   
             context.info("Surfaces created", {surfaces} )
