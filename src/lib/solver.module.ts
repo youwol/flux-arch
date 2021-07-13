@@ -2,87 +2,42 @@
 
 
 import { arche, pack } from './main';
-import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, freeContract, Context, uuidv4 } from '@youwol/flux-core'
+import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, freeContract, Context, ModuleError } from '@youwol/flux-core'
 import { ArcheFacade } from './arche.facades';
-
-import { Environment } from './implementation/data';
-import { AUTO_GENERATED } from '../auto_generated';
-import { fetchJavascriptAddOn, parseResourceId } from '@youwol/cdn-client'
-import { LocalEnvironment, LocalSolution, processArcheTaskInWorker, WasmWorker } from './implementation/local-environment';
-import { Observable, of, range, Subject } from 'rxjs';
-import { ProcessingType } from './implementation/tree-nodes';
-import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
-import { WorkerPool } from './worker-pool';
+import { filter } from 'rxjs/operators';
 
 export namespace ModuleSolver {
 
+    interface WorkerArguments {
+        model : ArcheFacade.Model
+    }
+
     export function solveInWorker( { args, taskId, context, workerScope }:{
-        args: unknown, 
+        args: WorkerArguments, 
         taskId: string,
         workerScope: any,
         context: Context
     }) {
-        console.log("START PROCESS TASK IN WORKER", args, taskId, workerScope)
+        let arche = workerScope["arche"]
 
-        let ms = 100
-        new Array(0,1,2,3,4,5,6,7,8,9).map((i) => {
-            context.info(`Step ${i}`)
-            const end = Date.now() + ms
-            while (Date.now() < end) continue
-        })
-       
-        return 42
-        /*
-        let GlobalScope = _GlobalScope ? _GlobalScope : self as any
-        let timings = []
-        let messages = []
-        if (!GlobalScope.archeSolutions)
-            GlobalScope.archeSolutions = {}
+        context.info("Parse model", { model:args })
+        let model = workerScope["@youwol/flux-arche.archeFactory"]("ArcheModelNode", args.model, arche)
 
-        let t0 = performance.now()
-        var exports = {}
+        context.info("Create solver")
+        let solver = new arche.Solver(
+            model, 
+            args.model.solver.type, 
+            args.model.solver.parameters.tolerance, 
+            args.model.solver.parameters.maxIteration
+            )
 
-        new Function('document', 'exports', '__dirname', archeSrcContent)(GlobalScope, exports, "")
-        let ArcheModule = exports['ArcheModule']
+        context.info("start solver")
+        solver.run()
 
-        let t1 = performance.now()
-        timings.push({ title: `Parse Arche source`, dt: t1 - t0 })
-
-        let archeFactory = typeof (archeFactoryFct) == 'string' ? new Function(archeFactoryFct)() : archeFactoryFct
-
-        let solve = (data, config, archeFactory, arche) => {
-            let model = archeFactory("ArcheModelNode", data, arche, archeFactory)
-            let solver = new arche.Solver(model, 'seidel', 1e-9, 200)
-            solver.run()
-            GlobalScope.archeSolutions[solutionId] = model
-            console.log("DONE WITH PROCESS TASK INWORKER", task, taskId, solutionId)
-            GlobalScope.postMessage({ messages, timings, taskId })
-        }
-
-        let resolve = (data) => {
-            console.log("Start resolution task", taskId, solutionId, GlobalScope.archeSolutions)
-            let model = GlobalScope.archeSolutions[solutionId]
-            let ptCount = data.grid.length / 3
-            let gridResult = new Float32Array(6 * ptCount)
-            for (let i = 0; i < ptCount; i++) {
-                let stress = model.stressAt(data.grid[3 * i], data.grid[3 * i + 1], data.grid[3 * i + 2])
-                stress.forEach((v, j) => {
-                    gridResult[6 * i + j] = v
-                })
-            }
-            console.log("DONE WITH PROCESS TASK INWORKER", task, taskId)
-            GlobalScope.postMessage({ stress: gridResult, taskId, messages, timings }, gridResult.buffer)
-        }
-
-        ArcheModule().then((arche) => {
-            let t2 = performance.now()
-            timings.push({ title: `Wasm runtime initialized`, dt: t2 - t1 })
-            if (task == "solve")
-                solve(data, config, archeFactory, arche)
-            if (task == "resolve")
-                resolve(data)
-        })
-        */
+        context.info("solver done")
+        workerScope[taskId] = model
+        
+        return taskId
     }
 
 
@@ -104,6 +59,12 @@ export namespace ModuleSolver {
         @Property({ description: "Tolerance" })
         readonly tolerance: number = 1e-9
 
+        getSolver(){
+            return new ArcheFacade.Solver( 
+                this.type, 
+                { maxIteration: this.maxIteration, tolerance: this.tolerance }
+                )
+        }
         constructor(params: { type?: string, maxIteration?: number, tolerance?: number } = {}) {
 
             Object.assign(this, params)
@@ -142,85 +103,38 @@ export namespace ModuleSolver {
             this.solveMultiThreaded(scene, config, context)
         }
 
-        solveMainThread(scene: ArcheFacade.Scene, configuration: PersistentData, context: Context) {
-
-            context.info("Start solver", { scene })
-
-            let archeModel = new ArcheFacade.Model({
-                surfaces: scene.surfaces,
-                material: scene.material,
-                remotes: scene.remotes
-            })
-            let model = ArcheFacade.factory("ArcheModelNode", archeModel, arche)
-            let solver = new arche.Solver(model, 'seidel', 1e-9, 200)
-            solver.run()
-
-            context.info("Solver done", { model })
-
-            this.solution$.next({ data: new ArcheFacade.SolutionLocal(model), context })
-            context.terminate()
-        }
-
         solveMultiThreaded(scene: ArcheFacade.Scene, configuration: PersistentData, context: Context) {
 
-            let channel$ = WorkerPool.schedule({
+            let workerPool = this.environment.workerPool
+
+            workerPool.schedule<WorkerArguments>({
+                title: 'SOLVE',
                 entryPoint: solveInWorker,
-                args:scene,
+                args:{ 
+                    model: new ArcheFacade.Model({
+                        surfaces: scene.surfaces,
+                        material: scene.material,
+                        remotes: scene.remotes,
+                        solver: configuration.getSolver()
+                    })
+                },
                 context
-            })
-            channel$.pipe( 
-                filter( ({type, taskId, data}) => {
-                    return type == "Exit"
-                }),
-                take(1)
-            ).subscribe( ({data}) => {
-                context.info("Result retrieved", data.result)
-                this.solution$.next({ data: {}, context })
-                context.terminate()
-            })
-            /*
-            let solutionId = uuidv4()
-            let resource = parseResourceId(`${AUTO_GENERATED.name}#${AUTO_GENERATED.version}~assets/arche.js`)
-            fetch(resource.url)
-            .then(
-                d => d.text()
-            ).then(archeSrcContent => {
-                let archeModel = new ArcheFacade.Model({
-                    surfaces: scene.surfaces,
-                    material: scene.material,
-                    remotes: scene.remotes
-                })
-                let localEnv = new LocalEnvironment()
-                // itemsToTransfert will be transfered, not copied (no cost); has to be transferable (e.g. ArrayBuffer)
-                // more info https://developer.mozilla.org/fr/docs/Web/API/Worker/postMessage
-                let itemsToTransfert = archeModel.surfaces
-                    .map(s => [s.positions.buffer, s.indexes.buffer])
-                    .reduce((acc, e) => acc.concat(e), [])
-
-                // creation of an inline web worker => see
-                // more info https://medium.com/@dee_bloo/make-multithreading-easier-with-inline-web-workers-a58723428a42
-                let worker = WasmWorker.createWorker(processArcheTaskInWorker)
-
-                worker.postMessage({
-                    task: 'solve',
-                    // json data structure that also references the ArrayBuffers provided in itemsToTransfert
-                    // more info https://developer.mozilla.org/fr/docs/Web/API/Worker/postMessage
-                    data: archeModel,
-                    // the arche WASM module
-                    archeSrcContent,
-                    // we make available the function that builds arche objects
-                    archeFactoryFct: "return " + ArcheFacade.factory.toString(),
-                    config: configuration,
-                    solutionId,
-                })
-
-                worker.onmessage = function ({ data: { messages, timings } }) {
-                    timings.map(timing => report && report.addElapsedTime(timing.title, timing.dt, {}))
-                    messages.map(({ title, object }) => report.addMessage(LogLevel.Info, title, object))
-                    let solution = new ArcheFacade.Solution(solutionId, worker)
-                    solution$.next({data:solution, context})
+            }).pipe( 
+                filter( ({type}) => type == "Exit")
+            ).subscribe( 
+                ({data}) => {
+                    context.info("Result retrieved", data.result)
+                    this.solution$.next({ 
+                        data: new ArcheFacade.Solution(data.result, data.workerId), 
+                        context 
+                    })
+                    context.terminate()
+                },
+                (error) => { 
+                    context.error(new ModuleError(this, error.message))
+                    context.terminate()
                 }
-            })*/
+            )
         }
     }
 }
