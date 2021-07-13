@@ -19,15 +19,21 @@ export namespace ModuleBoundaryCondition {
     })
     class AxisBC{
 
-        @Property({ description: "", enum:['free','fixed'] })
+        @Property({ 
+            description: "", 
+            enum:['free','fixed'] 
+        })
         readonly type: string = 'free'
 
-        @Property({ description: "" })
-        readonly value: number = 0
+        @Property({ 
+            description: "Boundary condition function",
+            type: 'code'
+        })
+        readonly field: string | ((x,y,z)=> number) = "return (x,y,z) => 0"
 
         constructor( params :{ 
             type?:string, 
-            value?:number 
+            field?:string | ((x,y,z)=> number)
         } = {}
             ) {
                 Object.assign(this, params)
@@ -40,24 +46,32 @@ export namespace ModuleBoundaryCondition {
     export class PersistentData {
 
         @Property({ description: "" })
-        readonly dipAxis: AxisBC = new AxisBC()
+        readonly dipAxis: AxisBC = new AxisBC({type:'free', field: "return (x,y,z) => 0"})
 
         @Property({ description: "" })
-        readonly strikeAxis: AxisBC = new AxisBC()
+        readonly strikeAxis: AxisBC = new AxisBC({type:'free', field: "return (x,y,z) => 0"})
 
         @Property({ description: "" })
-        readonly normalAxis: AxisBC = new AxisBC()
+        readonly normalAxis: AxisBC = new AxisBC({type:'free', field: "return (x,y,z) => -9.81*z"})
 
         @Property({ description: "emit initial value" })
         readonly emitInitialValue : boolean = true
 
-        constructor( params : { 
+        constructor( {dipAxis, strikeAxis, normalAxis, emitInitialValue} : { 
             dipAxis?: AxisBC, 
             strikeAxis?: AxisBC, 
             normalAxis?: AxisBC,
             emitInitialValue?:boolean 
         } = {}) {
-            Object.assign(this, params)
+
+            if(emitInitialValue)
+                this.emitInitialValue = emitInitialValue
+            if(dipAxis)
+                this.dipAxis = new AxisBC(dipAxis) 
+            if(strikeAxis)
+                this.dipAxis = new AxisBC(strikeAxis) 
+            if(normalAxis)
+                this.dipAxis = new AxisBC(normalAxis)
         }
     }
 
@@ -108,7 +122,9 @@ export namespace ModuleBoundaryCondition {
         }
 
         createBoundaryCondition(_, config: PersistentData, context: Context){
+
             this.boundaryCondition$.next({data:new ArcheFacade.BoundaryCondition(config), context})
+            context.terminate()
         }
     } 
 }

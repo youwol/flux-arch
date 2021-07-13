@@ -57,23 +57,32 @@ export namespace ArcheFacade {
         }
     }
 
+    type Field = string | ((x,y,z)=>number)
     export class BoundaryCondition {
 
         readonly parameters: {
-            dipAxis: { type: string, value: number },
-            strikeAxis: { type: string, value: number },
-            normalAxis: { type: string, value: number }
+            dipAxis: { type: string, field: string },
+            strikeAxis: { type: string, field: string },
+            normalAxis: { type: string, field: string }
         }
         public readonly type = "ArcheBoundaryConditionNode"
 
         constructor({ dipAxis, strikeAxis, normalAxis }:
             {
-                dipAxis: { type: string, value: number },
-                strikeAxis: { type: string, value: number },
-                normalAxis: { type: string, value: number }
+                dipAxis: { type: string, field: Field },
+                strikeAxis: { type: string, field: Field },
+                normalAxis: { type: string, field: Field }
             }) {
 
-            this.parameters = { dipAxis, strikeAxis, normalAxis }
+            let ensureString = (axis) => ({
+                type: axis.type, 
+                field: typeof(axis.field) == 'string' ? axis.field : `return ${String(axis.field)}`
+            })
+            this.parameters = { 
+                dipAxis: ensureString(dipAxis),
+                strikeAxis:ensureString(strikeAxis),
+                normalAxis:ensureString(normalAxis)
+            }
         }
     }
 
@@ -227,12 +236,21 @@ export namespace ArcheFacade {
             })
             
             let bcData = surfaceData.boundaryCondition.parameters
-            surface.setBC( 'dip', bcData.dipAxis.type,  bcData.dipAxis.value)
-            surface.setBC( 'strike', bcData.strikeAxis.type,  bcData.strikeAxis.value)
-            surface.setBC( 'normal', bcData.normalAxis.type,  bcData.normalAxis.value)*/
-            surface.setBC( 'dip', 'free', 0)
-            surface.setBC( 'strike', 'free',  0)
-            surface.setBC( 'normal', 'free',  (x,y,z) => -2000*9.81*z)
+            surface.setBC( 
+                'dip', 
+                bcData.dipAxis.type,  
+                typeof(bcData.dipAxis.field)=="string" ?  new Function(bcData.dipAxis.field)() : bcData.dipAxis.field
+                )
+            surface.setBC( 
+                'strike', 
+                bcData.strikeAxis.type,  
+                typeof(bcData.strikeAxis.field)=="string" ? new Function(bcData.strikeAxis.field)() : bcData.strikeAxis.field
+                )
+            surface.setBC( 
+                'normal', 
+                bcData.normalAxis.type, 
+                typeof(bcData.normalAxis.field)=="string" ? new Function(bcData.normalAxis.field)() : bcData.normalAxis.field
+                )
             return surface
         }
 

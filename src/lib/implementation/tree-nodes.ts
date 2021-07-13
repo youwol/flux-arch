@@ -165,25 +165,27 @@ export class ArcheObservationMeshNode extends ArcheMeshNode{
     }
 }
 
+type Field = string | ((x,y,z)=>number)
+
 export class ArcheBoundaryConditionNode extends ArcheNode {
 
     nodeType = "ArcheBoundaryConditionNode"
 
-    parameters : { dipAxis: { type:string, value: number}, 
-                   strikeAxis:  { type:string, value: number}, 
-                   normalAxis:  { type:string, value: number} }
+    parameters : { dipAxis: { type:string, field: Field}, 
+                   strikeAxis:  { type:string, field: Field}, 
+                   normalAxis:  { type:string, field: Field} }
 
     constructor( { id, ownerId, name, parameters} : 
         { id: string, ownerId: string, name: string, parameters?: { 
-            dipAxis: { type:string, value: number}, 
-            strikeAxis:  { type:string, value: number},
-            normalAxis:  { type:string, value: number} }} ){ 
+            dipAxis: { type:string, field: Field}, 
+            strikeAxis:  { type:string, field: Field},
+            normalAxis:  { type:string, field: Field} }} ){ 
         super({ id, ownerId, name, type:['boundary-condition'], children:undefined})
         
         this.parameters = parameters || { 
-            dipAxis: { type:'locked', value: 0}, 
-            strikeAxis:  { type:'locked', value: 0}, 
-            normalAxis:  { type:'locked', value: 0} 
+            dipAxis: { type:'locked', field: (x,y,z) => 0}, 
+            strikeAxis:  { type:'locked', field: (x,y,z) => 0}, 
+            normalAxis:  { type:'locked', field: (x,y,z) => 0} 
         }
     }
     /*data(){
