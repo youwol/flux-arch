@@ -108,8 +108,11 @@ export namespace ArcheFacade {
         public readonly constraints: Array<Constraint>
 
         constructor({ positions, indexes, boundaryCondition, constraints } :
-            { positions: Float32Array, indexes: Uint16Array,
-              boundaryCondition:BoundaryCondition, constraints:  Array<Constraint> }) {
+            {   positions: Float32Array, 
+                indexes: Uint16Array,
+                boundaryCondition:BoundaryCondition, 
+                constraints:  Array<Constraint>
+            }) {
 
             super()
             this.positions = positions
@@ -171,7 +174,7 @@ export namespace ArcheFacade {
 
 
     export function factory(type, parameters, arche, factoryFct = undefined) {
-        console.log("factory", type, parameters)
+        
         factoryFct = factoryFct || factory
         
         if( type == "ArcheMaterialNode") 
@@ -248,6 +251,7 @@ export namespace ArcheFacade {
                 bcData.normalAxis.type, 
                 typeof(bcData.normalAxis.field)=="string" ? new Function(bcData.normalAxis.field)() : bcData.normalAxis.field
                 )
+                
             return surface
         }
 
