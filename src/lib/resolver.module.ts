@@ -1,52 +1,55 @@
 
 
-import { arche, pack } from './main';
-import { Flux, BuilderView, ModuleFlux, Pipe, Schema, uuidv4, contract, expectSome, expectAnyOf, expectInstanceOf, expectSingle, Context } from '@youwol/flux-core'
+import { pack } from './main';
+import { Flux, BuilderView, ModuleFlux, Pipe, Schema, contract, expectSome, 
+    expectAnyOf, expectInstanceOf, expectSingle, Context, ModuleError, Property } from '@youwol/flux-core'
 import { ArcheFacade } from './arche.facades';
-import { retrieveThreeMeshes } from './implementation/utils';
 import { DataFrame, Serie } from '@youwol/dataframe';
-import { BufferGeometry, Group, Mesh, MeshStandardMaterial, Object3D } from 'three';
+import { Group, Mesh, MeshStandardMaterial } from 'three';
 import * as _ from 'lodash'
-import { Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { forkJoin, Observable, Subject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { KeplerMesh } from '@youwol/flux-kepler';
 import { createFluxThreeObject3D, defaultMaterial } from '@youwol/flux-three';
 
 export namespace ModuleResolver {
 
-
-    export function retrieveSolution( data: any): ArcheFacade.Solution {
-
-        if( Array.isArray(data))
-            return data.find( d => d instanceof ArcheFacade.Solution )
-        
-        if( data.solution && data.solution instanceof ArcheFacade.Solution)
-            return data.solution
+    interface WorkerArguments {
+        positions : Float32Array
+        modelId: string
     }
-    
-    
-    export function retrieveGridsSharedArray( data: any): [Array<Float32Array>, Array<string>]{
-
-        let meshes = []
-        if(Array.isArray(data))
-            meshes = retrieveThreeMeshes(data)
-        else if( data.grid)
-            meshes = retrieveThreeMeshes(data.grid)
-        else if( data.grids)
-            meshes = retrieveThreeMeshes(data.grids)
-        
-        let grids =  meshes.map( mesh => {
-            let geom = mesh.geometry as BufferGeometry
-            let positions = geom.attributes['position']
-            let sharedPositions = new Float32Array(new SharedArrayBuffer( 4 * 3 * positions.count))
-            sharedPositions.set(positions.array,0)
-            return sharedPositions
+    function resolveInWorker( { args, taskId, context, workerScope }:{
+        args: WorkerArguments, 
+        taskId: string,
+        workerScope: any,
+        context: Context
+    }){
+        context.info("start resolving the solution on provided positions",
+            {positions: args.positions,
+            modelId: args.modelId})
+            
+        let positions = args.positions
+        let ptCount =  positions.length / 3
+        context.info(`mesh with ${ptCount} points`)
+        let model = workerScope[args.modelId]
+        let sharedArray = new SharedArrayBuffer(6 * ptCount * 4 )
+        let gridResult = new Float32Array( sharedArray )
+        for(let i=0;i<ptCount;i++){
+            let [x,y,z] = [positions[3*i], positions[3*i+1], positions[3*i+2]]
+            let stress = model.stressAt(x,y,z)
+            stress.forEach( (v,j) => {
+                gridResult[6*i + j] = v 
+            })
+        }
+        context.info("Done resolving the solution on provided positions",
+        {   positions: args.positions,
+            stress:gridResult,
+            modelId: args.modelId
         })
-        let names =  meshes.map( mesh => mesh.name)
-        return [grids, names]
+        return gridResult
     }
 
-    type GridsLike = Mesh | Group
+    
     // | {coordinates:Array<number>} | {coordinates:Array<[number,number,number]>} | {coordinates:Array<{x:number, y: number, z:number}>}
 
     //Icons made by <a href="https://www.flaticon.com/authors/becris" title="Becris">Becris</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
@@ -57,13 +60,22 @@ export namespace ModuleResolver {
         description: "Persistent Data of Resolver"
     })
     export class PersistentData {
-        constructor() {}
+
+        @Property({ description: "Object's id" })
+        readonly objectId: string = "resolved"
+
+        @Property({ description: "Display name" })
+        readonly displayName: string = "Resolved"
+
+        constructor(params: { objectId?: string, displayName?: string } = {}) {
+            Object.assign(this, params)
+        }
     }
 
-    let modelContract = expectSingle({
+    let contractSolution = expectSingle({
         when: expectInstanceOf({
-            typeName: "Model",
-            Type: ArcheFacade.SolutionLocal
+            typeName: "Solution",
+            Type: ArcheFacade.Solution
         })
     })
     
@@ -92,7 +104,7 @@ export namespace ModuleResolver {
         description: "Get: (i) some observation mesh(es), and (ii) a mode (e.g. from Solver module)",
         requireds: {
             meshes: contractMesh,
-            model: modelContract
+            solution: contractSolution
         },
         optionals:{}
     })
@@ -121,140 +133,83 @@ export namespace ModuleResolver {
                 description:`Triggering this input resolve an Arche solution on provided mesh(es).`, 
                 contract: inputContract,
                 onTriggered: ({data,configuration, context}) => {
-                    this.resolve(data.model, data.meshes, context)
+                    this.resolve(data.solution, data.meshes, configuration, context)
                 }
             })
             this.output$ = this.addOutput()
         }
 
-        resolve(solution: ArcheFacade.SolutionLocal, meshes: Mesh[], context: Context){
+        resolve(solution: ArcheFacade.Solution, meshes: Mesh[], configuration: PersistentData, context: Context){
 
-            let keplerObjects = meshes.map( (mesh: Mesh) => {
-                return this.resolveMesh(solution, mesh, context)
+            let solutions$ = meshes.map( (mesh: Mesh) => {
+                return this.resolveMesh$(solution, mesh, context)
             })
-            let group = new Group()
-            group.add(...keplerObjects)
-            this.output$.next({data: group, context})
-            context.terminate()
+            forkJoin(solutions$)
+            .subscribe(
+                (keplerObjects) => {
+                
+                    let group = new Group()
+                    group.add(...keplerObjects)
+                    let obj = createFluxThreeObject3D({
+                        object: group,
+                        id: configuration.objectId,
+                        displayName: configuration.displayName
+                    }) as Group
+                    this.output$.next({data: obj, context})
+                    context.terminate()
+            },
+                (error) => { 
+                    context.error(new ModuleError(this, error.message))
+            })
         }
 
-        resolveMesh( solution: ArcheFacade.SolutionLocal, mesh:Mesh, context: Context){
+        resolveMesh$( solution: ArcheFacade.Solution, mesh:Mesh, context: Context): Observable<KeplerMesh>{
 
+
+            let workerPool = this.environment.workerPool
+            
             return context.withChild("resolve on a mesh", (context) => {
 
                 context.info("Input mesh", new Mesh(mesh.geometry, new MeshStandardMaterial({wireframe:true})) )
-                let positions = mesh.geometry.getAttribute('position')
-                let ptCount =  positions.count 
+                let positions = mesh.geometry.getAttribute('position').array as Float32Array
+                let view = new Float32Array(new SharedArrayBuffer( 4 * positions.length ))
+                view.set(positions,0)
 
-                let gridResult = new Float32Array( 6 * ptCount )
-                for(let i=0;i<ptCount;i++){
-                    let [x,y,z] = [positions.getX(i),positions.getY(i), positions.getZ(i)]
-                    let stress = solution.stressAt(x,y,z)
-                    stress.forEach( (v,j) => {
-                        gridResult[6*i + j] = v 
-                    })
-                }
-                let df = DataFrame.create({
-                    series:{
-                        stress: Serie.create({
-                            array: gridResult,
-                            itemSize: 6
-                        }),
-                        positions: Serie.create({                            
-                            array: positions.array as Float32Array,
-                            itemSize: 3
-                        })
+                let stream$ = workerPool.schedule<WorkerArguments>({
+                    title: 'RESOLVE',
+                    entryPoint: resolveInWorker,
+                    targetWorkerId: solution.workerId,
+                    args:{
+                        modelId: solution.solutionId,
+                        positions: view
                     },
-                    userData: {}                    
+                    context
                 })
-                context.info("Dataframe created", df)
-                let keplerMesh = new KeplerMesh(mesh.geometry, defaultMaterial(), df)
-                let obj = createFluxThreeObject3D({
-                    object: keplerMesh,
-                    id:mesh.name+"_resolved",
-                    displayName: mesh.userData.displayName+" resolved"
-                })
-                return obj as KeplerMesh
+                
+                return stream$.pipe( 
+                    filter( ({type}) => type == "Exit"),
+                    map( ({data}) => {
+
+                        let df = DataFrame.create({
+                            series:{
+                                stress: Serie.create({ array: data.result, itemSize: 6 }),
+                                positions: Serie.create({ array: positions, itemSize: 3 })
+                            }                  
+                        })
+                        context.info("Dataframe created", df)
+                        let keplerMesh = new KeplerMesh(mesh.geometry, defaultMaterial(), df)
+                        let obj = createFluxThreeObject3D({
+                            object: keplerMesh,
+                            id:mesh.name+"_resolved",
+                            displayName: mesh.userData.displayName+" resolved"
+                        })
+                        context.info("Mesh created", mesh)
+
+                        return obj as KeplerMesh
+                    })
+                )
             })
         }
-        /*resolve(data: Array<ArcheFacade.Solution| GridsLike> | 
-            {solution: ArcheFacade.Solution, grid: GridsLike} | 
-            {solution: ArcheFacade.Solution, grids: GridsLike | Array<GridsLike> } , config: PersistentData, context: any) {
-                
-            let report : Report = context.__report
-            let solution = retrieveSolution(data)
-            let [grids, names] = retrieveGridsSharedArray(data)
-            if( !solution)
-                throw Error('The resolver needs a solution from the Solver module in the input data')
-            if( !grids)
-                throw Error('The resolver needs some grids data to resolve the solution on')
-            
-            report && report.addMessage(LogLevel.Info,"solution&grids", {solution, grids})
-            this.resolveMultiThreaded(solution, grids, names, config, context, this.output$)
-        }
-
-
-        resolveMultiThreaded(inputData: ArcheFacade.Solution, grids: Array<Float32Array> , names: Array<string>,
-            configuration: PersistentData, context: any, output$: Pipe<DataFrame | Array<DataFrame>>) {
-
-            let inputTaskId = uuidv4()
-            let report: Report = context.__report
-            
-            fetch(`/api/cdn-backend/libraries/youwol/${NAME}/${VERSION}/assets/arche.js`).then(
-                d => d.text()
-            ).then(archeSrcContent => {
-                
-                // creation of an inline web worker => see
-                // more info https://medium.com/@dee_bloo/make-multithreading-easier-with-inline-web-workers-a58723428a42
-                let worker = inputData.worker
-                console.log("Post task", inputTaskId)
-                worker.postMessage({
-                    task: 'resolve',
-                    taskId:inputTaskId,
-                    // json data structure that also references the ArrayBuffers provided in itemsToTransfert
-                    // more info https://developer.mozilla.org/fr/docs/Web/API/Worker/postMessage
-                    data: {solutionId:inputData.solutionId,
-                           grids},
-                    // the arche WASM module
-                    archeSrcContent,
-                    // we make available the function that builds arche objects
-                    archeFactoryFct: "return " + ArcheFacade.factory.toString(),
-                    config: configuration
-                })
-                Module.workerMessages.pipe( 
-                    filter( ({ stresses, taskId, messages, timings }) => taskId==inputTaskId)
-                ).subscribe(({ stresses, taskId, messages, timings }) => {
-                    console.log("Recieved task (expected "+inputTaskId+")", taskId )
-                    timings.map(timing => report && report.addElapsedTime(timing.title, timing.dt, {}))
-                    messages.map(({ title, object }) => report.addMessage(LogLevel.Info, title, object))
-                    let dfs = formatDataframe(stresses, names)
-                    output$.next( { data:dfs.length==1 ? dfs[0] : dfs, context})
-                })
-                worker.onmessage = function ({ data: { stresses, taskId, messages, timings } }) {
-                    Module.workerMessages.next({ stresses, taskId, messages, timings })
-                    //console.log("Recieved task (expected"+inputTaskId+")", taskId )
-                    //if(taskId!=inputTaskId)
-                    //    return                        
-                    //timings.map(timing => report && report.addElapsedTime(timing.title, timing.dt, {}))
-                    //messages.map(({ title, object }) => report.addMessage(LogLevel.Info, title, object))
-                    //let dfs = formatDataframe(stresses, names)
-                    //output$.next( { data:dfs.length==1 ? dfs[0] : dfs, context})
-                }
-            })
-        }
-        */
     }
-    /*
-        function formatDataframe( stressArrays : Array<Float32Array>, names : Array<string> ){
-
-            let dataframes = stressArrays.map( (array,i) => {
-                let stress = _.chunk( new Float32Array(array), 6)
-                let df = new DataFrame({stress})
-                df.name = names[i]
-                return df
-            })
-            return dataframes
-        }
-    */
 }
 
