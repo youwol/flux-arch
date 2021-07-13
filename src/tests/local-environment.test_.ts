@@ -111,9 +111,9 @@ test('realistic model', (done) => {
     let [sharedPositions, sharedIndexes] = createSharedArrays([0,0,0, 1,0,0, 1,1,0], [0,1,2])
     
     let boundaryCondition = new ArcheFacade.BoundaryCondition({
-        dipAxis:{type:'free', value:0},
-        strikeAxis:{type:'free', value:0},
-        normalAxis:{type:'free', value:0},
+        dipAxis:{type:'free', field: (x,y,z) => 0},
+        strikeAxis:{type:'free', field:(x,y,z) => 0},
+        normalAxis:{type:'free', field:(x,y,z) => 0},
     })
     let constraints = [
         { type:'ArcheCoulombConstraintNode', parameters:{friction:0, cohesion:0} },
