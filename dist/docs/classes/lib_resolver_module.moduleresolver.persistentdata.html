@@ -89,6 +89,13 @@
 								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="lib_resolver_module.moduleresolver.persistentdata.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="lib_resolver_module.moduleresolver.persistentdata.html#displayname" class="tsd-kind-icon">display<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="lib_resolver_module.moduleresolver.persistentdata.html#objectid" class="tsd-kind-icon">object<wbr>Id</a></li>
+							</ul>
+						</section>
 					</div>
 				</section>
 			</section>
@@ -98,18 +105,55 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Persistent<wbr>Data<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="lib_resolver_module.moduleresolver.persistentdata.html" class="tsd-signature-type" data-tsd-kind="Class">PersistentData</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Persistent<wbr>Data<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>displayName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>objectId<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="lib_resolver_module.moduleresolver.persistentdata.html" class="tsd-signature-type" data-tsd-kind="Class">PersistentData</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/f5f2f6f/src/lib/resolver.module.ts#L59">src/lib/resolver.module.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/8c1e026/src/lib/resolver.module.ts#L68">src/lib/resolver.module.ts:68</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>params: <span class="tsd-signature-symbol">{ </span>displayName<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>objectId<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> display<wbr>Name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> object<wbr>Id<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="lib_resolver_module.moduleresolver.persistentdata.html" class="tsd-signature-type" data-tsd-kind="Class">PersistentData</a></h4>
 						</li>
 					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="displayname" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> display<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">display<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;Resolved&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/8c1e026/src/lib/resolver.module.ts#L68">src/lib/resolver.module.ts:68</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="objectid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> object<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">object<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;resolved&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/8c1e026/src/lib/resolver.module.ts#L65">src/lib/resolver.module.ts:65</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -142,16 +186,16 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="lib_resolver_module.moduleresolver.persistentdata.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="lib_resolver_module.moduleresolver.persistentdata.html#displayname" class="tsd-kind-icon">display<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="lib_resolver_module.moduleresolver.persistentdata.html#objectid" class="tsd-kind-icon">object<wbr>Id</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="../modules/lib_resolver_module.moduleresolver.html#retrievegridssharedarray" class="tsd-kind-icon">retrieve<wbr>Grids<wbr>Shared<wbr>Array</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-namespace">
-						<a href="../modules/lib_resolver_module.moduleresolver.html#retrievesolution" class="tsd-kind-icon">retrieve<wbr>Solution</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
@@ -171,6 +215,7 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
