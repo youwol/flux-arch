@@ -163,15 +163,9 @@ export namespace ArcheFacade {
     }
 
     export class Solution{
-        constructor(public readonly solutionId: string, public readonly worker: Worker){}
+        constructor(public readonly solutionId: string, public readonly workerId: string){}
     }
-    export class SolutionLocal{
-        constructor(public readonly model){}
 
-        stressAt(x:number, y: number, z: number) {
-            return this.model.stressAt(x,y,z)
-        }
-    }
 
     export function factory(type, parameters, arche, factoryFct = undefined) {
         console.log("factory", type, parameters)
