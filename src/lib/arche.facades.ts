@@ -228,7 +228,7 @@ export namespace ArcheFacade {
             let positions = Array.from(new Float32Array(surfaceData.positions))
             let indexes =Array.from(new Uint16Array(surfaceData.indexes))
             let surface = new arche.Surface( positions,  indexes )
-            /*surfaceData.constraints.forEach( constraint => {
+            surfaceData.constraints.forEach( constraint => {
                 surface.addConstraint( factoryFct(constraint.type, constraint.parameters, arche, factoryFct))
             })
             
