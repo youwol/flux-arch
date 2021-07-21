@@ -28,7 +28,7 @@ export namespace ModuleMaterial {
         @Property({ description: "emit initial value" })
         readonly emitInitialValue : boolean = true
 
-        constructor({poisson=0, young=0, density=0, emitInitialValue=true} : 
+        constructor(params : 
             {
                 poisson?: number, 
                 young?: number, 
@@ -36,7 +36,7 @@ export namespace ModuleMaterial {
                 emitInitialValue?: boolean
             } = {}) {
 
-            Object.assign(this, {poisson, young, density, emitInitialValue})
+            Object.assign(this, params)
         }
     }
 
