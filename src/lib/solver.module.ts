@@ -2,7 +2,7 @@
 
 
 import { arche, pack } from './main';
-import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, freeContract, Context, ModuleError } from '@youwol/flux-core'
+import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, freeContract, Context, ModuleError, expectInstanceOf, expectSingle } from '@youwol/flux-core'
 import { ArcheFacade } from './arche.facades';
 import { filter } from 'rxjs/operators';
 
@@ -71,6 +71,13 @@ export namespace ModuleSolver {
         }
     }
 
+    let contractScene = expectSingle({
+        when: expectInstanceOf({
+            typeName: "Scene",
+            Type: ArcheFacade.Scene
+        })
+    })
+
     @Flux({
         pack: pack,
         namespace: ModuleSolver,
@@ -91,8 +98,8 @@ export namespace ModuleSolver {
 
             this.addInput({
                 id: "input",
-                description: `Triggering this input trigger the solver. No data beside configuration is needed.`,
-                contract: freeContract(),
+                description: `Triggering this input execute the solver using the provided scene.`,
+                contract: contractScene,
                 onTriggered: ({ data, configuration, context }) => this.solve(data, configuration, context)
             })
             this.solution$ = this.addOutput({ id: "solution" })
@@ -106,7 +113,6 @@ export namespace ModuleSolver {
         solveMultiThreaded(scene: ArcheFacade.Scene, configuration: PersistentData, context: Context) {
 
             let workerPool = this.environment.workerPool
-
             workerPool.schedule<WorkerArguments>({
                 title: 'SOLVE',
                 entryPoint: solveInWorker,
