@@ -160,6 +160,7 @@ export namespace ModuleResolver {
             },
                 (error) => { 
                     context.error(new ModuleError(this, error.message))
+                    context.terminate()
             })
         }
 
@@ -183,7 +184,8 @@ export namespace ModuleResolver {
                         modelId: solution.solutionId,
                         positions: view
                     },
-                    context
+                    context,
+                    environment: this.environment
                 })
                 
                 return stream$.pipe( 
