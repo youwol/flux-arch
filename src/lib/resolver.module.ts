@@ -184,8 +184,7 @@ export namespace ModuleResolver {
                         modelId: solution.solutionId,
                         positions: view
                     },
-                    context,
-                    environment: this.environment
+                    context
                 })
                 
                 return stream$.pipe( 

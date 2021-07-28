@@ -26,7 +26,8 @@ export function install(environment: IEnvironment){
                 functions: [{
                     id: "@youwol/flux-arche.archeFactory",
                     target: ArcheFacade.factory
-                }]
+                }],
+                variables: []
             })
         }),
         mergeMap( (assets) => {

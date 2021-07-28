@@ -124,7 +124,6 @@ export namespace ModuleSolver {
                         solver: configuration.getSolver()
                     })
                 },
-                environment:this.environment,
                 context
             }).pipe( 
                 filter( ({type}) => type == "Exit")
