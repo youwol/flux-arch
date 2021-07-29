@@ -9,7 +9,7 @@ import { ProjectMgrOutput } from './implementation/arche.state';
 import { ImmutableTree } from '@youwol/fv-tree';
 import { WorkflowStep } from './workflow-step.plugin';
 import { child$, render } from '@youwol/flux-view';
-import { ArcheNode } from './implementation/tree-nodes';
+import { ArchNode } from './implementation/tree-nodes';
 
 //Icons made by <a href="https://www.flaticon.com/free-icon/workflow_1271776?term=workflow&page=2&position=11" title="srip">srip</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 let svgIcon = `
@@ -273,7 +273,7 @@ export namespace WorkflowManager {
                     (state: TreeViewState) => {
                         return new ImmutableTree.View({
                             state,
-                            headerView: (state: TreeViewState, node: ArcheNode) => headerView(state,node)
+                            headerView: (state: TreeViewState, node: ArchNode) => headerView(state,node)
                         })
                     }
                 )

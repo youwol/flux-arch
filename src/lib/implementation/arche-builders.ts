@@ -1,11 +1,11 @@
 import { findChild, findChildren, retrieveThreeMeshes } from './utils';
 
-import { ArcheBoundaryConditionNode, ArcheRemoteNode, ArcheConstraintNode, ArcheDiscontinuityNode,ArcheNode, ArcheAndersonianRemoteNode, ArcheMeshNode, ArcheMaterialNode } from './tree-nodes'
+import { ArchBoundaryConditionNode, ArchRemoteNode, ArchConstraintNode, ArchDiscontinuityNode,ArchNode, ArchAndersonianRemoteNode, ArchMeshNode, ArchMaterialNode } from './tree-nodes'
 import { from, Observable } from 'rxjs';
 import { map, mergeMap, reduce } from 'rxjs/operators';
 
 import { decodeGocadTS } from '@youwol/io'
-import { ArcheFacade } from '../arche.facades';
+import { ArchFacade } from '../arche.facades';
 import { BufferGeometry, Mesh, Object3D } from 'three';
 import { BemSurface } from '../types.arche';
 import { arche } from '../main';
@@ -14,18 +14,18 @@ import { arche } from '../main';
 type Gocad = { indices: Array<number>, positions: Array<number> }
 
 
-export function buildModel(root: ArcheNode, drive): Observable<ArcheFacade.Model> {
+export function buildModel(root: ArchNode, drive): Observable<ArchFacade.Model> {
 
-    return buildArcheSurfaces(root, drive)
+    return buildArchSurfaces(root, drive)
         .pipe(
             map((surfaces) =>{
-                let remotes = findChildren<ArcheRemoteNode>(root, ArcheRemoteNode).map(r =>{
-                    return new r['ArcheFacade'](r.parameters)
+                let remotes = findChildren<ArchRemoteNode>(root, ArchRemoteNode).map(r =>{
+                    return new r['ArchFacade'](r.parameters)
                 })
-                let material = findChild<ArcheMaterialNode>(root, ArcheMaterialNode)
-                return new ArcheFacade.Model({
+                let material = findChild<ArchMaterialNode>(root, ArchMaterialNode)
+                return new ArchFacade.Model({
                 surfaces: surfaces,
-                material: new ArcheFacade.Material(material.parameters),
+                material: new ArchFacade.Material(material.parameters),
                 remotes,
                 solver: undefined
             })})
@@ -33,12 +33,12 @@ export function buildModel(root: ArcheNode, drive): Observable<ArcheFacade.Model
 }
 
 
-export function buildArcheSurfaces(node: ArcheNode, drive) {
+export function buildArchSurfaces(node: ArchNode, drive) {
 
-    let nodesDiscontinuities = findChildren(node, ArcheDiscontinuityNode) as Array<ArcheDiscontinuityNode>
+    let nodesDiscontinuities = findChildren(node, ArchDiscontinuityNode) as Array<ArchDiscontinuityNode>
     return from(nodesDiscontinuities).pipe(
         mergeMap(discontinuity => {
-            let meshes = findChildren<ArcheMeshNode>(discontinuity, ArcheMeshNode) as Array<ArcheMeshNode>
+            let meshes = findChildren<ArchMeshNode>(discontinuity, ArchMeshNode) as Array<ArchMeshNode>
             return from(meshes).pipe(
                 mergeMap(mesh => drive.readAsText(mesh.fileId)),
                 reduce((acc, e) => acc.concat(e), []),
@@ -61,35 +61,35 @@ export function buildArcheSurfaces(node: ArcheNode, drive) {
 }
 
 
-export function buildSurfacesFromGocad(objects: Gocad | Array<Gocad>, node: ArcheDiscontinuityNode): Array<ArcheFacade.Surface> {
+export function buildSurfacesFromGocad(objects: Gocad | Array<Gocad>, node: ArchDiscontinuityNode): Array<ArchFacade.Surface> {
 
     if (!Array.isArray(objects))
         return buildSurfacesFromGocad([objects], node)
 
     let surfaces = objects.map(object => {
 
-        let constraintNodes = findChildren<ArcheConstraintNode>(node, ArcheConstraintNode)
-        let bcNode = findChild<ArcheBoundaryConditionNode>(node, ArcheBoundaryConditionNode)
+        let constraintNodes = findChildren<ArchConstraintNode>(node, ArchConstraintNode)
+        let bcNode = findChild<ArchBoundaryConditionNode>(node, ArchBoundaryConditionNode)
         let sharedPositions = new Float32Array(new SharedArrayBuffer( 4 * object.positions.length))
         sharedPositions.set(Float32Array.from(object.positions),0)
         let sharedIndexes = new Uint16Array(new SharedArrayBuffer( 2 * object.indices.length))
         sharedIndexes.set(Uint16Array.from(object.indices),0)
-        return new ArcheFacade.Surface({
+        return new ArchFacade.Surface({
             positions: sharedPositions,
             indexes:  sharedIndexes,
-            boundaryCondition: new ArcheFacade.BoundaryCondition(bcNode.parameters),
-            constraints: constraintNodes.map(c => new c['ArcheFacade'](c.parameters ))
+            boundaryCondition: new ArchFacade.BoundaryCondition(bcNode.parameters),
+            constraints: constraintNodes.map(c => new c['ArchFacade'](c.parameters ))
         })
     })
     return surfaces
 }
 
 
-export function buildSurfacesFromThree(data: Object3D | Array<any>, report = undefined): Array<ArcheFacade.Surface> {
+export function buildSurfacesFromThree(data: Object3D | Array<any>, report = undefined): Array<ArchFacade.Surface> {
 
     let meshes = retrieveThreeMeshes(data)
-    let bc :  ArcheFacade.BoundaryCondition = Array.isArray(data) && data.find( d => d instanceof ArcheFacade.BoundaryCondition)
-    let constraints : Array<ArcheFacade.Constraint> = Array.isArray(data) && data.filter( d => d instanceof ArcheFacade.Constraint)
+    let bc :  ArchFacade.BoundaryCondition = Array.isArray(data) && data.find( d => d instanceof ArchFacade.BoundaryCondition)
+    let constraints : Array<ArchFacade.Constraint> = Array.isArray(data) && data.filter( d => d instanceof ArchFacade.Constraint)
     let surfaces = meshes.map(mesh => {
 
         let bufferGeom = mesh.geometry as BufferGeometry
@@ -97,7 +97,7 @@ export function buildSurfacesFromThree(data: Object3D | Array<any>, report = und
         let indexes = Uint16Array.from(bufferGeom.index.array)
         let positions = Float32Array.from(bufferGeom.attributes.position.array)
         let t1 = performance.now()
-        let surface =new ArcheFacade.Surface({positions,indexes, constraints,boundaryCondition:bc})
+        let surface =new ArchFacade.Surface({positions,indexes, constraints,boundaryCondition:bc})
         let t2 = performance.now()
         report && report.addElapsedTime("duplicate indexes, positions", t1 - t0, {})
         report && report.addElapsedTime("buildSurface", t2 - t1, {})

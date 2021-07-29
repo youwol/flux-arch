@@ -3,7 +3,7 @@ import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, uuidv4 } from '@
 import { from, Observable, of } from 'rxjs';
 import { Environment, Solution } from '../lib/implementation/data';
 //import { MockDriveImplementation } from '../../../shared/test/mock-drive';
-import { ArcheFacade } from '../lib/arche.facades';
+import { ArchFacade } from '../lib/arche.facades';
 import { Interfaces } from '@youwol/flux-files';
 import * as path from 'path'
 import { decodeGocadTS } from '@youwol/io';
@@ -16,7 +16,7 @@ export namespace MockEnvironment {
     
     export class MockSolution implements Solution{
         
-        constructor(public readonly solutionId:string, public readonly model:ArcheFacade.Model){}
+        constructor(public readonly solutionId:string, public readonly model:ArchFacade.Model){}
     }
     export class EnvImplementation extends Environment{
 
@@ -25,14 +25,14 @@ export namespace MockEnvironment {
         
         constructor(
             public readonly rootFolder, 
-            public readonly resolver: (model:ArcheFacade.Model, position:[number,number,number]) => Array<number> ){
+            public readonly resolver: (model:ArchFacade.Model, position:[number,number,number]) => Array<number> ){
             super()
 
             //this.drive = new MockDriveImplementation.Drive("mockDrive",rootFolder)
             this.folder = new Interfaces.Folder("","root",this.drive.id, this.drive)
         }
 
-        solve(model: ArcheFacade.Model, notifications$): Observable<MockSolution>{        
+        solve(model: ArchFacade.Model, notifications$): Observable<MockSolution>{        
             return of( new MockSolution(uuidv4(), model) )
         }
 
@@ -97,7 +97,7 @@ export namespace MockEnvironment {
 
             this.environment$ = this.addOutput({id:"environment"})
         }
-        send( resolver: (model:ArcheFacade.Model, position:[number,number,number]) => Array<number>  ){
+        send( resolver: (model:ArchFacade.Model, position:[number,number,number]) => Array<number>  ){
             let environment = new EnvImplementation(this.getPersistentData<PersistentData>().rootFolder,resolver)
             this.environment$.next({data:{ environment }, context:{}})
         }

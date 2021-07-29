@@ -3,13 +3,13 @@ import { Interfaces } from '@youwol/flux-files'
 import { filter, map, mergeMap, scan, switchMap, take, tap, withLatestFrom } from 'rxjs/operators'
 import * as _ from 'lodash'
 import { extractNewObservationMeshNodes, findChild, findChildren} from './utils'
-import { ArcheFacade } from '../arche.facades'
-import { RootArcheNode, ArcheMeshNode, 
-    ArcheNode, ArcheRealizationNode, ArcheDiscontinuityMeshNode, 
-    ArcheObservationMeshNode, 
-    ArcheMaterialNode,
-    ArcheAndersonianRemoteNode,
-    ArcheFolderRemoteNode} from './tree-nodes'
+import { ArchFacade } from '../arche.facades'
+import { RootArchNode, ArchMeshNode, 
+    ArchNode, ArchRealizationNode, ArchDiscontinuityMeshNode, 
+    ArchObservationMeshNode, 
+    ArchMaterialNode,
+    ArchAndersonianRemoteNode,
+    ArchFolderRemoteNode} from './tree-nodes'
 import { from, Observable, ReplaySubject, Subscription } from 'rxjs'
 import { Environment, ProjectState, Solution, needSolve, TreeViewState} from './data'
 import { BufferGeometry, Mesh } from 'three'
@@ -19,29 +19,29 @@ import { uuidv4 } from '@youwol/flux-core'
 import { Visu3dState } from './visu3d.state'
     
 
-type ComponentNode = ArcheFacade.Surface | ArcheFacade.Remote | ArcheFacade.Material
+type ComponentNode = ArchFacade.Surface | ArchFacade.Remote | ArchFacade.Material
 
 
 
-function toCommand( ownerId: string, root: RootArcheNode, component: ArcheFacade.ArcheModelComponent)
-: ImmutableTree.Command<ArcheNode>{
+function toCommand( ownerId: string, root: RootArchNode, component: ArchFacade.ArchModelComponent)
+: ImmutableTree.Command<ArchNode>{
 
-    if(component instanceof ArcheFacade.Material){
-        let oldNode = findChild<ArcheMaterialNode>(root,ArcheMaterialNode)
-        let material = new ArcheMaterialNode({id:oldNode.id, ownerId, name:'material', type:['fromComponent'], parameters:component.parameters})
+    if(component instanceof ArchFacade.Material){
+        let oldNode = findChild<ArchMaterialNode>(root,ArchMaterialNode)
+        let material = new ArchMaterialNode({id:oldNode.id, ownerId, name:'material', type:['fromComponent'], parameters:component.parameters})
         
-        return new ImmutableTree.ReplaceNodeCommand<ArcheNode>(oldNode, material) 
+        return new ImmutableTree.ReplaceNodeCommand<ArchNode>(oldNode, material) 
     }
-    if(component instanceof ArcheFacade.AndersonianRemote){
-        let remote = new ArcheAndersonianRemoteNode({id:uuidv4(),ownerId, name:'Andersonian',type:['fromComponent'], parameters:component.parameters})
-        let folder = findChild<ArcheFolderRemoteNode>(root,ArcheFolderRemoteNode)
-        return new ImmutableTree.AddChildCommand<ArcheNode>(folder, remote) 
+    if(component instanceof ArchFacade.AndersonianRemote){
+        let remote = new ArchAndersonianRemoteNode({id:uuidv4(),ownerId, name:'Andersonian',type:['fromComponent'], parameters:component.parameters})
+        let folder = findChild<ArchFolderRemoteNode>(root,ArchFolderRemoteNode)
+        return new ImmutableTree.AddChildCommand<ArchNode>(folder, remote) 
     }
 
 }
 function applyCommands( 
     tree: TreeViewState, 
-    commands: Array<ImmutableTree.Command<ArcheNode>>){
+    commands: Array<ImmutableTree.Command<ArchNode>>){
     
     let cmds = commands.filter(cmd => !(cmd instanceof ImmutableTree.InitCommand))
     cmds.forEach( command =>  command.execute(tree, false, tree.updatePropagationFct ) )
@@ -55,11 +55,11 @@ export class ProjectMgrOutput{
     public readonly environment: Environment
     public readonly manager: StateMgr
     public readonly state: ProjectState
-    public readonly selection:{nodes:Array<ArcheNode>}
+    public readonly selection:{nodes:Array<ArchNode>}
     public readonly context: any
 
     constructor( {environment, manager, state, selection, context} :
-        {environment:Environment, manager: StateMgr, state:ProjectState, selection:{nodes:Array<ArcheNode>}, context:any}  ){
+        {environment:Environment, manager: StateMgr, state:ProjectState, selection:{nodes:Array<ArchNode>}, context:any}  ){
 
             this.environment = environment
             this.manager = manager
@@ -83,20 +83,20 @@ export class StateMgr {
     public readonly id: string
     public readonly name: string
     public readonly fromState:ProjectState
-    public readonly withComponents: Array<ArcheFacade.ArcheModelComponent>
+    public readonly withComponents: Array<ArchFacade.ArchModelComponent>
     public readonly environment: Environment
     public readonly visu3dState : Visu3dState
     public readonly context: Environment
 
-    withCommands = new Array<ImmutableTree.Command<ArcheNode>>()
-    withCommandComponents = new Array<ImmutableTree.Command<ArcheNode>>()
+    withCommands = new Array<ImmutableTree.Command<ArchNode>>()
+    withCommandComponents = new Array<ImmutableTree.Command<ArchNode>>()
     nodesWatched = new Array<string>()
-    lastSolution : {solution: Solution, commandRef: ImmutableTree.Command<ArcheNode> }
+    lastSolution : {solution: Solution, commandRef: ImmutableTree.Command<ArchNode> }
 
     constructor(
         {   id, name, fromState, withCommands, withComponents, environment, context}:
-        {   id: string, name: string, fromState:ProjectState, withCommands:Array<ImmutableTree.Command<ArcheNode>>, 
-            withComponents:Array<ArcheFacade.ArcheModelComponent>, environment:Environment, context: any})  {
+        {   id: string, name: string, fromState:ProjectState, withCommands:Array<ImmutableTree.Command<ArchNode>>, 
+            withComponents:Array<ArchFacade.ArchModelComponent>, environment:Environment, context: any})  {
                 
             this.id = id
             this.name = name
@@ -142,7 +142,7 @@ export class StateMgr {
                         if(this.withCommands.filter( cmd => !(cmd instanceof ImmutableTree.InitCommand)).length>0)
                             console.log("###===> got command "+this.id, this.withCommands)
                     }),
-                    map( ( allUpdates: Array<ImmutableTree.Updates<ArcheNode>> ) => {
+                    map( ( allUpdates: Array<ImmutableTree.Updates<ArchNode>> ) => {
 
                         let lastUpdate = allUpdates.slice(-1)[0]
                         let solution = undefined
@@ -156,7 +156,7 @@ export class StateMgr {
                                 solution = this.lastSolution.solution
                         }
                         let state = new ProjectState(  this.id, this.inputState.initial, this.withCommands, this.inputState.withComponents, 
-                            lastUpdate.newTree as RootArcheNode, solution )
+                            lastUpdate.newTree as RootArchNode, solution )
 
                         return { state, lastUpdate} 
                     })
@@ -178,22 +178,22 @@ export class StateMgr {
             this.subscriptions.push(
 
                 this.tree.directUpdates$.pipe( 
-                    filter( (updates: Array<ImmutableTree.Updates<ArcheNode>>) => {
-                        let disc = findChild<ArcheDiscontinuityMeshNode>( updates.slice(-1)[0].newTree, ArcheDiscontinuityMeshNode)
+                    filter( (updates: Array<ImmutableTree.Updates<ArchNode>>) => {
+                        let disc = findChild<ArchDiscontinuityMeshNode>( updates.slice(-1)[0].newTree, ArchDiscontinuityMeshNode)
                         return disc && needSolve(updates.map( update => update.command ))
                     }),
                     switchMap( (updates) => {
                         let lastUpdate = updates.slice(-1)[0]
-                        let model$ = buildModel(lastUpdate.newTree as RootArcheNode, this.tree.environment.drive)
+                        let model$ = buildModel(lastUpdate.newTree as RootArchNode, this.tree.environment.drive)
                         return model$.pipe(map( model=>({model,lastUpdate})))
                     }),
-                    switchMap( ({model, lastUpdate} : {model:ArcheFacade.Model, lastUpdate:ImmutableTree.Updates<ArcheNode>}) => {
+                    switchMap( ({model, lastUpdate} : {model:ArchFacade.Model, lastUpdate:ImmutableTree.Updates<ArchNode>}) => {
 
                         return this.tree.environment
-                        .solve(model, (lastUpdate.newTree as RootArcheNode).process$)
+                        .solve(model, (lastUpdate.newTree as RootArchNode).process$)
                         .pipe( map( (solution) => ({solution, lastUpdate})) )
                     }),
-                    tap( ({solution, lastUpdate} : {solution:Solution, lastUpdate:ImmutableTree.Updates<ArcheNode>}) => {
+                    tap( ({solution, lastUpdate} : {solution:Solution, lastUpdate:ImmutableTree.Updates<ArchNode>}) => {
                         this.lastSolution = { solution, commandRef: lastUpdate.command} 
                     }),
                     map( ({solution})=>solution)
@@ -231,7 +231,7 @@ export class StateMgr {
                 this.subscriptions.push(
 
                     obs$.pipe(
-                        switchMap( ({solution, nodes}:{solution:Solution, nodes:Array<ArcheObservationMeshNode>}) => {
+                        switchMap( ({solution, nodes}:{solution:Solution, nodes:Array<ArchObservationMeshNode>}) => {
                             return from(nodes).pipe( map(node=> ({node,solution})))
                         }),
                         mergeMap( ({solution,node}) => {
@@ -240,9 +240,9 @@ export class StateMgr {
                         })
                     )
                     .subscribe(({file, oldMeshNode, solutionId}: 
-                        {file: Interfaces.File, oldMeshNode:ArcheObservationMeshNode, solutionId:string}) => {
+                        {file: Interfaces.File, oldMeshNode:ArchObservationMeshNode, solutionId:string}) => {
 
-                        let realization = new ArcheRealizationNode({id:"realization-"+oldMeshNode.id, solutionId, ownerId: this.tree.id, name:"realization",fileId:file.id,meshFileId:oldMeshNode.fileId})
+                        let realization = new ArchRealizationNode({id:"realization-"+oldMeshNode.id, solutionId, ownerId: this.tree.id, name:"realization",fileId:file.id,meshFileId:oldMeshNode.fileId})
                         let meshNode = new oldMeshNode.factory( { ...oldMeshNode, ...{ownerId:this.id, children:[realization]} })
                         this.tree.replaceNode(oldMeshNode, meshNode )
                     }) 
@@ -251,12 +251,12 @@ export class StateMgr {
             
             let toResolve1$ = this.ownedSolution$.pipe(
                 withLatestFrom( this.tree.root$),
-                filter( ([solution, root] : [Solution, RootArcheNode]) => {
-                    return  findChildren<ArcheObservationMeshNode>(root,ArcheObservationMeshNode).length>0
+                filter( ([solution, root] : [Solution, RootArchNode]) => {
+                    return  findChildren<ArchObservationMeshNode>(root,ArchObservationMeshNode).length>0
                 }),
-                map( ([solution, root] : [Solution, RootArcheNode]) => {
+                map( ([solution, root] : [Solution, RootArchNode]) => {
                     let id = this.id
-                    let nodes = findChildren<ArcheObservationMeshNode>(root,ArcheObservationMeshNode)
+                    let nodes = findChildren<ArchObservationMeshNode>(root,ArchObservationMeshNode)
                     return {solution, nodes}
                 })
             )
@@ -280,8 +280,8 @@ export class StateMgr {
     }
 
 
-    saveNode( node: ArcheNode, 
-        data: ArcheFacade.Constraint | ArcheFacade.AndersonianRemote | ArcheFacade.BoundaryCondition | ArcheFacade.Material ){
+    saveNode( node: ArchNode, 
+        data: ArchFacade.Constraint | ArchFacade.AndersonianRemote | ArchFacade.BoundaryCondition | ArchFacade.Material ){
         this.tree.replaceAttributes(node.id, {parameters: data.parameters})
     }    
 
@@ -297,7 +297,7 @@ export class StateMgr {
             mergeMap( () => this.tree.root$ ),
             take(1)
         ).subscribe( (root) => {
-            let nodes = findChildren<ArcheMeshNode>( root, ArcheMeshNode)
+            let nodes = findChildren<ArchMeshNode>( root, ArchMeshNode)
             let node = nodes.find( node => node.fileId == file.id)
             this.visu3dState.revokeFrom(node)
             this.tree.replaceAttributes(node.id, {fileId:file.id, children:[]})
@@ -308,12 +308,12 @@ export class StateMgr {
         return this.visu3dState.buildObject(nodeId)
     }
 
-    addSelectionWatch(node:ArcheNode) {
+    addSelectionWatch(node:ArchNode) {
         if(this.nodesWatched.find( id => id == node.id) == undefined)
             this.nodesWatched.push(node.id)
     }
 
-    removeSelectionWatch(node:ArcheNode) {
+    removeSelectionWatch(node:ArchNode) {
         this.nodesWatched = this.nodesWatched.filter( id => id!=node.id)
     }
 }

@@ -2,10 +2,10 @@
 import { pack } from './main';
 import { Property, Flux, BuilderView, ModuleFlux, Pipe, Schema, SideEffects, Project, freeContract } from '@youwol/flux-core'
 import { BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { ArcheNode} from './implementation/tree-nodes';
+import { ArchNode} from './implementation/tree-nodes';
 import { ProjectMgrOutput, StateMgr } from './implementation/arche.state';
 import { Environment, newProjectNode, ProjectState } from './implementation/data';
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 
 
 export namespace ProjectMgr {
@@ -58,10 +58,10 @@ export namespace ProjectMgr {
             return {environment, fromState, withComponents:[]}  
 
         let withComponents = data.filter( d => {
-            if(d instanceof ArcheFacade.ArcheModelComponent)
+            if(d instanceof ArchFacade.ArchModelComponent)
                 return [d]
             if(Array.isArray(d))
-                return d.filter( e => e instanceof ArcheFacade.ArcheModelComponent) 
+                return d.filter( e => e instanceof ArchFacade.ArchModelComponent) 
         })
         .reduce( (acc,e) => acc.concat(e) , [])
     
@@ -87,7 +87,7 @@ export namespace ProjectMgr {
         lastStateMgr$ = new ReplaySubject<StateMgr>(1)
 
         nodesWatched = new Array<string>()
-        selection$ = new BehaviorSubject<{ nodes: Array<ArcheNode>}>({nodes:[]})
+        selection$ = new BehaviorSubject<{ nodes: Array<ArchNode>}>({nodes:[]})
 
         subscriptions = new Array<Subscription>()
 

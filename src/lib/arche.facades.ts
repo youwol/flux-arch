@@ -1,9 +1,9 @@
 /*
 Those datastructure are meant to be send to web workers => they are data-only
 */
-export namespace ArcheFacade {
+export namespace ArchFacade {
 
-    export class ArcheModelComponent{
+    export class ArchModelComponent{
 
     }
 
@@ -14,7 +14,7 @@ export namespace ArcheFacade {
     export class CoulombConstraint extends Constraint {
 
         constructor({ friction, cohesion }: { friction: number, cohesion: number }) {
-            super("ArcheCoulombConstraintNode", { friction, cohesion })
+            super("ArchCoulombConstraintNode", { friction, cohesion })
         }
     }
 
@@ -22,7 +22,7 @@ export namespace ArcheFacade {
 
         constructor({ theta, frictionDip, frictionStrike }:
             { theta: number, frictionDip: number, frictionStrike: number }) {
-            super("ArcheCoulombOrthoConstraintNode", { theta, frictionDip, frictionStrike })
+            super("ArchCoulombOrthoConstraintNode", { theta, frictionDip, frictionStrike })
         }
     }
     /*
@@ -30,7 +30,7 @@ export namespace ArcheFacade {
 
         constructor({ axis, value, direction, type }:
             { axis: string, value: number, direction: string, type: string }) {
-            super("ArcheDisplacementConstraintNode", { axis, value, direction, type })
+            super("ArchDisplacementConstraintNode", { axis, value, direction, type })
         }
     }
 
@@ -38,11 +38,11 @@ export namespace ArcheFacade {
 
         constructor({ value, direction, type }:
             { value: number, direction: string, type: string }) {
-            super("ArcheDisplacementNormConstraintNode", { value, direction, type })
+            super("ArchDisplacementNormConstraintNode", { value, direction, type })
         }
     }*/
 
-    export class Remote extends ArcheModelComponent {
+    export class Remote extends ArchModelComponent {
 
         constructor(public readonly type: string, public readonly parameters) {
             super()
@@ -53,7 +53,7 @@ export namespace ArcheFacade {
 
         constructor({ HSigma, hSigma, vSigma, theta }:
             { HSigma: number, hSigma: number, vSigma: number, theta: number }) {
-            super("ArcheAndersonianRemoteNode", { HSigma, hSigma, vSigma, theta })
+            super("ArchAndersonianRemoteNode", { HSigma, hSigma, vSigma, theta })
         }
     }
 
@@ -65,7 +65,7 @@ export namespace ArcheFacade {
             strikeAxis: { type: string, field: string },
             normalAxis: { type: string, field: string }
         }
-        public readonly type = "ArcheBoundaryConditionNode"
+        public readonly type = "ArchBoundaryConditionNode"
 
         constructor({ dipAxis, strikeAxis, normalAxis }:
             {
@@ -86,7 +86,7 @@ export namespace ArcheFacade {
         }
     }
 
-    export class Material extends ArcheModelComponent {
+    export class Material extends ArchModelComponent {
 
         readonly parameters: { poisson: number, young: number, density: number }
 
@@ -97,7 +97,7 @@ export namespace ArcheFacade {
         }
     }
 
-    export class Surface extends ArcheModelComponent {
+    export class Surface extends ArchModelComponent {
 
         public readonly positions: Float32Array // shared array buffer
 
@@ -180,13 +180,13 @@ export namespace ArcheFacade {
         
         factoryFct = factoryFct || factory
         
-        if( type == "ArcheMaterialNode") 
+        if( type == "ArchMaterialNode") 
             return new arche.Material(parameters.poisson, parameters.young, parameters.density)
 
-        if (type == 'ArcheCoulombConstraintNode')
+        if (type == 'ArchCoulombConstraintNode')
             return new arche.Coulomb(parameters.friction, parameters.cohesion)
 
-        if (type == 'ArcheCoulombOrthoConstraintNode') {
+        if (type == 'ArchCoulombOrthoConstraintNode') {
 
             let c = new arche.CoulombOrtho()
             c.theta = parameters.theta
@@ -195,7 +195,7 @@ export namespace ArcheFacade {
             return c
         }
         
-        if (type == 'ArcheDisplacementConstraintNode') {
+        if (type == 'ArchDisplacementConstraintNode') {
 
             if (parameters.direction == 'compression' && parameters.type == 'max')
                 return arche.MaxDispl(parameters.axis, parameters.value)
@@ -207,7 +207,7 @@ export namespace ArcheFacade {
                 return arche.MinTraction(parameters.axis, parameters.value)
         }
 
-        if (type == 'ArcheDisplacementNormConstraintNode') {
+        if (type == 'ArchDisplacementNormConstraintNode') {
 
             if (parameters.direction == 'compression' && parameters.type == 'max')
                 return arche.MaxNormDispl(parameters.value)
@@ -215,7 +215,7 @@ export namespace ArcheFacade {
                 return arche.MaxNormTraction(parameters.value)
         }
         
-        if (type == "ArcheAndersonianRemoteNode") {
+        if (type == "ArchAndersonianRemoteNode") {
 
             let r = new arche.AndersonianRemote()
             r.stress = true
@@ -225,10 +225,10 @@ export namespace ArcheFacade {
             r.theta = parameters.theta
             return r
         }
-        if (type == "ArcheSolverNode"){
+        if (type == "ArchSolverNode"){
             return new Solver(parameters.type, parameters)
         }
-        if (type == "ArcheSurfaceNode"){
+        if (type == "ArchSurfaceNode"){
 
             let surfaceData: Surface = parameters
             let positions = Array.from(new Float32Array(surfaceData.positions))
@@ -258,14 +258,14 @@ export namespace ArcheFacade {
             return surface
         }
 
-        if (type == "ArcheModelNode") {
+        if (type == "ArchModelNode") {
         
             let model = new arche.Model()
             model.setHalfSpace(false)
-            let material = factoryFct("ArcheMaterialNode", parameters.material.parameters, arche, factoryFct)
+            let material = factoryFct("ArchMaterialNode", parameters.material.parameters, arche, factoryFct)
             model.setMaterial(material)
 
-            let surfaces = parameters.surfaces.map( s => factoryFct("ArcheSurfaceNode", s, arche, factoryFct))
+            let surfaces = parameters.surfaces.map( s => factoryFct("ArchSurfaceNode", s, arche, factoryFct))
             surfaces.forEach( s => model.addSurface(s))
 
             let remotes = parameters.remotes.map( r => factoryFct(r.type, r.parameters, arche, factoryFct))

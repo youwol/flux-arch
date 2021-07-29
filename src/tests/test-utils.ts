@@ -4,7 +4,7 @@ import { MockEnvironment } from './mock-environment'
 import { map, share, skip, take } from 'rxjs/operators'
 import { ProjectMgr } from '../lib/project-mgr.module'
 import { ProjectMgrOutput } from '../lib/implementation/arche.state'
-import { ArcheDiscontinuityNode, ArcheFolderDiscontinuityNode, ArcheFolderObservationNode, ArcheObservationMeshNode, ArcheObservationNode, ArcheRealizationNode} from '../lib/implementation/tree-nodes'
+import { ArchDiscontinuityNode, ArchFolderDiscontinuityNode, ArchFolderObservationNode, ArchObservationMeshNode, ArchObservationNode, ArchRealizationNode} from '../lib/implementation/tree-nodes'
 import { findChild, findChildren } from '../lib/implementation/utils'
 import { getActions } from '../lib/views/tree-elements.view'
 //import { getAbsoluteTestDataPath } from '../../../shared/test/utils'
@@ -41,7 +41,7 @@ export function loadDiscontinuityS1(fromIndex, modules,
         // expect initial load => add discontinuity
         onInitialLoad && onInitialLoad(data)
         let rootNode = data.state.node
-        let folderNode = findChild<ArcheFolderDiscontinuityNode>(rootNode,ArcheFolderDiscontinuityNode)
+        let folderNode = findChild<ArchFolderDiscontinuityNode>(rootNode,ArchFolderDiscontinuityNode)
         let actions = getActions(data.manager.tree, folderNode)
         setTimeout( ()=> actions.find( action => action.name=='add discontinuity').exe(), 0)
     }) 
@@ -50,7 +50,7 @@ export function loadDiscontinuityS1(fromIndex, modules,
         // expect discontinuity added => add S1.ts mesh
         onDiscontinuityAdded && onDiscontinuityAdded(data)
         let rootNode = data.state.node
-        let discontinuityNode = findChildren<ArcheDiscontinuityNode>(rootNode,ArcheDiscontinuityNode)
+        let discontinuityNode = findChildren<ArchDiscontinuityNode>(rootNode,ArchDiscontinuityNode)
         let dataPath = ""//getAbsoluteTestDataPath('geophysics/arche/model_test_S1/S1.ts')
         fs.readFile(dataPath,'utf-8', (err, content) => {
             expect(err).toBeNull()
@@ -83,7 +83,7 @@ export function addSimpleShape(fromIndex, modules, targetShapeName: string,
 
         modules.projectMgr.output$.pipe(skip(fromIndex),take(1),map(({data})=>data)).subscribe( (data:ProjectMgrOutput) => {
             
-            let obsNode = findChild<ArcheFolderObservationNode>(data.state.node, ArcheFolderObservationNode)
+            let obsNode = findChild<ArchFolderObservationNode>(data.state.node, ArchFolderObservationNode)
             let actions = getActions(data.manager.tree, obsNode)
             setTimeout( ()=> {
                 actions.find( action => action.name==targetShapeName).exe()
@@ -97,11 +97,11 @@ export function addSimpleShape(fromIndex, modules, targetShapeName: string,
 
             let addMeshCmd = lastCmd
             expect(addMeshCmd).toBeInstanceOf( ImmutableTree.AddChildCommand)
-            expect(addMeshCmd['parentNode']).toBeInstanceOf(ArcheFolderObservationNode)
-            expect(addMeshCmd['childNode']).toBeInstanceOf(ArcheObservationNode)
+            expect(addMeshCmd['parentNode']).toBeInstanceOf(ArchFolderObservationNode)
+            expect(addMeshCmd['childNode']).toBeInstanceOf(ArchObservationNode)
 
             let observationNode = addMeshCmd['childNode']
-            expect(observationNode.children[0]).toBeInstanceOf(ArcheObservationMeshNode)
+            expect(observationNode.children[0]).toBeInstanceOf(ArchObservationMeshNode)
             let meshNode = observationNode.children[0]
             expect(meshNode.children.length).toEqual(0)
             // Expected: the mesh of the simple shape has been added, no resolution computed
@@ -181,7 +181,7 @@ export function addOneChildNodeWithSolutionCheck(
         expect(data.state.solution).toBeDefined()  
         let solution = data.state.solution as MockEnvironment.MockSolution
         expect(solution.solutionId).toEqual(solutionId) 
-        let realizationNode = findChild<ArcheRealizationNode>(data.state.node,ArcheRealizationNode)
+        let realizationNode = findChild<ArchRealizationNode>(data.state.node,ArchRealizationNode)
         data.manager.buildObject3D(realizationNode.id).subscribe( (object3d:KeplerMesh) => {
         
             let geometry = object3d.geometry as BufferGeometry    
@@ -216,7 +216,7 @@ export function addOneChildNodeWithSolutionCheck(
 
          expect(data.state.solution).toBeDefined()  
          expect(data.state.solution.solutionId).toEqual(solutionId) 
-         let realizationNode = findChild<ArcheRealizationNode>(data.state.node,ArcheRealizationNode)
+         let realizationNode = findChild<ArchRealizationNode>(data.state.node,ArchRealizationNode)
          data.manager.buildObject3D(realizationNode.id).subscribe( (object3d:KeplerMesh) => {
          
              let geometry = object3d.geometry as BufferGeometry    

@@ -4,7 +4,7 @@
 import { pack } from './main';
 import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, 
     Context, ModuleError, expectInstanceOf, expectSingle } from '@youwol/flux-core'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 import { filter, map } from 'rxjs/operators';
 import { WorkerContext } from '@youwol/flux-core/src/lib/worker-pool';
 import { ProgressViewData, ConvergencePlotData } from './views/progress.view';
@@ -16,7 +16,7 @@ import { createFluxThreeObject3D, defaultMaterial } from '@youwol/flux-three';
 export namespace ModuleSolver {
 
     interface WorkerArguments {
-        model : ArcheFacade.Model
+        model : ArchFacade.Model
     }
 
     export function solveInWorker( { args, taskId, context, workerScope }:{
@@ -28,7 +28,7 @@ export namespace ModuleSolver {
         let arche = workerScope["arche"]
 
         context.info("Parse model", { model:args })
-        let model = workerScope["@youwol/flux-arche.archeFactory"]("ArcheModelNode", args.model, arche)
+        let model = workerScope["@youwol/flux-arche.archeFactory"]("ArchModelNode", args.model, arche)
 
         context.info("Create solver")
         let solver = new arche.Solver(
@@ -88,7 +88,7 @@ export namespace ModuleSolver {
         readonly burgersObjectId: string = "burgersObject3D"
 
         getSolver(){
-            return new ArcheFacade.Solver( 
+            return new ArchFacade.Solver( 
                 this.type, 
                 { maxIteration: this.maxIteration, tolerance: this.tolerance }
                 )
@@ -102,7 +102,7 @@ export namespace ModuleSolver {
     let contractScene = expectSingle({
         when: expectInstanceOf({
             typeName: "Scene",
-            Type: ArcheFacade.Scene
+            Type: ArchFacade.Scene
         })
     })
 
@@ -111,7 +111,7 @@ export namespace ModuleSolver {
         namespace: ModuleSolver,
         id: "ModuleSolver",
         displayName: "Solver",
-        description: "Arche solver"
+        description: "Arch solver"
     })
     @BuilderView({
         namespace: ModuleSolver,
@@ -133,10 +133,10 @@ export namespace ModuleSolver {
             this.solution$ = this.addOutput({ id: "solution" })
         }
 
-        solveMultiThreaded(scene: ArcheFacade.Scene, configuration: PersistentData, context: Context) {
+        solveMultiThreaded(scene: ArchFacade.Scene, configuration: PersistentData, context: Context) {
 
             let workerPool = this.environment.workerPool
-            let model = new ArcheFacade.Model({
+            let model = new ArchFacade.Model({
                 surfaces: scene.surfaces,
                 material: scene.material,
                 remotes: scene.remotes,
@@ -173,7 +173,7 @@ export namespace ModuleSolver {
                     context.info("Result retrieved", data.result)
                     this.solution$.next({ 
                         data: { 
-                            solution: new ArcheFacade.Solution(model, data.result.burgers),
+                            solution: new ArchFacade.Solution(model, data.result.burgers),
                             object: this.createBurgersObjects(scene, data.result.burgersDisplay,configuration, context)
                         }, 
                         context 
@@ -189,7 +189,7 @@ export namespace ModuleSolver {
 
 
         createBurgersObjects(
-            scene:ArcheFacade.Scene, 
+            scene:ArchFacade.Scene, 
             results: Array<ArrayBuffer>, 
             configuration: PersistentData,
             context: Context ): Object3D {

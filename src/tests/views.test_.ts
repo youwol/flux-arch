@@ -4,7 +4,7 @@ import { MockEnvironment } from './mock-environment'
 import { ProjectMgr } from '../lib/project-mgr.module'
 import { ProjectView } from '../lib/project-view.module'
 import { delay, map, skip, switchMap, take } from 'rxjs/operators'
-import { ArcheDiscontinuityNode, ArcheFolderDiscontinuityNode, ArcheFolderObservationNode, ArcheNode } from '../lib/implementation/tree-nodes'
+import { ArchDiscontinuityNode, ArchFolderDiscontinuityNode, ArchFolderObservationNode, ArchNode } from '../lib/implementation/tree-nodes'
 import { findChild } from '../lib/implementation/utils'
 import { getActions } from '../lib/views/tree-elements.view'
 //import { getAbsoluteTestDataPath } from '../../../shared/test/utils'
@@ -39,7 +39,7 @@ test('project view', (done) => {
     
     modules.projectMgr.output$.pipe(take(1), map(({data})=>data ) ).subscribe(
         (data:ProjectMgrOutput) => {
-            let folderDiscNode = findChild<ArcheFolderDiscontinuityNode>(data.state.node , ArcheFolderDiscontinuityNode)
+            let folderDiscNode = findChild<ArchFolderDiscontinuityNode>(data.state.node , ArchFolderDiscontinuityNode)
             let actions = getActions(data.manager.tree, folderDiscNode)
             setTimeout( ()=> actions.find( action => action.name=='add discontinuity').exe(), 0)
             //done()
@@ -56,9 +56,9 @@ test('project view', (done) => {
         }
     )
     modules.projectView.view.selectedNode$.pipe(take(1),delay(0)).subscribe(
-        (node: ArcheNode ) => {
+        (node: ArchNode ) => {
             // rootNode has been selected
-            let folderDiscNode = findChild<ArcheFolderDiscontinuityNode>(node , ArcheFolderDiscontinuityNode)
+            let folderDiscNode = findChild<ArchFolderDiscontinuityNode>(node , ArchFolderDiscontinuityNode)
             let discFolderDiv = renderedDiv.querySelector('#node-'+folderDiscNode.id) as HTMLDivElement
             expect(discFolderDiv).toBeTruthy()
             let headerDiv = discFolderDiv.querySelector("#header")
@@ -67,9 +67,9 @@ test('project view', (done) => {
         }
     )
     modules.projectView.view.selectedNode$.pipe(skip(1), take(1), delay(0)).subscribe(
-        (node: ArcheNode ) => {
+        (node: ArchNode ) => {
             // discontinuity folder node has been selected
-            let discNode = findChild<ArcheDiscontinuityNode>(node , ArcheDiscontinuityNode)
+            let discNode = findChild<ArchDiscontinuityNode>(node , ArchDiscontinuityNode)
             let discDiv = renderedDiv.querySelector('#node-'+discNode.id) as HTMLDivElement
             expect(discDiv).toBeTruthy()
             let headerDiv = discDiv.querySelector("#header")
@@ -93,7 +93,7 @@ test('project view', (done) => {
     modules.projectMgr.output$.pipe(skip(2), take(1), map(({data})=>data ),delay(0)).subscribe(
         (data:ProjectMgrOutput) => {
 
-            let obsNode = findChild<ArcheFolderObservationNode>(data.state.node, ArcheFolderObservationNode)
+            let obsNode = findChild<ArchFolderObservationNode>(data.state.node, ArchFolderObservationNode)
             let actions = getActions(data.manager.tree, obsNode)
             setTimeout( ()=> {
                 actions.find( action => action.name=="plane xy").exe()

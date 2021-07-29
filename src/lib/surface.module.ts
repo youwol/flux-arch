@@ -3,7 +3,7 @@ import { arche, pack } from './main';
 import { Flux, BuilderView, ModuleFlux, Pipe, Schema, freeContract, expectSome, expectAnyOf, expectInstanceOf, expectAllOf, expectSingle, contract, Context } from '@youwol/flux-core'
 import { BufferGeometry, Group, Mesh, Object3D } from 'three';
 import { buildSurfacesFromThree } from './implementation/arche-builders'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 
 export namespace ModuleSurface {
     //Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
@@ -12,7 +12,7 @@ export namespace ModuleSurface {
     <path d="M480,0H32C14.336,0,0,14.336,0,32v160h64V64h384v384H64V320H0v160c0,17.696,14.336,32,32,32h448c17.696,0,32-14.304,32-32    V32C512,14.336,497.696,0,480,0z"/>
     `
 
-    type ArcheSurface = any
+    type ArchSurface = any
 
     @Schema({
         pack: pack,
@@ -47,14 +47,14 @@ export namespace ModuleSurface {
     let contractBoundaryCondition = expectSingle({
         when: expectInstanceOf({
             typeName: "BoundaryCondition",
-            Type: ArcheFacade.BoundaryCondition
+            Type: ArchFacade.BoundaryCondition
         })
     })
 
     let contractConstraints = expectSome({
         when: expectInstanceOf({
             typeName: "Constraints",
-            Type:  ArcheFacade.Constraint
+            Type:  ArchFacade.Constraint
         })
     })
 
@@ -85,14 +85,14 @@ export namespace ModuleSurface {
     })
     export class Module extends ModuleFlux {
 
-        surface$: Pipe<Array<ArcheSurface> | ArcheSurface>
+        surface$: Pipe<Array<ArchSurface> | ArchSurface>
 
         constructor(params) {
             super(params)
 
             this.addInput({
                 id:"objects",  
-                description: `Triggering this input construct surface(s) for use in Arche computations.`,
+                description: `Triggering this input construct surface(s) for use in Arch computations.`,
                 contract: inputContract,
                 onTriggered: ({data, configuration, context}) => this.createSurfaces(data, configuration, context)  
             })
@@ -100,7 +100,7 @@ export namespace ModuleSurface {
         }
 
         createSurfaces(
-            {meshes, bc, constraints}: {meshes: Mesh[], bc:  ArcheFacade.BoundaryCondition, constraints?: ArcheFacade.Constraint[]} , 
+            {meshes, bc, constraints}: {meshes: Mesh[], bc:  ArchFacade.BoundaryCondition, constraints?: ArchFacade.Constraint[]} , 
             config: PersistentData, 
             context: Context ){
             
@@ -109,7 +109,7 @@ export namespace ModuleSurface {
                 let bufferGeom = mesh.geometry as BufferGeometry
                 let indexes = Uint16Array.from(bufferGeom.index.array)
                 let positions = Float32Array.from(bufferGeom.attributes.position.array)
-                let surface = new ArcheFacade.Surface({
+                let surface = new ArchFacade.Surface({
                     positions,
                     indexes, 
                     constraints: constraints || [],

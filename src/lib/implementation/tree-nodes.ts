@@ -5,7 +5,7 @@ import { Interfaces } from '@youwol/flux-files'
 
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs'
 import { filter, scan } from 'rxjs/operators'
-import { ArcheFacade } from '../arche.facades'
+import { ArchFacade } from '../arche.facades'
 import { arche } from '../main'
 import { KeplerMesh } from '@youwol/flux-kepler'
 
@@ -15,9 +15,9 @@ export enum ProcessingType {
 }
 
 
-export class ArcheNode extends ImmutableTree.Node {
+export class ArchNode extends ImmutableTree.Node {
 
-    nodeType = "ArcheNode"
+    nodeType = "ArchNode"
     signals$ = new ReplaySubject<any>()
     name: string
     
@@ -25,7 +25,7 @@ export class ArcheNode extends ImmutableTree.Node {
     ownerId : string
 
     constructor( { id, ownerId, name, type, children} : 
-                 {id?:string, ownerId: string, name:string, type:Array<string>, children?:Array<ArcheNode>}){
+                 {id?:string, ownerId: string, name:string, type:Array<string>, children?:Array<ArchNode>}){
         super({id:id ? id :uuidv4(), children})
         this.name = name
         this.type = type || []
@@ -33,22 +33,22 @@ export class ArcheNode extends ImmutableTree.Node {
     }
     
     /*data(){
-        let children = this.children as Array<ArcheNode>
+        let children = this.children as Array<ArchNode>
         return {id: this.id, ownerId:this.ownerId, name:this.name, type:this.type, children: this.children ? children.map( c => c.data()): undefined,
                 nodeType:this.nodeType}
     }*/
 }
 
-export class RootArcheNode extends ArcheNode{
+export class RootArchNode extends ArchNode{
 
-    nodeType = "RootArcheNode"
+    nodeType = "RootArchNode"
 
     folders : Object
     process$ = new BehaviorSubject<{type,count}>({type:'none',count:0})
     processes$ : Observable<{count:number}>
 
     constructor( { id, ownerId, name, type, children, folders, parameters } :
-        { id: string, ownerId: string, name: string, type: Array<string>, children: Array<ArcheNode>, folders: any, 
+        { id: string, ownerId: string, name: string, type: Array<string>, children: Array<ArchNode>, folders: any, 
             parameters?:  { poisson: number, young: number, density: number } } ){
 
         super({ id, ownerId, name, type, children})
@@ -65,9 +65,9 @@ export class RootArcheNode extends ArcheNode{
 }
 
 
-export class ArcheMaterialNode extends ArcheNode{
+export class ArchMaterialNode extends ArchNode{
 
-    nodeType = "ArcheMaterialNode"
+    nodeType = "ArchMaterialNode"
     parameters = { poisson: 0, young: 0, density: 0 }
 
     constructor( { id, ownerId, name, type, parameters } :
@@ -83,16 +83,16 @@ export class ArcheMaterialNode extends ArcheNode{
     }*/
 }
 
-export class ArcheFolderNode extends ArcheNode {
+export class ArchFolderNode extends ArchNode {
 
-    nodeType = "ArcheFolderNode"
+    nodeType = "ArchFolderNode"
 
     constructor( { id, ownerId, name, type, children} ){ super({  id, ownerId, name, type, children})}
 }
 
-export class ArcheFileNode extends ArcheNode {
+export class ArchFileNode extends ArchNode {
 
-    nodeType = "ArcheFileNode"
+    nodeType = "ArchFileNode"
     fileId : string
 
     constructor( { id, ownerId, name, type, fileId, children} ){ 
@@ -103,24 +103,24 @@ export class ArcheFileNode extends ArcheNode {
         return Object.assign({}, super.data(), {fileId: this.fileId})
     }*/
 }
-export class ArcheFolderDiscontinuityNode extends ArcheFolderNode {
+export class ArchFolderDiscontinuityNode extends ArchFolderNode {
 
-    nodeType = "ArcheFolderDiscontinuityNode"
+    nodeType = "ArchFolderDiscontinuityNode"
     
     constructor( { id, ownerId, name, type, children} ){ super({ id, ownerId, name, type, children}) }
 }
 
-export class ArcheDiscontinuityNode extends ArcheFolderNode {
+export class ArchDiscontinuityNode extends ArchFolderNode {
 
-    nodeType = "ArcheDiscontinuityNode"
+    nodeType = "ArchDiscontinuityNode"
     fileId : string
     
     constructor( { id, ownerId, name, type, children} ){ super({ id, ownerId, name, type, children})}
 }
 
-export class ArcheMeshNode extends ArcheFileNode {
+export class ArchMeshNode extends ArchFileNode {
 
-    nodeType = "ArcheMeshNode"
+    nodeType = "ArchMeshNode"
     fileId : string
     
     boundingBox: {min:{x,y,z}, max:{x,y,z}} 
@@ -135,9 +135,9 @@ export class ArcheMeshNode extends ArcheFileNode {
     }*/
 }
 
-export class ArcheDiscontinuityMeshNode extends ArcheMeshNode{
+export class ArchDiscontinuityMeshNode extends ArchMeshNode{
 
-    nodeType = "ArcheDiscontinuityMeshNode"
+    nodeType = "ArchDiscontinuityMeshNode"
 
     constructor( { id, ownerId, name, fileId, boundingBox} : {id:string, ownerId: string,name:string, fileId:string, 
             boundingBox:{min:{x,y,z}, max:{x,y,z}} }){ 
@@ -146,12 +146,12 @@ export class ArcheDiscontinuityMeshNode extends ArcheMeshNode{
     }
 }
 
-export class ArcheObservationMeshNode extends ArcheMeshNode{
+export class ArchObservationMeshNode extends ArchMeshNode{
 
-    nodeType = "ArcheObservationMeshNode"
+    nodeType = "ArchObservationMeshNode"
     processes$ : Observable<{count:number, ids: Array<string>}>
 
-    constructor( { id, ownerId, name, fileId, boundingBox, children} : {id:string, ownerId: string,name:string, fileId:string, children?: Array<ArcheRealizationNode>,
+    constructor( { id, ownerId, name, fileId, boundingBox, children} : {id:string, ownerId: string,name:string, fileId:string, children?: Array<ArchRealizationNode>,
             boundingBox:{min:{x,y,z}, max:{x,y,z}} }){ 
         super({ id, ownerId, name, fileId, boundingBox, children : children || [] })
         this.boundingBox = boundingBox
@@ -167,9 +167,9 @@ export class ArcheObservationMeshNode extends ArcheMeshNode{
 
 type Field = string | ((x,y,z)=>number)
 
-export class ArcheBoundaryConditionNode extends ArcheNode {
+export class ArchBoundaryConditionNode extends ArchNode {
 
-    nodeType = "ArcheBoundaryConditionNode"
+    nodeType = "ArchBoundaryConditionNode"
 
     parameters : { dipAxis: { type:string, field: Field}, 
                    strikeAxis:  { type:string, field: Field}, 
@@ -193,38 +193,38 @@ export class ArcheBoundaryConditionNode extends ArcheNode {
     }*/
 }
 
-export class ArcheFolderObservationNode extends ArcheFolderNode {
+export class ArchFolderObservationNode extends ArchFolderNode {
 
-    nodeType = "ArcheFolderObservationNode"
+    nodeType = "ArchFolderObservationNode"
     
     constructor( { id, ownerId, name, type, children} ){ super({ id, ownerId, name, type, children}) }
 }
 
-export class ArcheObservationNode extends ArcheNode {
+export class ArchObservationNode extends ArchNode {
 
-    nodeType = "ArcheObservationNode"
+    nodeType = "ArchObservationNode"
 
     constructor( { id, ownerId, name, type, children} ){ 
         super({ id, ownerId, name, type, children})
     }
 }
 
-export class ArchePlaneObservationNode extends ArcheObservationNode {
+export class ArchPlaneObservationNode extends ArchObservationNode {
 
-    nodeType = "ArchePlaneObservationNode"
+    nodeType = "ArchPlaneObservationNode"
     constructor( { id, ownerId, name, type, children} ){ super({ id, ownerId, name, type, children})}
 }
 
-export class ArcheFolderRemoteNode extends ArcheFolderNode {
+export class ArchFolderRemoteNode extends ArchFolderNode {
 
-    nodeType = "ArcheFolderRemoteNode"
+    nodeType = "ArchFolderRemoteNode"
     
     constructor( { id, ownerId, name, type, children} ){ super({ id, ownerId, name, type, children}) }
 }
 
-export abstract class ArcheRemoteNode extends ArcheNode {
+export abstract class ArchRemoteNode extends ArchNode {
 
-    nodeType = "ArcheRemoteNode"
+    nodeType = "ArchRemoteNode"
 
     parameters : any
 
@@ -237,10 +237,10 @@ export abstract class ArcheRemoteNode extends ArcheNode {
     }*/
 }
 
-export class ArcheAndersonianRemoteNode extends ArcheRemoteNode {
+export class ArchAndersonianRemoteNode extends ArchRemoteNode {
 
-    nodeType = "ArcheAndersonianRemoteNode"
-    ArcheFacade = ArcheFacade.AndersonianRemote
+    nodeType = "ArchAndersonianRemoteNode"
+    ArchFacade = ArchFacade.AndersonianRemote
 
     constructor( { id, ownerId, name, type, parameters} :
         {id: string, ownerId: string, name: string, type?: Array<string>,
@@ -249,9 +249,9 @@ export class ArcheAndersonianRemoteNode extends ArcheRemoteNode {
     }
 }
 
-export abstract class ArcheConstraintNode extends ArcheNode {
+export abstract class ArchConstraintNode extends ArchNode {
 
-    nodeType = "ArcheConstraintNode"
+    nodeType = "ArchConstraintNode"
     public readonly parameters : {[key:string]: any}
 
     constructor( { id, ownerId, name, parameters } ){ 
@@ -264,10 +264,10 @@ export abstract class ArcheConstraintNode extends ArcheNode {
 
 }
 
-export class ArcheCoulombConstraintNode extends ArcheConstraintNode {
+export class ArchCoulombConstraintNode extends ArchConstraintNode {
 
-    nodeType = "ArcheCoulombConstraintNode"
-    ArcheFacade = ArcheFacade.CoulombConstraint
+    nodeType = "ArchCoulombConstraintNode"
+    ArchFacade = ArchFacade.CoulombConstraint
     
     constructor( {  id, ownerId, name, parameters } : { id: string, ownerId: string, name:string, 
         parameters?:{friction: number, cohesion: number}}){ 
@@ -275,10 +275,10 @@ export class ArcheCoulombConstraintNode extends ArcheConstraintNode {
     }
 }
 
-export class ArcheCoulombOrthoConstraintNode extends ArcheConstraintNode {
+export class ArchCoulombOrthoConstraintNode extends ArchConstraintNode {
 
-    nodeType = "ArcheCoulombOrthoConstraintNode"    
-    ArcheFacade = ArcheFacade.CoulombOrthoConstraint
+    nodeType = "ArchCoulombOrthoConstraintNode"    
+    ArchFacade = ArchFacade.CoulombOrthoConstraint
 
     constructor( { id, ownerId, name, parameters } : { id:string, ownerId: string,name:string,
         parameters?:{theta:number,frictionDip: number,frictionStrike: number/*, cohesionDip: number, 
@@ -287,9 +287,9 @@ export class ArcheCoulombOrthoConstraintNode extends ArcheConstraintNode {
     }
 }
 
-export class ArcheRealizationNode  extends ArcheFileNode {
+export class ArchRealizationNode  extends ArchFileNode {
 
-    nodeType = "ArcheRealizationNode"
+    nodeType = "ArchRealizationNode"
     meshFileId: string
     solutionId: string
 
@@ -318,74 +318,74 @@ export function parseProject(data:any) {
         ownerId: data.ownerId,
         children: data.children ? data.children.map( child => parseProject(child)) : undefined
     }
-    if(data.nodeType == "RootArcheNode")
-        return new RootArcheNode(Object.assign({}, base , {folders: data.folders,parameters: data.parameters}))
+    if(data.nodeType == "RootArchNode")
+        return new RootArchNode(Object.assign({}, base , {folders: data.folders,parameters: data.parameters}))
 
-    if(data.nodeType == "ArcheFileNode")
-        return new ArcheFileNode(Object.assign({}, base , {fileId: data.fileId}))
+    if(data.nodeType == "ArchFileNode")
+        return new ArchFileNode(Object.assign({}, base , {fileId: data.fileId}))
         
-    if(data.nodeType == "ArcheFolderNode")
-        return new ArcheFolderNode(base)
+    if(data.nodeType == "ArchFolderNode")
+        return new ArchFolderNode(base)
         
-    if(data.nodeType == "ArcheFolderDiscontinuityNode")
-        return new ArcheFolderDiscontinuityNode(base)
+    if(data.nodeType == "ArchFolderDiscontinuityNode")
+        return new ArchFolderDiscontinuityNode(base)
 
-    if(data.nodeType == "ArcheFolderObservationNode")
-        return new ArcheFolderObservationNode(base)
+    if(data.nodeType == "ArchFolderObservationNode")
+        return new ArchFolderObservationNode(base)
     
-    if(data.nodeType == "ArcheFolderRemoteNode")
-        return new ArcheFolderRemoteNode(base)
+    if(data.nodeType == "ArchFolderRemoteNode")
+        return new ArchFolderRemoteNode(base)
 
-    if(data.nodeType == "ArcheDiscontinuityNode")
-        return new ArcheDiscontinuityNode(Object.assign({}, base , { children: base.children || []}))
+    if(data.nodeType == "ArchDiscontinuityNode")
+        return new ArchDiscontinuityNode(Object.assign({}, base , { children: base.children || []}))
 
-    if(data.nodeType == "ArcheBoundaryConditionNode")
-        return new ArcheBoundaryConditionNode(Object.assign({}, base , {parameters: data.parameters}))
+    if(data.nodeType == "ArchBoundaryConditionNode")
+        return new ArchBoundaryConditionNode(Object.assign({}, base , {parameters: data.parameters}))
 
-    if(data.nodeType == "ArcheDiscontinuityMeshNode")
-        return new ArcheDiscontinuityMeshNode(Object.assign({}, base , {fileId: data.fileId, boundingBox: data.boundingBox}))
+    if(data.nodeType == "ArchDiscontinuityMeshNode")
+        return new ArchDiscontinuityMeshNode(Object.assign({}, base , {fileId: data.fileId, boundingBox: data.boundingBox}))
 
-    if(data.nodeType == "ArcheObservationNode")
-        return new ArcheObservationNode(Object.assign({}, base , {fileId: data.fileId}))
+    if(data.nodeType == "ArchObservationNode")
+        return new ArchObservationNode(Object.assign({}, base , {fileId: data.fileId}))
     
-    if(data.nodeType == "ArcheAndersonianRemoteNode")
-        return new ArcheAndersonianRemoteNode(Object.assign({}, base , {parameters: data.parameters}))
+    if(data.nodeType == "ArchAndersonianRemoteNode")
+        return new ArchAndersonianRemoteNode(Object.assign({}, base , {parameters: data.parameters}))
     
-    if(data.nodeType == "ArcheCoulombConstraintNode")
-        return new ArcheCoulombConstraintNode(Object.assign({}, base , {parameters: data.parameters}))
+    if(data.nodeType == "ArchCoulombConstraintNode")
+        return new ArchCoulombConstraintNode(Object.assign({}, base , {parameters: data.parameters}))
 
-    if(data.nodeType == "ArcheCoulombOrthoConstraintNode")
-        return new ArcheCoulombOrthoConstraintNode(Object.assign({}, base , {parameters: data.parameters}))
+    if(data.nodeType == "ArchCoulombOrthoConstraintNode")
+        return new ArchCoulombOrthoConstraintNode(Object.assign({}, base , {parameters: data.parameters}))
 
     
-    if(data.nodeType == "ArcheDisplacementConstraintNode")
-        return new ArcheDisplacementConstraintNode(Object.assign({}, base , {parameters: data.parameters}))
+    if(data.nodeType == "ArchDisplacementConstraintNode")
+        return new ArchDisplacementConstraintNode(Object.assign({}, base , {parameters: data.parameters}))
 
-    if(data.nodeType == "ArcheDisplacementNormConstraintNode")
-        return new ArcheDisplacementNormConstraintNode(Object.assign({}, base , {parameters: data.parameters}))
+    if(data.nodeType == "ArchDisplacementNormConstraintNode")
+        return new ArchDisplacementNormConstraintNode(Object.assign({}, base , {parameters: data.parameters}))
     
-    if(data.nodeType == "ArcheRealizationNode")
-        return new ArcheRealizationNode (Object.assign({}, base , {fileId: data.fileId, solutionId: data.solutionId, meshFileId:data.meshFileId}))
+    if(data.nodeType == "ArchRealizationNode")
+        return new ArchRealizationNode (Object.assign({}, base , {fileId: data.fileId, solutionId: data.solutionId, meshFileId:data.meshFileId}))
 
-    return new ArcheNode(base)
+    return new ArchNode(base)
     }
 */
 
 /*
-export class ArcheDisplacementConstraintNode extends ArcheConstraintNode {
+export class ArchDisplacementConstraintNode extends ArchConstraintNode {
 
-    nodeType = "ArcheDisplacementConstraintNode"
-    ArcheFacade = ArcheFacade.DisplacementConstraint
+    nodeType = "ArchDisplacementConstraintNode"
+    ArchFacade = ArchFacade.DisplacementConstraint
     constructor( { id, ownerId, name, parameters } : {id:string, ownerId: string, name:string,
         parameters?:{axis:string,direction:string, value: number,type:string}}){ 
         super({ id, ownerId, name, parameters:parameters||{axis:'0',direction:'compression', value: 0,type:'max'}})
     }
 }
 
-export class ArcheDisplacementNormConstraintNode extends ArcheConstraintNode {
+export class ArchDisplacementNormConstraintNode extends ArchConstraintNode {
 
-    nodeType = "ArcheDisplacementNormConstraintNode"
-    ArcheFacade = ArcheFacade.DisplacementNormConstraint
+    nodeType = "ArchDisplacementNormConstraintNode"
+    ArchFacade = ArchFacade.DisplacementNormConstraint
 
     constructor( {  id, ownerId, name, parameters } : {id:string, ownerId: string, name:string,
         parameters?:{direction:string, value: number,type:string}}){ 

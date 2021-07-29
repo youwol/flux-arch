@@ -1,7 +1,7 @@
 //import { MockDriveImplementation } from '../../../shared/test/mock-drive'
 import { Interfaces } from '@youwol/flux-files'
-import { LocalEnvironment, processArcheTaskInWorker } from '../lib/implementation/local-environment'
-import { ArcheFacade } from '../lib/arche.facades'
+import { LocalEnvironment, processArchTaskInWorker } from '../lib/implementation/local-environment'
+import { ArchFacade } from '../lib/arche.facades'
 import * as fs from 'fs'
 
 import { Subject } from 'rxjs'
@@ -20,13 +20,13 @@ export class SerialWorker{
     }}
 
     postMessage({task, taskId, data, config,solutionId,archeSrcContent}) {
-        processArcheTaskInWorker({data:{
+        processArchTaskInWorker({data:{
             task,
             taskId, 
             archeSrcContent, 
             data,
             config,
-            archeFactoryFct: ArcheFacade.factory as any,
+            archeFactoryFct: ArchFacade.factory as any,
             solutionId
             }},
             this.GlobalScopeMock
@@ -72,11 +72,11 @@ test('simplest model', (done) => {
     let [sharedPositions, sharedIndexes] = createSharedArrays([0,0,0, 1,0,0, 1,1,0], [0,1,2])
     
     let constraints = [
-        //{ type:'ArcheCoulombConstraintNode', parameters:{friction:0, cohesion:0} },
-        //{ type:'ArcheCoulombOrthoConstraintNode', parameters:{theta: 0, frictionDip:0, frictionStrike:0} },
+        //{ type:'ArchCoulombConstraintNode', parameters:{friction:0, cohesion:0} },
+        //{ type:'ArchCoulombOrthoConstraintNode', parameters:{theta: 0, frictionDip:0, frictionStrike:0} },
     ]
     let remotes =[
-        //{ type: 'ArcheAndersonianRemoteNode', parameters:{ hSigma:0, HSigma:0, vSigma:0, theta:0}} 
+        //{ type: 'ArchAndersonianRemoteNode', parameters:{ hSigma:0, HSigma:0, vSigma:0, theta:0}} 
     ]
     let surface = {
         positions:sharedPositions, 
@@ -110,17 +110,17 @@ test('realistic model', (done) => {
     let env = createEnvironment()
     let [sharedPositions, sharedIndexes] = createSharedArrays([0,0,0, 1,0,0, 1,1,0], [0,1,2])
     
-    let boundaryCondition = new ArcheFacade.BoundaryCondition({
+    let boundaryCondition = new ArchFacade.BoundaryCondition({
         dipAxis:{type:'free', field: (x,y,z) => 0},
         strikeAxis:{type:'free', field:(x,y,z) => 0},
         normalAxis:{type:'free', field:(x,y,z) => 0},
     })
     let constraints = [
-        { type:'ArcheCoulombConstraintNode', parameters:{friction:0, cohesion:0} },
-        { type:'ArcheCoulombOrthoConstraintNode', parameters:{theta: 0, frictionDip:0, frictionStrike:0} },
+        { type:'ArchCoulombConstraintNode', parameters:{friction:0, cohesion:0} },
+        { type:'ArchCoulombOrthoConstraintNode', parameters:{theta: 0, frictionDip:0, frictionStrike:0} },
     ]
     let remotes =[
-        { type: 'ArcheAndersonianRemoteNode', parameters:{ hSigma:0, HSigma:0, vSigma:0, theta:0}} 
+        { type: 'ArchAndersonianRemoteNode', parameters:{ hSigma:0, HSigma:0, vSigma:0, theta:0}} 
     ]
     let surface = {
         positions:sharedPositions, 

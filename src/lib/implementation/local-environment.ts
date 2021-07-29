@@ -1,11 +1,11 @@
 import { Interfaces } from '@youwol/flux-files'
 import { from, Observable, of, Subject } from 'rxjs'
 import { filter, map, mergeMap, tap } from 'rxjs/operators'
-import { ArcheRealizationNode, ArcheObservationMeshNode, ProcessingType } from './tree-nodes'
+import { ArchRealizationNode, ArchObservationMeshNode, ProcessingType } from './tree-nodes'
 
 import { decodeGocadTS} from '@youwol/io'
 import { DataFrame } from '@youwol/dataframe'
-import { ArcheFacade } from '../arche.facades'
+import { ArchFacade } from '../arche.facades'
 import * as _ from 'lodash'
 import { AUTO_GENERATED} from '../../auto_generated'
 import { Environment, Solution } from './data'
@@ -25,7 +25,7 @@ export class WasmWorker{
         .then( d => d.text())
     }
     createWorker(){
-        var blob = new Blob(['self.onmessage = ', processArcheTaskInWorker.toString()], { type: 'text/javascript' });
+        var blob = new Blob(['self.onmessage = ', processArchTaskInWorker.toString()], { type: 'text/javascript' });
         var url = URL.createObjectURL(blob);
         let worker = new Worker(url)
         worker.onmessage = function ({ data }) {
@@ -37,7 +37,7 @@ export class WasmWorker{
 
 export class LocalEnvironment extends Environment{
 
-    static solutions = new Map<ArcheFacade.Model, LocalSolution>()
+    static solutions = new Map<ArchFacade.Model, LocalSolution>()
     static workersChannel$ = new Subject<{taskId:string, data:any}>()
     
 
@@ -48,7 +48,7 @@ export class LocalEnvironment extends Environment{
         super()
     }
 
-    solve(model: ArcheFacade.Model, notifications$): Observable<LocalSolution>{
+    solve(model: ArchFacade.Model, notifications$): Observable<LocalSolution>{
 
         if(LocalEnvironment.solutions.has(model))
             return of(LocalEnvironment.solutions.get(model))
@@ -64,7 +64,7 @@ export class LocalEnvironment extends Environment{
                 taskId,
                 data: model,
                 archeSrcContent,
-                archeFactoryFct: "return " + ArcheFacade.factory.toString(),
+                archeFactoryFct: "return " + ArchFacade.factory.toString(),
                 solutionId: taskId
             }) 
         })
@@ -108,7 +108,7 @@ export class LocalEnvironment extends Environment{
                 data: {  grid},
                 archeSrcContent,
                 solutionId:solution.solutionId,
-                archeFactoryFct: "return " + ArcheFacade.factory.toString(),
+                archeFactoryFct: "return " + ArchFacade.factory.toString(),
             }
             console.log("MESSAGE",message)
             worker.postMessage(message)
@@ -136,10 +136,10 @@ export class LocalEnvironment extends Environment{
 }
 
 
-export function processArcheTaskInWorker({
+export function processArchTaskInWorker({
         data: { task, taskId, archeSrcContent, data, config, archeFactoryFct, solutionId }
     }:
-    { data: { task: string, taskId:string, archeSrcContent: string, config: any, data: ArcheFacade.Model | { solutionId: string, grids: Array<ArrayBuffer> }, 
+    { data: { task: string, taskId:string, archeSrcContent: string, config: any, data: ArchFacade.Model | { solutionId: string, grids: Array<ArrayBuffer> }, 
         archeFactoryFct: string, solutionId: string }
     },
     _GlobalScope = undefined  
@@ -155,15 +155,15 @@ export function processArcheTaskInWorker({
     var exports ={}
     
     new Function('document','exports','__dirname', archeSrcContent)( GlobalScope, exports, "")
-    let ArcheModule = exports['ArcheModule']
+    let ArchModule = exports['ArchModule']
 
     let t1 = performance.now()
-    timings.push({ title: `Parse Arche source`, dt: t1 - t0 })
+    timings.push({ title: `Parse Arch source`, dt: t1 - t0 })
 
     let archeFactory = typeof(archeFactoryFct) == 'string' ? new Function(archeFactoryFct)() : archeFactoryFct
 
     let solve = (data, config, archeFactory, arche) => {
-        let model = archeFactory("ArcheModelNode", data, arche, archeFactory )
+        let model = archeFactory("ArchModelNode", data, arche, archeFactory )
         let solver = new arche.Solver(model, 'seidel', 1e-9,200)
         solver.run()
         GlobalScope.archeSolutions[solutionId] = model
@@ -186,7 +186,7 @@ export function processArcheTaskInWorker({
         GlobalScope.postMessage({  stress:gridResult , taskId, messages, timings }, gridResult.buffer)
     }
 
-    ArcheModule().then( (arche) => {
+    ArchModule().then( (arche) => {
         let t2 = performance.now()
         timings.push({ title: `Wasm runtime initialized`, dt: t2 - t1 })
         if( task == "solve")

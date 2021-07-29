@@ -5,7 +5,7 @@ import { ImmutableTree } from '@youwol/fv-tree'
 
 import { of, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { delay, distinct, filter, map, mergeMap, scan, switchMap } from 'rxjs/operators';
-import { ArcheNode} from './implementation/tree-nodes';
+import { ArchNode} from './implementation/tree-nodes';
 import { StateMgr } from './implementation/arche.state';
 import { Interfaces } from '@youwol/flux-files';
 import { getActions, headerView, progressUI } from './views/tree-elements.view';
@@ -56,7 +56,7 @@ export namespace ProjectView {
         subscriptions = new Array<Subscription>()
         subscriptionsView = new Array<Subscription>()
 
-        view: ImmutableTree.View<ArcheNode>
+        view: ImmutableTree.View<ArchNode>
 
         tests = new Map<any,any>()
         constructor(params) {
@@ -103,11 +103,11 @@ export namespace ProjectView {
             this.subscriptions.push(sub)
         }
 
-        emitSelection(nodes: Array<ArcheNode>, manager){
+        emitSelection(nodes: Array<ArchNode>, manager){
             this.output$.next({data: {selection:{nodes}, manager:manager}, context:{}})
         }
 
-        selectNode(node:ArcheNode){
+        selectNode(node:ArchNode){
             node && this.emitSelection([node], this.stateMgr)
         }
         
@@ -142,7 +142,7 @@ export namespace ProjectView {
                         child$(
                             mdle.stateMgr$.pipe(  map( stateMgr => stateMgr.tree ) ),
                             (treeViewState: TreeViewState) => {
-                                let view = new ImmutableTree.View<ArcheNode>( {state:treeViewState, headerView: (state: TreeViewState, node) => headerView(state, node) })
+                                let view = new ImmutableTree.View<ArchNode>( {state:treeViewState, headerView: (state: TreeViewState, node) => headerView(state, node) })
                             }
                         )
                     ]
@@ -150,7 +150,7 @@ export namespace ProjectView {
             ]
         }
         /*
-        mdle.view = new ImmutableTree.View<ArcheNode>( {treeData$, { actions: getActions, headerView: headerView }, mdle.subscriptionsView)
+        mdle.view = new ImmutableTree.View<ArchNode>( {treeData$, { actions: getActions, headerView: headerView }, mdle.subscriptionsView)
 
         mdle.view.selectedNode$.subscribe( node => mdle.selectNode(node) )
 

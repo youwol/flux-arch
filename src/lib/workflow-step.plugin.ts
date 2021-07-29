@@ -34,7 +34,7 @@ export namespace WorkflowStep {
         namespace: WorkflowStep,
         id: "WorkflowStep",
         displayName: "WorkflowStep",
-        description: "A step of an Arche workflow",
+        description: "A step of an Arch workflow",
         compatibility: {
             "A step should be associated to a project manager module": (mdle) => mdle instanceof ProjectMgr.Module,
         }

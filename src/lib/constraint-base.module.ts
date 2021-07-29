@@ -1,6 +1,6 @@
 
 import { Context, freeContract, ModuleFlux, Pipe} from '@youwol/flux-core'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 
 
 export namespace ConstraintBase {
@@ -17,14 +17,14 @@ export namespace ConstraintBase {
 
     export abstract class Module<TConfig extends ConfigConstraintBase> extends ModuleFlux {
 
-        output$: Pipe<ArcheFacade.Constraint>
+        output$: Pipe<ArchFacade.Constraint>
 
         constructor(params) {
             super(params)
 
             this.addInput( {
                 id:"config", 
-                description:`Triggerring this input construct a surface constraint to use in Arche computations.
+                description:`Triggerring this input construct a surface constraint to use in Arch computations.
                 The constraint is entirely defined by the module configuration.`,
                 contract: freeContract(),
                 onTriggered: ({data, configuration, context}) => this.emitConstraint(data, configuration, context) 
@@ -34,7 +34,7 @@ export namespace ConstraintBase {
                 this.emitConstraint(undefined, this.getPersistentData<TConfig>(), new Context("", {}))
         }
 
-        abstract createConstraint(config: TConfig): ArcheFacade.Constraint
+        abstract createConstraint(config: TConfig): ArchFacade.Constraint
 
         emitConstraint(_, config: TConfig, context: Context) {
             let c = this.createConstraint(config)

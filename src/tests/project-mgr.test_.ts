@@ -2,12 +2,12 @@
 import { Runner} from "@youwol/flux-core"
 import { map, skip, take } from 'rxjs/operators'
 import { ProjectMgrOutput } from '../lib/implementation/arche.state'
-import { ArcheDiscontinuityNode, ArcheFolderDiscontinuityNode, ArcheFolderObservationNode, ArcheFolderRemoteNode, 
-    ArcheDiscontinuityMeshNode, ArcheMaterialNode, ArcheObservationMeshNode, ArcheObservationNode, ArcheRealizationNode } from '../lib/implementation/tree-nodes'
+import { ArchDiscontinuityNode, ArchFolderDiscontinuityNode, ArchFolderObservationNode, ArchFolderRemoteNode, 
+    ArchDiscontinuityMeshNode, ArchMaterialNode, ArchObservationMeshNode, ArchObservationNode, ArchRealizationNode } from '../lib/implementation/tree-nodes'
 import { findChild, findChildren } from '../lib/implementation/utils'
 import { getActions } from '../lib/views/tree-elements.view'
 import { ImmutableTree } from '@youwol/fv-tree'
-import { ArcheFacade } from '../lib/arche.facades'
+import { ArchFacade } from '../lib/arche.facades'
 import { KeplerMesh } from '@youwol/flux-kepler'
 import { BufferAttribute, BufferGeometry, Mesh } from 'three'
 import * as _ from 'lodash'
@@ -27,13 +27,13 @@ test('new project', (done) => {
         expect(data).toBeInstanceOf(ProjectMgrOutput)
         let rootNode = data.state.node
         expect(rootNode.resolvedChildren().length).toEqual(4)
-        let folderDiscontinuities = findChildren<ArcheFolderDiscontinuityNode>(rootNode,ArcheFolderDiscontinuityNode)
+        let folderDiscontinuities = findChildren<ArchFolderDiscontinuityNode>(rootNode,ArchFolderDiscontinuityNode)
         expect(folderDiscontinuities.length).toEqual(1)
-        let materialNodes = findChildren<ArcheMaterialNode>(rootNode,ArcheMaterialNode)
+        let materialNodes = findChildren<ArchMaterialNode>(rootNode,ArchMaterialNode)
         expect(materialNodes.length).toEqual(1)
-        let folderRemotes = findChildren<ArcheFolderRemoteNode>(rootNode,ArcheFolderRemoteNode)
+        let folderRemotes = findChildren<ArchFolderRemoteNode>(rootNode,ArchFolderRemoteNode)
         expect(folderRemotes.length).toEqual(1)
-        let folderObservation = findChildren<ArcheFolderObservationNode>(rootNode,ArcheFolderObservationNode)
+        let folderObservation = findChildren<ArchFolderObservationNode>(rootNode,ArchFolderObservationNode)
         expect(folderObservation.length).toEqual(1)
 
         expect(data.state.initial.node).toEqual(data.state.node)
@@ -52,7 +52,7 @@ test('add Discontinuity', (done) => {
     
     let onInitialLoad = (data:ProjectMgrOutput) => {
         let rootNode = data.state.node
-        let folderNode = findChild<ArcheFolderDiscontinuityNode>(rootNode,ArcheFolderDiscontinuityNode)
+        let folderNode = findChild<ArchFolderDiscontinuityNode>(rootNode,ArchFolderDiscontinuityNode)
 
         let actions = getActions(data.manager.tree, folderNode)
         expect(actions.length).toEqual(3)
@@ -62,7 +62,7 @@ test('add Discontinuity', (done) => {
     }
     let onDiscontinuityAdded = (data:ProjectMgrOutput) => {
         let rootNode = data.state.node
-        let discontinuityNode = findChildren<ArcheDiscontinuityNode>(rootNode,ArcheDiscontinuityNode)
+        let discontinuityNode = findChildren<ArchDiscontinuityNode>(rootNode,ArchDiscontinuityNode)
         expect(discontinuityNode.length).toEqual(1)
     }
 
@@ -70,14 +70,14 @@ test('add Discontinuity', (done) => {
 
         let rootNode = data.state.node
         expect(data.state.solution).toBeUndefined()
-        let meshNodes = findChildren<ArcheDiscontinuityMeshNode>(rootNode,ArcheDiscontinuityMeshNode)
+        let meshNodes = findChildren<ArchDiscontinuityMeshNode>(rootNode,ArchDiscontinuityMeshNode)
         expect(meshNodes.length).toEqual(1)
         let commands = data.state.withCommands
         expect(commands.length).toEqual(2)
         let addMeshCmd = commands[1]
         expect(addMeshCmd).toBeInstanceOf( ImmutableTree.AddChildCommand)
-        expect(addMeshCmd['parentNode']).toBeInstanceOf(ArcheDiscontinuityNode)
-        expect(addMeshCmd['childNode']).toBeInstanceOf(ArcheDiscontinuityMeshNode)
+        expect(addMeshCmd['parentNode']).toBeInstanceOf(ArchDiscontinuityNode)
+        expect(addMeshCmd['childNode']).toBeInstanceOf(ArchDiscontinuityMeshNode)
         data.manager.buildObject3D(addMeshCmd['childNode'].id).subscribe(
             (object3d: Mesh) => {
                 let geometry = object3d.geometry as BufferGeometry
@@ -101,7 +101,7 @@ test('add Discontinuity', (done) => {
         done()
     })
     
-    modules.mockEnv.send( (model:ArcheFacade.Model, position:[number,number,number]) => {
+    modules.mockEnv.send( (model:ArchFacade.Model, position:[number,number,number]) => {
         return [model.material.parameters.poisson, model.material.parameters.young, model.material.parameters.density]
     })
 })
@@ -124,11 +124,11 @@ test('add plane xy', (done) => {
 
         let addMeshCmd = commands[2]
         expect(addMeshCmd).toBeInstanceOf( ImmutableTree.AddChildCommand)
-        expect(addMeshCmd['parentNode']).toBeInstanceOf(ArcheFolderObservationNode)
-        expect(addMeshCmd['childNode']).toBeInstanceOf(ArcheObservationNode)
+        expect(addMeshCmd['parentNode']).toBeInstanceOf(ArchFolderObservationNode)
+        expect(addMeshCmd['childNode']).toBeInstanceOf(ArchObservationNode)
 
         let observationNode = addMeshCmd['childNode']
-        expect(observationNode.children[0]).toBeInstanceOf(ArcheObservationMeshNode)
+        expect(observationNode.children[0]).toBeInstanceOf(ArchObservationMeshNode)
         let meshNode = observationNode.children[0]
         expect(meshNode.children.length).toEqual(0)
     }
@@ -142,11 +142,11 @@ test('add plane xy', (done) => {
         expect(addMeshCmd).toBeInstanceOf( ImmutableTree.ReplaceNodeCommand)
         let oldNode = addMeshCmd['oldNode']
         let newNode = addMeshCmd['newNode']
-        expect(oldNode).toBeInstanceOf(ArcheObservationMeshNode)
-        expect(newNode).toBeInstanceOf(ArcheObservationMeshNode)
+        expect(oldNode).toBeInstanceOf(ArchObservationMeshNode)
+        expect(newNode).toBeInstanceOf(ArchObservationMeshNode)
         expect(oldNode.children.length).toEqual(0)
         expect(newNode.children.length).toEqual(1)
-        expect(newNode.children[0]).toBeInstanceOf(ArcheRealizationNode)
+        expect(newNode.children[0]).toBeInstanceOf(ArchRealizationNode)
     }
 
     let onObject3DBuilt = (data: ProjectMgrOutput,  object3d:KeplerMesh) => {
@@ -167,7 +167,7 @@ test('add plane xy', (done) => {
     
     addSimpleShape(lastLoadIndex, modules, 'plane xy',{ onMeshAdded, onResolutionDone, onObject3DBuilt})
 
-    modules.mockEnv.send( (model:ArcheFacade.Model, position:[number,number,number]) => {
+    modules.mockEnv.send( (model:ArchFacade.Model, position:[number,number,number]) => {
         return [model.material.parameters.poisson, model.material.parameters.young, model.material.parameters.density]
     })
 })
@@ -200,7 +200,7 @@ test('add disk xy', (done) => {
     let lastLoadIndex = loadDiscontinuityS1(0,modules,{})    
     addSimpleShape(lastLoadIndex, modules, 'disk xy', {onObject3DBuilt})
 
-    modules.mockEnv.send( (model:ArcheFacade.Model, position:[number,number,number]) => {
+    modules.mockEnv.send( (model:ArchFacade.Model, position:[number,number,number]) => {
         return [model.material.parameters.poisson, model.material.parameters.young, model.material.parameters.density]
     })
 })
@@ -225,8 +225,8 @@ test('save mesh & selectionWatch', (done) => {
         geometry.setAttribute('position', new BufferAttribute(Float32Array.from(newPositions),3) )
 
         let drive = undefined//new MockDriveImplementation.Drive("mockDrive",'test-drive')
-        let realizationNode = findChild<ArcheRealizationNode>(data.state.node, ArcheRealizationNode)
-        let node = findChild<ArcheObservationMeshNode>(data.state.node, ArcheObservationMeshNode)
+        let realizationNode = findChild<ArchRealizationNode>(data.state.node, ArchRealizationNode)
+        let node = findChild<ArchObservationMeshNode>(data.state.node, ArchObservationMeshNode)
         expect(realizationNode.id).toEqual(object3d.name)
         drive.getFile( node.fileId ).subscribe(
             (file:Interfaces.File) => {
@@ -243,7 +243,7 @@ test('save mesh & selectionWatch', (done) => {
         // the observation mesh is updated
         expect(data.selection.nodes.length).toEqual(1)
         let newMeshNode = data.selection.nodes[0]
-        expect(newMeshNode).toBeInstanceOf(ArcheObservationMeshNode)
+        expect(newMeshNode).toBeInstanceOf(ArchObservationMeshNode)
         expect(newMeshNode.resolvedChildren().length).toEqual(0)
         data.manager.buildObject3D(newMeshNode.id).subscribe(
             (object3d: KeplerMesh) => {
@@ -259,15 +259,15 @@ test('save mesh & selectionWatch', (done) => {
         // the realization has been computed
         expect(data.selection.nodes.length).toEqual(1)
         let newMeshNode = data.selection.nodes[0]
-        expect(newMeshNode).toBeInstanceOf(ArcheObservationMeshNode)
+        expect(newMeshNode).toBeInstanceOf(ArchObservationMeshNode)
         expect(newMeshNode.resolvedChildren().length).toEqual(1)
         let realization = newMeshNode.resolvedChildren()[0]
-        expect(realization).toBeInstanceOf(ArcheRealizationNode)
+        expect(realization).toBeInstanceOf(ArchRealizationNode)
         done()
     })
 
 
-    modules.mockEnv.send( (model:ArcheFacade.Model, position:[number,number,number]) => {
+    modules.mockEnv.send( (model:ArchFacade.Model, position:[number,number,number]) => {
         return [model.material.parameters.poisson, model.material.parameters.young, model.material.parameters.density]
     })
 })

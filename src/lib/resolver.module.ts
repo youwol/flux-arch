@@ -3,7 +3,7 @@
 import { pack } from './main';
 import { Flux, BuilderView, ModuleFlux, Pipe, Schema, contract, expectSome, 
     expectAnyOf, expectInstanceOf, expectSingle, Context, ModuleError, Property } from '@youwol/flux-core'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 import { DataFrame, Serie } from '@youwol/dataframe';
 import { Group, Mesh, MeshStandardMaterial } from 'three';
 import * as _ from 'lodash'
@@ -25,7 +25,7 @@ export namespace ModuleResolver {
 
     interface WorkerArguments {
         positions : Float32Array
-        solution: ArcheFacade.Solution,
+        solution: ArchFacade.Solution,
         property: PropertyTarget
     }
 
@@ -45,7 +45,7 @@ export namespace ModuleResolver {
         let archFactory = workerScope["@youwol/flux-arche.archeFactory"]
         let positions = args.positions
 
-        let model = archFactory("ArcheModelNode", args.solution.model, arch)
+        let model = archFactory("ArchModelNode", args.solution.model, arch)
         context.info("Recreate solution", {typedArrays})
         const solution = arch.Solution.create(model, typedArrays)
 
@@ -124,7 +124,7 @@ export namespace ModuleResolver {
     let contractSolution = expectSingle({
         when: expectInstanceOf({
             typeName: "Solution",
-            Type: ArcheFacade.Solution,
+            Type: ArchFacade.Solution,
             attNames:["solution"]
         })
     })
@@ -164,7 +164,7 @@ export namespace ModuleResolver {
         namespace: ModuleResolver,
         id: "ModuleResolver",
         displayName: "Post-process",
-        description: "Arche post-process"
+        description: "Arch post-process"
     })
     @BuilderView({
         namespace: ModuleResolver,
@@ -180,7 +180,7 @@ export namespace ModuleResolver {
 
             this.addInput({
                 id:"input", 
-                description:`Triggering this input resolve an Arche solution on provided mesh(es).`, 
+                description:`Triggering this input resolve an Arch solution on provided mesh(es).`, 
                 contract: inputContract,
                 onTriggered: ({data,configuration, context}) => {
                     this.resolve(data.solution, data.meshes, configuration, context)
@@ -189,7 +189,7 @@ export namespace ModuleResolver {
             this.output$ = this.addOutput()
         }
 
-        resolve(solution: ArcheFacade.Solution, meshes: Mesh[], configuration: PersistentData, context: Context){
+        resolve(solution: ArchFacade.Solution, meshes: Mesh[], configuration: PersistentData, context: Context){
 
             let solutions$ = meshes.map( (mesh: Mesh) => {
                 return configuration
@@ -236,7 +236,7 @@ export namespace ModuleResolver {
 
         resolveMesh$( 
             property: PropertyTarget, 
-            solution: ArcheFacade.Solution, 
+            solution: ArchFacade.Solution, 
             mesh:Mesh, 
             context: Context): Observable<[Mesh, DataFrame, PropertyTarget]>{
 

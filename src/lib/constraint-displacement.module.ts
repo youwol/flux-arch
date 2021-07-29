@@ -3,7 +3,7 @@
 import { pack } from './factory';
 import { Flux, BuilderView, Schema, Property } from '@youwol/flux-lib-core'
 import { ConstraintBase } from './constraint-base.module'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 
 export namespace ConstraintDisplacement {
     
@@ -57,8 +57,8 @@ export namespace ConstraintDisplacement {
             super(params)
         }
 
-        createConstraint(config: PersistentData): ArcheFacade.DisplacementConstraint {
-            return new ArcheFacade.DisplacementConstraint(config)
+        createConstraint(config: PersistentData): ArchFacade.DisplacementConstraint {
+            return new ArchFacade.DisplacementConstraint(config)
         }
     }
 }

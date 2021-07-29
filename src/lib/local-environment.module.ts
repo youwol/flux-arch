@@ -54,7 +54,7 @@ export namespace ModuleLocalEnvironment {
 
             this.addInput({
                 id:"input", 
-                description: `Triggerring this input construct a material to use in a Arche project. No data beside configuration is needed.`, 
+                description: `Triggerring this input construct a material to use in a Arch project. No data beside configuration is needed.`, 
                 contract: freeContract(),
                 onTriggered: ({data, configuration, context}) => this.createLocalEnvironment(data)
             })
@@ -67,7 +67,7 @@ export namespace ModuleLocalEnvironment {
                     return {
                         children:[
                             { innerText: "Local drive request"},
-                            { innerText:"Arche local environment required the selection of a folder in your computer."+
+                            { innerText:"Arch local environment required the selection of a folder in your computer."+
                             "This folder is used as workspace for your project."},
                         ]
                     }

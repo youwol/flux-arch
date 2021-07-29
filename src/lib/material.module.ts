@@ -3,7 +3,7 @@
 
 import { pack } from './main';
 import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, freeContract, Context } from '@youwol/flux-core'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 
 
 export namespace ModuleMaterial {
@@ -45,7 +45,7 @@ export namespace ModuleMaterial {
         namespace: ModuleMaterial,
         id: "ModuleMaterial",
         displayName: "Material",
-        description: "Arche material",
+        description: "Arch material",
         resources: {
             'technical doc': `${pack.urlCDN}/dist/docs/modules/lib_material_module.modulematerial.html`
         }
@@ -56,14 +56,14 @@ export namespace ModuleMaterial {
     })
     export class Module extends ModuleFlux {
 
-        material$: Pipe<ArcheFacade.Material>
+        material$: Pipe<ArchFacade.Material>
 
         constructor(params) {
             super(params)
 
             this.addInput({
                 id:"input",  
-                description:`Triggering this input construct a material to use in a Arche project. No data beside configuration is needed.`,
+                description:`Triggering this input construct a material to use in a Arch project. No data beside configuration is needed.`,
                 contract: freeContract(),
                 onTriggered: ({data, configuration, context}) => {
                     this.createMaterial(data, configuration, context)
@@ -89,7 +89,7 @@ export namespace ModuleMaterial {
         }
 
         createMaterial(_, config: PersistentData, context: Context){
-            this.material$.next({data:new ArcheFacade.Material(config), context})
+            this.material$.next({data:new ArchFacade.Material(config), context})
         }
     }
 

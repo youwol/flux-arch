@@ -2,7 +2,7 @@ import { FluxPack, IEnvironment, Journal } from '@youwol/flux-core'
 import { Observable } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 import { AUTO_GENERATED } from '../auto_generated'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 import { progressView, ProgressViewData, ConvergencePlotData, convergencePlotViewD3 } from './views/progress.view';
 export var arche 
 
@@ -26,7 +26,7 @@ export function install(environment: IEnvironment){
                 }],
                 functions: [{
                     id: "@youwol/flux-arche.archeFactory",
-                    target: ArcheFacade.factory
+                    target: ArchFacade.factory
                 }],
                 variables: []
             })

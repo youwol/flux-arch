@@ -2,7 +2,7 @@
 import { pack } from './main';
 import { Flux, BuilderView, Schema, Property } from '@youwol/flux-core'
 import { ConstraintBase } from './constraint-base.module'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 
 export namespace ModuleConstraintCoulombOrtho {
     
@@ -47,8 +47,8 @@ export namespace ModuleConstraintCoulombOrtho {
             super(params)
         }
 
-        createConstraint(config: PersistentData): ArcheFacade.CoulombOrthoConstraint {
-            return new ArcheFacade.CoulombOrthoConstraint(config)
+        createConstraint(config: PersistentData): ArchFacade.CoulombOrthoConstraint {
+            return new ArchFacade.CoulombOrthoConstraint(config)
         }
     }
 }

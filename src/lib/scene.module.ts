@@ -3,7 +3,7 @@ import { arche, pack } from './main';
 import { Flux, BuilderView, ModuleFlux, Pipe, Schema, freeContract, expectSome, expectAnyOf, expectInstanceOf, expectAllOf, expectSingle, contract, Context } from '@youwol/flux-core'
 import { BufferGeometry, Group, Mesh, Object3D } from 'three';
 import { buildSurfacesFromThree } from './implementation/arche-builders'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 
 export namespace ModuleScene {
     //Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
@@ -27,31 +27,31 @@ export namespace ModuleScene {
             when:[ 
                 expectInstanceOf({
                     typeName: "Surface",
-                    Type: ArcheFacade.Surface,
+                    Type: ArchFacade.Surface,
                     normalizeTo: (d) => [d]
                 }),
                 expectSome({
                     when: expectInstanceOf({
                         typeName: "Surface",
-                        Type: ArcheFacade.Surface
+                        Type: ArchFacade.Surface
                     })
                 })
             ]
         }),
-        normalizeTo: (d: Array<Array<ArcheFacade.Surface>>) => d.flat()
+        normalizeTo: (d: Array<Array<ArchFacade.Surface>>) => d.flat()
     })
 
     let contractMaterial = expectSingle({
         when: expectInstanceOf({
             typeName: "Material",
-            Type: ArcheFacade.Material
+            Type: ArchFacade.Material
         })
     })
 
     let contractRemotes = expectSome({
         when: expectInstanceOf({
             typeName: "Remotes",
-            Type:  ArcheFacade.Remote
+            Type:  ArchFacade.Remote
         })
     })
 
@@ -81,14 +81,14 @@ export namespace ModuleScene {
     })
     export class Module extends ModuleFlux {
 
-        scene$ : Pipe<ArcheFacade.Scene>
+        scene$ : Pipe<ArchFacade.Scene>
 
         constructor(params) {
             super(params)
 
             this.addInput({
                 id:"objects",  
-                description: `Triggering this input construct surface(s) for use in Arche computations.`,
+                description: `Triggering this input construct surface(s) for use in Arch computations.`,
                 contract: inputContract,
                 onTriggered: ({data, configuration, context}) => this.createSurfaces(data, configuration, context)  
             })
@@ -97,14 +97,14 @@ export namespace ModuleScene {
 
         createSurfaces(
             {surfaces, material, remotes}: {
-                surfaces: ArcheFacade.Surface[], 
-                material:  ArcheFacade.Material, 
-                remotes: ArcheFacade.Remote[]
+                surfaces: ArchFacade.Surface[], 
+                material:  ArchFacade.Material, 
+                remotes: ArchFacade.Remote[]
             } , 
             config: PersistentData, 
             context: Context ){
             
-            let scene = new ArcheFacade.Scene({surfaces, material, remotes})
+            let scene = new ArchFacade.Scene({surfaces, material, remotes})
             this.scene$.next({data: scene, context })
 
             context.terminate()

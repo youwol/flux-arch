@@ -4,7 +4,7 @@ import { combineLatest, Observable, of, Subscription } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { BufferAttribute, BufferGeometry, Color, DoubleSide, FrontSide, Mesh, MeshStandardMaterial } from 'three';
 import { TreeViewState } from "./data";
-import { ArcheDiscontinuityMeshNode, ArcheMeshNode, ArcheNode, ArcheObservationMeshNode, ArcheRealizationNode, RootArcheNode } from './tree-nodes';
+import { ArchDiscontinuityMeshNode, ArchMeshNode, ArchNode, ArchObservationMeshNode, ArchRealizationNode, RootArchNode } from './tree-nodes';
 import { decodeGocadTS} from'@youwol/io'
 import { DataFrame } from '@youwol/dataframe';
 import { findChildren } from './utils';
@@ -12,7 +12,7 @@ import { findChildren } from './utils';
 
 export class Visu3dState{
 
-    private rootNode : RootArcheNode
+    private rootNode : RootArchNode
     
     cache: {[key:string]: Mesh} = {}
 
@@ -20,14 +20,14 @@ export class Visu3dState{
 
         subscriptions.push(
             tree.root$
-            .subscribe( root => this.rootNode = root as RootArcheNode ) 
+            .subscribe( root => this.rootNode = root as RootArchNode ) 
         )
     }
-    revokeFrom( node: ArcheNode) {
+    revokeFrom( node: ArchNode) {
 
         let allMeshes = [
-            ...findChildren<ArcheMeshNode>(node, ArcheMeshNode), 
-            ...findChildren<ArcheRealizationNode>(node, ArcheRealizationNode)
+            ...findChildren<ArchMeshNode>(node, ArchMeshNode), 
+            ...findChildren<ArchRealizationNode>(node, ArchRealizationNode)
         ]
         allMeshes
         .filter( mesh => this.cache[mesh.id])
@@ -42,21 +42,21 @@ export class Visu3dState{
 
         let node = this.tree.getNode(nodeId) // Tree.find( this.rootNode, n => n.id == nodeId)//
 
-        if( node instanceof ArcheDiscontinuityMeshNode )
+        if( node instanceof ArchDiscontinuityMeshNode )
             return this.buildSimpleMesh(node)
 
-        if( node instanceof ArcheObservationMeshNode && node.resolvedChildren().length == 0)
+        if( node instanceof ArchObservationMeshNode && node.resolvedChildren().length == 0)
             return this.buildSimpleMesh(node)
 
-        /*if( node instanceof ArcheObservationMeshNode && node.resolvedChildren().length == 1)
-            return this.buildRealizationMesh(node.resolvedChildren()[0] as ArcheRealizationNode)
+        /*if( node instanceof ArchObservationMeshNode && node.resolvedChildren().length == 1)
+            return this.buildRealizationMesh(node.resolvedChildren()[0] as ArchRealizationNode)
 
-        if( node instanceof ArcheRealizationNode )
+        if( node instanceof ArchRealizationNode )
             return this.buildRealizationMesh(node)
             */
     }
 
-    buildSimpleMesh( node: ArcheMeshNode ) :  Observable<Mesh>{
+    buildSimpleMesh( node: ArchMeshNode ) :  Observable<Mesh>{
 
         return this.drive.readAsText(node.fileId).pipe(
             map( meshText =>  {
@@ -83,9 +83,9 @@ export class Visu3dState{
                     vertexColors: false,
                     metalness:0.5,
                     roughness: 0.5,
-                    wireframe: node instanceof ArcheObservationMeshNode
+                    wireframe: node instanceof ArchObservationMeshNode
                 }))
-                let path =  this.tree.reducePath(node.id, (node: ArcheNode)=> node.name) as Array<string>
+                let path =  this.tree.reducePath(node.id, (node: ArchNode)=> node.name) as Array<string>
                 path[0] = this.projectName
                 mesh.name = path.join('/')
                 mesh.userData.classes=['Object3D','Realization']
@@ -96,7 +96,7 @@ export class Visu3dState{
         )
     }
 
-    /*buildRealizationMesh( node: ArcheRealizationNode ) :  Observable<Mesh>{
+    /*buildRealizationMesh( node: ArchRealizationNode ) :  Observable<Mesh>{
         
         let mesh$ = this.drive.readAsText(node.meshFileId).pipe(
             map( meshText =>  {
@@ -121,8 +121,8 @@ export class Visu3dState{
         )
         return combineLatest([mesh$,df$]).pipe(
             mergeMap( ([mesh,df]:[Mesh,DataFrame]) => {
-                let mdle = new ApplyAttributes.Module({moduleId:"ArcheRealizationNode",Factory:ApplyAttributes, configuration:{}})
-                let path =  this.tree.reducePath(node.id, (node: ArcheNode)=> node.name)
+                let mdle = new ApplyAttributes.Module({moduleId:"ArchRealizationNode",Factory:ApplyAttributes, configuration:{}})
+                let path =  this.tree.reducePath(node.id, (node: ArchNode)=> node.name)
                 path[0] = this.projectName
                 mdle.createDataframe([mesh,df] as any, new ApplyAttributes.PersistentData({
                     objectId:node.id, objectName: path.join('/')

@@ -1,7 +1,7 @@
 
 import { arche, pack } from './main';
 import { Flux, BuilderView, ModuleFlux, Pipe, Schema, RenderView, createHTMLElement, Property, freeContract, Context } from '@youwol/flux-core'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 
 
 export namespace ModuleBoundaryCondition {
@@ -11,7 +11,7 @@ export namespace ModuleBoundaryCondition {
     <path d="M480,0H32C14.336,0,0,14.336,0,32v160h64V64h384v384H64V320H0v160c0,17.696,14.336,32,32,32h448c17.696,0,32-14.304,32-32    V32C512,14.336,497.696,0,480,0z"/>
     `
 
-    type ArcheRemote = any
+    type ArchRemote = any
 
 
     @Schema({
@@ -91,7 +91,7 @@ export namespace ModuleBoundaryCondition {
     })
     export class Module extends ModuleFlux {
 
-        boundaryCondition$: Pipe<ArcheRemote>
+        boundaryCondition$: Pipe<ArchRemote>
 
         constructor(params) {
             super(params)
@@ -123,7 +123,7 @@ export namespace ModuleBoundaryCondition {
 
         createBoundaryCondition(_, config: PersistentData, context: Context){
 
-            this.boundaryCondition$.next({data:new ArcheFacade.BoundaryCondition(config), context})
+            this.boundaryCondition$.next({data:new ArchFacade.BoundaryCondition(config), context})
             context.terminate()
         }
     } 

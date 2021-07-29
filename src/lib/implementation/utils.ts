@@ -1,8 +1,8 @@
 import { map, mergeMap, take } from 'rxjs/operators'
 import { BufferAttribute, BufferGeometry, Group, Mesh } from 'three'
 import * as _ from 'lodash'
-import { ArcheFolderDiscontinuityNode, ArcheMeshNode, ArcheNode, ArcheObservationMeshNode, ArcheObservationNode, 
-    ArcheRealizationNode, RootArcheNode } from './tree-nodes'
+import { ArchFolderDiscontinuityNode, ArchMeshNode, ArchNode, ArchObservationMeshNode, ArchObservationNode, 
+    ArchRealizationNode, RootArchNode } from './tree-nodes'
 import { TreeViewState } from './data'
 
 import { encodeGocadTS } from '@youwol/io'
@@ -82,14 +82,14 @@ export function getBoundingBox( dataframes : Array<DataFrame> | DataFrame) : Bou
        
 }
 
-export function getSceneBoundingBox(root:RootArcheNode): BoundingBox {
-    let rootDiscontinuity = findChild<ArcheFolderDiscontinuityNode>(root,ArcheFolderDiscontinuityNode)
-    let children = findChildren<ArcheMeshNode>(rootDiscontinuity,ArcheMeshNode)
+export function getSceneBoundingBox(root:RootArchNode): BoundingBox {
+    let rootDiscontinuity = findChild<ArchFolderDiscontinuityNode>(root,ArchFolderDiscontinuityNode)
+    let children = findChildren<ArchMeshNode>(rootDiscontinuity,ArchMeshNode)
     if(children.length==0){
         console.error("The bounding box can not be calculated: no discontinuities in the project", root)
         throw Error("The bounding box can not be calculated: no discontinuities in the project") 
     }
-    return findChildren<ArcheMeshNode>(rootDiscontinuity,ArcheMeshNode)
+    return findChildren<ArchMeshNode>(rootDiscontinuity,ArchMeshNode)
     .map( node => node.boundingBox as any )
     .reduce( (acc,e) => ({ 
         min:{x:Math.min(acc.min.x,e.min.x),y:Math.min(acc.min.y,e.min.y),z:Math.min(acc.min.z,e.min.z)},
@@ -149,14 +149,14 @@ export function createDiskGeometry(orientation: string, bBox:BoundingBox): Buffe
 
 
 
-export function createSimpleShape(type: string, orientation:string, tree: TreeViewState, node: ArcheNode) {
+export function createSimpleShape(type: string, orientation:string, tree: TreeViewState, node: ArchNode) {
     let folder = tree.environment.folder
     let drive = folder.drive
 
     tree.root$.pipe(
         take(1),
         mergeMap( rootNode => {
-            let bBox = getSceneBoundingBox(rootNode as RootArcheNode)
+            let bBox = getSceneBoundingBox(rootNode as RootArchNode)
             let geom = type == 'plane' 
                 ? createPlaneGeometry(orientation,bBox)
                 : createDiskGeometry(orientation,bBox)
@@ -165,7 +165,7 @@ export function createSimpleShape(type: string, orientation:string, tree: TreeVi
             let uid = uuidv4()
             return drive.createFile(folder.id,`mesh-${uid}.ts`,new Blob([s])).pipe(
                 map( (file:Interfaces.File) => 
-                new ArcheObservationMeshNode(
+                new ArchObservationMeshNode(
                     {id: `mesh-${uid}`, ownerId:tree.id, name:'mesh',fileId:file.id,
                 boundingBox: { 
                     min:{x:geom.boundingBox.min.x,y:geom.boundingBox.min.y,z:geom.boundingBox.min.z},
@@ -173,21 +173,21 @@ export function createSimpleShape(type: string, orientation:string, tree: TreeVi
                 }))
             ) 
         })
-    ).subscribe( (mesh: ArcheMeshNode) => {
-        tree.addChild(node.id, new ArcheObservationNode(
+    ).subscribe( (mesh: ArchMeshNode) => {
+        tree.addChild(node.id, new ArchObservationNode(
             { id: "obsNode-" + mesh.id, ownerId:tree.id, name: `${type} (${orientation})`,
              type: ['folder'], children: [mesh] }))
     })
 }
 
-export function extractNewObservationMeshNodes( ownerId: string, solutionId: string, updates: Array<ImmutableTree.Updates<ArcheNode>>){
+export function extractNewObservationMeshNodes( ownerId: string, solutionId: string, updates: Array<ImmutableTree.Updates<ArchNode>>){
 
     if(updates.length==0)
         return []
     let lastTree = updates.slice(-1)[0].newTree
-    let meshNodes =  findChildren<ArcheObservationMeshNode>(lastTree, ArcheObservationMeshNode)
+    let meshNodes =  findChildren<ArchObservationMeshNode>(lastTree, ArchObservationMeshNode)
     .filter( meshNode => { 
-        let realization = findChild<ArcheRealizationNode>(meshNode,ArcheRealizationNode)
+        let realization = findChild<ArchRealizationNode>(meshNode,ArchRealizationNode)
         if( realization && realization.solutionId == solutionId)
             return false
         return true

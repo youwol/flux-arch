@@ -10,17 +10,17 @@ export function createNewProject(folder: FileSystem.Folder) {
     ]).pipe(
         map(([f0, f1, f2]) => `
         return {
-            name: 'arche', type: ['project'], nodeType:'RootArcheNode',
+            name: 'arche', type: ['project'], nodeType:'RootArchNode',
             folders: {
                 discontinuities: '${f0.id}',
                 observationSpaces: '${f1.id}',
                 remotesStressFields: '${f2.id}'                
             },
             children: [ 
-                { name: 'discontinuities', type: ['folder', 'discontinuities'], children: [], nodeType:'ArcheFolderDiscontinuityNode'},
-                { name: 'observation grids', type: ['observation', 'folder'], children: [], nodeType:'ArcheFolderObservationNode' },
-                { name: 'remotes stress', type: ['remotes','folder'], children: [], nodeType:'ArcheFolderRemoteNode' },
-                { name: 'scripts', type: ['scripts','folder'], children: [], nodeType:'ArcheFolderScriptNode' }
+                { name: 'discontinuities', type: ['folder', 'discontinuities'], children: [], nodeType:'ArchFolderDiscontinuityNode'},
+                { name: 'observation grids', type: ['observation', 'folder'], children: [], nodeType:'ArchFolderObservationNode' },
+                { name: 'remotes stress', type: ['remotes','folder'], children: [], nodeType:'ArchFolderRemoteNode' },
+                { name: 'scripts', type: ['scripts','folder'], children: [], nodeType:'ArchFolderScriptNode' }
             ]
         }`),
         mergeMap((content) =>
@@ -34,7 +34,7 @@ export function createNewProject(folder: FileSystem.Folder) {
 }
 
   this.root$.pipe(
-                tap( state => this.state = state as RootArcheNode),
+                tap( state => this.state = state as RootArchNode),
                 map( state => JSON.stringify(state.data(), null,'\t')),
                 mergeMap( (content) => 
                     AssetsFilesystem.Backend.updateFile(file.drive.id,file.id,new Blob(["return "+content], { type: 'application/javascript' }),this.drive.events$) 
@@ -51,14 +51,14 @@ export function createNewProject(folder: FileSystem.Folder) {
                         )
                     )).subscribe(({ file, folder, content }) => {
                         let data = new Function(content)()
-                        let rootNode = parseProject(data) as RootArcheNode
+                        let rootNode = parseProject(data) as RootArchNode
                         this.stateMgr = new StateMgr(rootNode, folder, file, {selection$:this.selection$})
                         this.stateMgr.root$.pipe(
-                            mergeMap( (root: RootArcheNode) => 
+                            mergeMap( (root: RootArchNode) => 
                                 buildModel(root, this.stateMgr.drive).pipe(map(model=>[root,model])) 
                             ),
                         ).subscribe( ([root, model]) => this.project$.next({ data: { 
-                                state: root as ArcheNode, 
+                                state: root as ArchNode, 
                                 manager: this.stateMgr,
                                 model: model as any }, context: {} }))
                         

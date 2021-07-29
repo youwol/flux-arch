@@ -2,7 +2,7 @@
 import { pack } from './main';
 import { Flux, BuilderView, Schema, Property } from '@youwol/flux-core'
 import { ConstraintBase } from './constraint-base.module'
-import { ArcheFacade } from './arche.facades';
+import { ArchFacade } from './arche.facades';
 
 
 export namespace ModuleConstraintCoulomb {    
@@ -50,8 +50,8 @@ export namespace ModuleConstraintCoulomb {
             super(params)
         }
 
-        createConstraint(config: PersistentData): ArcheFacade.CoulombConstraint {
-            return new ArcheFacade.CoulombConstraint(config)
+        createConstraint(config: PersistentData): ArchFacade.CoulombConstraint {
+            return new ArchFacade.CoulombConstraint(config)
         }
     }
 }
