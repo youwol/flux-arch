@@ -1,7 +1,7 @@
 //import { MockDriveImplementation } from '../../../shared/test/mock-drive'
 import { Interfaces } from '@youwol/flux-files'
 import { LocalEnvironment, processArchTaskInWorker } from '../lib/implementation/local-environment'
-import { ArchFacade } from '../lib/arche.facades'
+import { ArchFacade } from '../lib/arch.facades'
 import * as fs from 'fs'
 
 import { Subject } from 'rxjs'
@@ -19,14 +19,14 @@ export class SerialWorker{
         LocalEnvironment.workersChannel$.next({taskId:data['taskId'], data})
     }}
 
-    postMessage({task, taskId, data, config,solutionId,archeSrcContent}) {
+    postMessage({task, taskId, data, config,solutionId,archSrcContent}) {
         processArchTaskInWorker({data:{
             task,
             taskId, 
-            archeSrcContent, 
+            archSrcContent, 
             data,
             config,
-            archeFactoryFct: ArchFacade.factory as any,
+            archFactoryFct: ArchFacade.factory as any,
             solutionId
             }},
             this.GlobalScopeMock
@@ -40,8 +40,8 @@ export class SerialWasmWorker{
 
     fetchWasm() {
         return new Promise( (resolve, reject) => {
-            fs.readFile(__dirname+"/../../assets/arche.js",'utf-8', (err, archeSrcContent) => {
-                resolve(archeSrcContent)
+            fs.readFile(__dirname+"/../../assets/arch.js",'utf-8', (err, archSrcContent) => {
+                resolve(archSrcContent)
             })
         })
     }

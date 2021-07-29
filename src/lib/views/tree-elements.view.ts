@@ -74,7 +74,7 @@ export function progressUI(event: Interfaces.EventIO) {
 
     let p = Math.floor(100 * event.transferedCount / event.totalCount)
     return {
-        class: "w-100 progress-bar progress-bar-striped  bg-success " + (event.step == Interfaces.Step.FINISHED ? "arche-progress finished" : ""),
+        class: "w-100 progress-bar progress-bar-striped  bg-success " + (event.step == Interfaces.Step.FINISHED ? "arch-progress finished" : ""),
         role: 'progressbar', 'aria-valuenow': p, 'aria-valuemin': "0", 'aria-valuemax': "100",
         style: { height: '5px' }
     }

@@ -5,8 +5,8 @@ import { Interfaces } from '@youwol/flux-files'
 
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs'
 import { filter, scan } from 'rxjs/operators'
-import { ArchFacade } from '../arche.facades'
-import { arche } from '../main'
+import { ArchFacade } from '../arch.facades'
+import { arch } from '../main'
 import { KeplerMesh } from '@youwol/flux-kepler'
 
 export enum ProcessingType {

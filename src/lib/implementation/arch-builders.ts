@@ -5,10 +5,8 @@ import { from, Observable } from 'rxjs';
 import { map, mergeMap, reduce } from 'rxjs/operators';
 
 import { decodeGocadTS } from '@youwol/io'
-import { ArchFacade } from '../arche.facades';
+import { ArchFacade } from '../arch.facades';
 import { BufferGeometry, Mesh, Object3D } from 'three';
-import { BemSurface } from '../types.arche';
-import { arche } from '../main';
 
 
 type Gocad = { indices: Array<number>, positions: Array<number> }

@@ -3,7 +3,7 @@ import {instantiateModules, parseGraph} from "@youwol/flux-core"
 import { MockEnvironment } from './mock-environment'
 import { map, share, skip, take } from 'rxjs/operators'
 import { ProjectMgr } from '../lib/project-mgr.module'
-import { ProjectMgrOutput } from '../lib/implementation/arche.state'
+import { ProjectMgrOutput } from '../lib/implementation/arch.state'
 import { ArchDiscontinuityNode, ArchFolderDiscontinuityNode, ArchFolderObservationNode, ArchObservationMeshNode, ArchObservationNode, ArchRealizationNode} from '../lib/implementation/tree-nodes'
 import { findChild, findChildren } from '../lib/implementation/utils'
 import { getActions } from '../lib/views/tree-elements.view'
@@ -51,7 +51,7 @@ export function loadDiscontinuityS1(fromIndex, modules,
         onDiscontinuityAdded && onDiscontinuityAdded(data)
         let rootNode = data.state.node
         let discontinuityNode = findChildren<ArchDiscontinuityNode>(rootNode,ArchDiscontinuityNode)
-        let dataPath = ""//getAbsoluteTestDataPath('geophysics/arche/model_test_S1/S1.ts')
+        let dataPath = ""//getAbsoluteTestDataPath('geophysics/arch/model_test_S1/S1.ts')
         fs.readFile(dataPath,'utf-8', (err, content) => {
             expect(err).toBeNull()
             data.manager.tree.dropFile(discontinuityNode[0], "S1.ts", new Blob([content]) as any)

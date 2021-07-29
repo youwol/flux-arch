@@ -1,13 +1,13 @@
 
 import { instantiateModules, parseGraph, Runner} from "@youwol/flux-core"
-import { ProjectMgrOutput } from '../lib/implementation/arche.state'
+import { ProjectMgrOutput } from '../lib/implementation/arch.state'
 import { ArchDiscontinuityMeshNode, ArchDiscontinuityNode } from '../lib/implementation/tree-nodes'
 import { findChildren } from '../lib/implementation/utils'
 import { MockEnvironment } from './mock-environment'
 import { ProjectMgr } from '../lib/project-mgr.module'
 import { ModuleMaterial } from '../lib/material.module'
 import { ModuleCombineLatest } from '@youwol/flux-rxjs'
-import { ArchFacade } from '../lib/arche.facades'
+import { ArchFacade } from '../lib/arch.facades'
 import { addSimpleShape, loadDiscontinuityS1 } from './test-utils'
 import { KeplerMesh } from '@youwol/flux-kepler'
 import { BufferGeometry, Mesh } from 'three'

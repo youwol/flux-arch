@@ -1,7 +1,7 @@
 
-import { arche, pack } from './main';
+import { arch, pack } from './main';
 import { Flux, BuilderView, ModuleFlux, Pipe, Schema, RenderView, createHTMLElement, Property, freeContract, Context } from '@youwol/flux-core'
-import { ArchFacade } from './arche.facades';
+import { ArchFacade } from './arch.facades';
 
 
 export namespace ModuleBoundaryCondition {

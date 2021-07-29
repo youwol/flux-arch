@@ -3,7 +3,7 @@ import { from, Observable } from 'rxjs'
 import { ArchMaterialNode, ArchObservationMeshNode, RootArchNode, 
     ArchDiscontinuityMeshNode, ArchNode, ArchBoundaryConditionNode, 
     ArchConstraintNode, ArchRemoteNode, ArchFolderDiscontinuityNode, ArchFolderObservationNode, ArchFolderRemoteNode, ProcessingType, ArchDiscontinuityNode } from './tree-nodes'
-import { ArchFacade } from '../arche.facades'
+import { ArchFacade } from '../arch.facades'
 import * as _ from 'lodash'
 import { ImmutableTree } from '@youwol/fv-tree'
 import { uuidv4 } from '@youwol/flux-core'

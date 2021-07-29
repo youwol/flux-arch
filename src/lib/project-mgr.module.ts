@@ -3,9 +3,9 @@ import { pack } from './main';
 import { Property, Flux, BuilderView, ModuleFlux, Pipe, Schema, SideEffects, Project, freeContract } from '@youwol/flux-core'
 import { BehaviorSubject, combineLatest, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { ArchNode} from './implementation/tree-nodes';
-import { ProjectMgrOutput, StateMgr } from './implementation/arche.state';
+import { ProjectMgrOutput, StateMgr } from './implementation/arch.state';
 import { Environment, newProjectNode, ProjectState } from './implementation/data';
-import { ArchFacade } from './arche.facades';
+import { ArchFacade } from './arch.facades';
 
 
 export namespace ProjectMgr {

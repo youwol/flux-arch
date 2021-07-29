@@ -3,7 +3,7 @@
 import { pack } from './main';
 import { Flux, BuilderView, ModuleFlux, Pipe, Schema, contract, expectSome, 
     expectAnyOf, expectInstanceOf, expectSingle, Context, ModuleError, Property } from '@youwol/flux-core'
-import { ArchFacade } from './arche.facades';
+import { ArchFacade } from './arch.facades';
 import { DataFrame, Serie } from '@youwol/dataframe';
 import { Group, Mesh, MeshStandardMaterial } from 'three';
 import * as _ from 'lodash'
@@ -15,7 +15,7 @@ import { WorkerContext } from '@youwol/flux-core/src/lib/worker-pool';
 import { ProgressViewData } from './views/progress.view';
 import { access } from 'node:fs';
 
-export namespace ModuleResolver {
+export namespace ModulePostProcess {
 
     enum PropertyTarget{
         Stress = 'Stress',
@@ -41,8 +41,8 @@ export namespace ModuleResolver {
                 burgers: args.solution.burgers
             })
         let typedArrays = args.solution.burgers.map( burger => new Float64Array(burger) )
-        let arch = workerScope["arche"]
-        let archFactory = workerScope["@youwol/flux-arche.archeFactory"]
+        let arch = workerScope["arch"]
+        let archFactory = workerScope["@youwol/flux-arch.archFactory"]
         let positions = args.positions
 
         let model = archFactory("ArchModelNode", args.solution.model, arch)
@@ -82,15 +82,15 @@ export namespace ModuleResolver {
 
     @Schema({
         pack: pack,
-        description: "Persistent Data of Resolver"
+        description: "Persistent Data of PostProcess"
     })
     export class PersistentData {
 
         @Property({ description: "Object's id" })
-        readonly objectId: string = "resolved"
+        readonly objectId: string = "post-process"
 
         @Property({ description: "Display name" })
-        readonly displayName: string = "Resolved"
+        readonly displayName: string = "post-process"
 
         @Property({ description: "Compute stress" })
         readonly stress: boolean = true
@@ -161,13 +161,13 @@ export namespace ModuleResolver {
     
     @Flux({
         pack: pack,
-        namespace: ModuleResolver,
-        id: "ModuleResolver",
+        namespace: ModulePostProcess,
+        id: "ModulePostProcess",
         displayName: "Post-process",
         description: "Arch post-process"
     })
     @BuilderView({
-        namespace: ModuleResolver,
+        namespace: ModulePostProcess,
         icon: svgIcon
     })
     export class Module extends ModuleFlux {
@@ -180,7 +180,7 @@ export namespace ModuleResolver {
 
             this.addInput({
                 id:"input", 
-                description:`Triggering this input resolve an Arch solution on provided mesh(es).`, 
+                description:`Triggering this input post-process an Arch solution on provided mesh(es).`, 
                 contract: inputContract,
                 onTriggered: ({data,configuration, context}) => {
                     this.resolve(data.solution, data.meshes, configuration, context)
@@ -201,7 +201,7 @@ export namespace ModuleResolver {
             .subscribe(
                 (allDfs: Array<[Mesh, DataFrame, PropertyTarget]>) => {
                 
-                    let keplerObjects = meshes.map( (mesh) => {
+                    let keplerObjects = meshes.map( (mesh, i) => {
                         let series = allDfs
                         .filter( ([m]) => mesh === m)
                         .reduce( (acc,[,df]) => ({...acc, ...df.series}), {})
@@ -213,8 +213,8 @@ export namespace ModuleResolver {
                         context.info("Mesh created", keplerMesh)
                         let obj = createFluxThreeObject3D({
                             object: keplerMesh,
-                            id:mesh.name+"_resolved",
-                            displayName: mesh.userData.displayName+" resolved"
+                            id:`${configuration.objectId}_${i}`,
+                            displayName:`${configuration.displayName}_${i}`
                         })
                         return obj
                     })
@@ -243,7 +243,7 @@ export namespace ModuleResolver {
 
             let workerPool = this.environment.workerPool
             
-            return context.withChild(`resolve ${property} on mesh`, (context) => {
+            return context.withChild(`post-process: ${property} on mesh`, (context) => {
 
                 context.info("Input mesh", new Mesh(mesh.geometry, new MeshStandardMaterial({wireframe:true})) )
                 let positions = mesh.geometry.getAttribute('position').array as Float32Array
@@ -251,7 +251,7 @@ export namespace ModuleResolver {
                 view.set(positions,0)
 
                 let channel$ = workerPool.schedule<WorkerArguments>({
-                    title: 'RESOLVE',
+                    title: 'POST PROCESS',
                     entryPoint: resolveInWorker,
                     args:{
                         solution,

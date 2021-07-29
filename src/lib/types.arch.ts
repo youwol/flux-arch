@@ -18,7 +18,7 @@
      * @brief Create a user-defined remote stress that has to be applied
      * to the model using a callback.
      * @example
-     * const r1 = arche.createUserRemote( (x,y,z) => {
+     * const r1 = arch.createUserRemote( (x,y,z) => {
      *   const rho = 2200
      *   const a   = -rho*9.81*z
      *   const xx  = a * 0.1
@@ -38,7 +38,7 @@
      * size 3 representing the modified traction vector.
      * @returns The newly created inequality constraint on traction
      * @example
-     * const c = arche.createUserTic( (x,y,z, tx,ty,tz) => [tx, ty, 0] )
+     * const c = arch.createUserTic( (x,y,z, tx,ty,tz) => [tx, ty, 0] )
      * surface1.addConstraint(c)
      * surface2.addConstraint(c)
      */
@@ -53,7 +53,7 @@
      * @returns The newly created inequality constraint on displacement
      * @example
      * // Prevent interpenetration of the triangles (x-axis in Okada convention)
-     * const c = arche.createUserDic( (x,y,z, dx,dy,dz) => [dx<0 ? 0 : dx, dy, dz] )
+     * const c = arch.createUserDic( (x,y,z, dx,dy,dz) => [dx<0 ? 0 : dx, dy, dz] )
      * surface.addConstraint(c)
      */
     export type createUserDic = (cb: Function) => Inequality
@@ -323,7 +323,7 @@
      * 
      * Usage
      * @example
-     * const solver = arche.ModelSolver(model, 1e-9, 200)
+     * const solver = arch.ModelSolver(model, 1e-9, 200)
      * 
      * remote.setFunction( (x,y,z) => [1, 0, 0, 0, 0, 0] )
      * solver.run()

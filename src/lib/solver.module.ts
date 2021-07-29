@@ -4,7 +4,7 @@
 import { pack } from './main';
 import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, 
     Context, ModuleError, expectInstanceOf, expectSingle } from '@youwol/flux-core'
-import { ArchFacade } from './arche.facades';
+import { ArchFacade } from './arch.facades';
 import { filter, map } from 'rxjs/operators';
 import { WorkerContext } from '@youwol/flux-core/src/lib/worker-pool';
 import { ProgressViewData, ConvergencePlotData } from './views/progress.view';
@@ -25,13 +25,13 @@ export namespace ModuleSolver {
         workerScope: any,
         context: WorkerContext
     }) {
-        let arche = workerScope["arche"]
+        let arch = workerScope["arch"]
 
         context.info("Parse model", { model:args })
-        let model = workerScope["@youwol/flux-arche.archeFactory"]("ArchModelNode", args.model, arche)
+        let model = workerScope["@youwol/flux-arch.archFactory"]("ArchModelNode", args.model, arch)
 
         context.info("Create solver")
-        let solver = new arche.Solver(
+        let solver = new arch.Solver(
             model, 
             args.model.solver.type, 
             args.model.solver.parameters.tolerance, 

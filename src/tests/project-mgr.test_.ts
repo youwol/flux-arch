@@ -1,13 +1,13 @@
 
 import { Runner} from "@youwol/flux-core"
 import { map, skip, take } from 'rxjs/operators'
-import { ProjectMgrOutput } from '../lib/implementation/arche.state'
+import { ProjectMgrOutput } from '../lib/implementation/arch.state'
 import { ArchDiscontinuityNode, ArchFolderDiscontinuityNode, ArchFolderObservationNode, ArchFolderRemoteNode, 
     ArchDiscontinuityMeshNode, ArchMaterialNode, ArchObservationMeshNode, ArchObservationNode, ArchRealizationNode } from '../lib/implementation/tree-nodes'
 import { findChild, findChildren } from '../lib/implementation/utils'
 import { getActions } from '../lib/views/tree-elements.view'
 import { ImmutableTree } from '@youwol/fv-tree'
-import { ArchFacade } from '../lib/arche.facades'
+import { ArchFacade } from '../lib/arch.facades'
 import { KeplerMesh } from '@youwol/flux-kepler'
 import { BufferAttribute, BufferGeometry, Mesh } from 'three'
 import * as _ from 'lodash'

@@ -1,9 +1,9 @@
 
-import { arche, pack } from './main';
-import { Flux, BuilderView, ModuleFlux, Pipe, Schema, freeContract, expectSome, expectAnyOf, expectInstanceOf, expectAllOf, expectSingle, contract, Context } from '@youwol/flux-core'
-import { BufferGeometry, Group, Mesh, Object3D } from 'three';
-import { buildSurfacesFromThree } from './implementation/arche-builders'
-import { ArchFacade } from './arche.facades';
+import { pack } from './main';
+import { Flux, BuilderView, ModuleFlux, Pipe, Schema, expectSome, expectAnyOf, expectInstanceOf, 
+    expectSingle, contract, Context } from '@youwol/flux-core'
+import { BufferGeometry, Group, Mesh } from 'three';
+import { ArchFacade } from './arch.facades';
 
 export namespace ModuleSurface {
     //Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>

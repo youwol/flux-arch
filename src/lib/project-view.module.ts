@@ -6,7 +6,7 @@ import { ImmutableTree } from '@youwol/fv-tree'
 import { of, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { delay, distinct, filter, map, mergeMap, scan, switchMap } from 'rxjs/operators';
 import { ArchNode} from './implementation/tree-nodes';
-import { StateMgr } from './implementation/arche.state';
+import { StateMgr } from './implementation/arch.state';
 import { Interfaces } from '@youwol/flux-files';
 import { getActions, headerView, progressUI } from './views/tree-elements.view';
 import { child$ } from '@youwol/flux-view';
@@ -121,7 +121,7 @@ export namespace ProjectView {
             */
         let treeData$ = mdle.stateMgr$.pipe(  map( stateMgr => stateMgr.tree ) )
         let vDOM = {
-            class: 'w-100 h-100 flux-pack-arche project-mgr bg-dark',
+            class: 'w-100 h-100 flux-pack-arch project-mgr bg-dark',
             children:[
                 {
                     class:'w-100',
@@ -156,7 +156,7 @@ export namespace ProjectView {
 
         let div = createHTMLElement({
             data: {
-                class: 'w-100 h-100 flux-pack-arche project-mgr bg-dark',
+                class: 'w-100 h-100 flux-pack-arch project-mgr bg-dark',
                 children: {
                     header: {
                         class: 'w-100',

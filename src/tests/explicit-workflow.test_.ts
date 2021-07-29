@@ -1,7 +1,7 @@
 import { instantiateModules, parseGraph, Runner } from "@youwol/flux-core"
 import { ModulePlane } from '@youwol/flux-three'
 import { ModuleCombineLatest } from '@youwol/flux-rxjs'
-import { ArchFacade } from '../lib/arche.facades'
+import { ArchFacade } from '../lib/arch.facades'
 import { ModuleBoundaryCondition } from '../lib/boundary-condition.module'
 import { ModuleConstraintCoulombOrtho } from '../lib/constraint-coulomb-ortho.module'
 import { ModuleConstraintCoulomb } from '../lib/constraint-coulomb.module'

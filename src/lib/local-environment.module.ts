@@ -23,7 +23,7 @@ export namespace ModuleLocalEnvironment {
         @Property({ description: "users group" })
         readonly usersGroup: string = "private"
 
-        @Property({ description: "arche project's name" })
+        @Property({ description: "arch project's name" })
         readonly projectName: string = "new project"
 
         constructor( params: { projectName?: string, usersGroup?: string } = {}) {

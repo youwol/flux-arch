@@ -6,7 +6,7 @@ import { WorkflowManager } from '../lib/workflow-manager.module'
 import { WorkflowStep } from '../lib/workflow-step.plugin'
 import { take } from 'rxjs/internal/operators/take'
 import { map, skip } from 'rxjs/operators'
-import { ProjectMgrOutput } from '../lib/implementation/arche.state'
+import { ProjectMgrOutput } from '../lib/implementation/arch.state'
 
 
 console.log = () => {}

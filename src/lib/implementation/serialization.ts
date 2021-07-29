@@ -10,7 +10,7 @@ export function createNewProject(folder: FileSystem.Folder) {
     ]).pipe(
         map(([f0, f1, f2]) => `
         return {
-            name: 'arche', type: ['project'], nodeType:'RootArchNode',
+            name: 'arch', type: ['project'], nodeType:'RootArchNode',
             folders: {
                 discontinuities: '${f0.id}',
                 observationSpaces: '${f1.id}',
@@ -42,7 +42,7 @@ export function createNewProject(folder: FileSystem.Folder) {
             ).subscribe( (d) => console.log('project updated!', d))
             
             AssetsFilesystem
-                .getFolderOrCreate(`${config.usersGroup}/arche/${config.projectName}`,false).pipe(
+                .getFolderOrCreate(`${config.usersGroup}/arch/${config.projectName}`,false).pipe(
                     mergeMap(({ created, folder }) => created
                         ? createNewProject(folder)
                         : folder.listItems().pipe(

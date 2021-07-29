@@ -3,7 +3,7 @@
 import { pack } from './factory';
 import { Flux, BuilderView, Schema, Property } from '@youwol/flux-lib-core'
 import { ConstraintBase } from './constraint-base.module'
-import { ArchFacade } from './arche.facades';
+import { ArchFacade } from './arch.facades';
 
 export namespace ConstraintDisplacement {
     

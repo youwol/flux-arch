@@ -2,9 +2,9 @@ import { FluxPack, IEnvironment, Journal } from '@youwol/flux-core'
 import { Observable } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 import { AUTO_GENERATED } from '../auto_generated'
-import { ArchFacade } from './arche.facades';
+import { ArchFacade } from './arch.facades';
 import { progressView, ProgressViewData, ConvergencePlotData, convergencePlotViewD3 } from './views/progress.view';
-export var arche 
+export var arch 
 
 
 export function install(environment: IEnvironment){
@@ -18,14 +18,14 @@ export function install(environment: IEnvironment){
                     id: resource,
                     src: assets[0].src,
                     sideEffects: (workerScope, exports) => {
-                        return exports.ArchModule().then( (arche) => { 
-                            console.log("WASM Arch installed", arche)
-                            workerScope.arche = arche
+                        return exports.ArchModule().then( (arch) => { 
+                            console.log("WASM Arch installed", arch)
+                            workerScope.arch = arch
                         })
                     }
                 }],
                 functions: [{
-                    id: "@youwol/flux-arche.archeFactory",
+                    id: "@youwol/flux-arch.archFactory",
                     target: ArchFacade.factory
                 }],
                 variables: []
@@ -33,8 +33,8 @@ export function install(environment: IEnvironment){
         }),
         mergeMap( (assets) => {
             return new Observable(subscriber => {
-                window["ArchModule"]().then( archeMdle => { 
-                    arche = archeMdle; 
+                window["ArchModule"]().then( archMdle => { 
+                    arch = archMdle; 
                     subscriber.next(true); subscriber.complete(); })
             });
         })

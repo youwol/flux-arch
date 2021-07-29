@@ -176,19 +176,19 @@ export namespace ArchFacade {
     }
 
 
-    export function factory(type, parameters, arche, factoryFct = undefined) {
+    export function factory(type, parameters, arch, factoryFct = undefined) {
         
         factoryFct = factoryFct || factory
         
         if( type == "ArchMaterialNode") 
-            return new arche.Material(parameters.poisson, parameters.young, parameters.density)
+            return new arch.Material(parameters.poisson, parameters.young, parameters.density)
 
         if (type == 'ArchCoulombConstraintNode')
-            return new arche.Coulomb(parameters.friction, parameters.cohesion)
+            return new arch.Coulomb(parameters.friction, parameters.cohesion)
 
         if (type == 'ArchCoulombOrthoConstraintNode') {
 
-            let c = new arche.CoulombOrtho()
+            let c = new arch.CoulombOrtho()
             c.theta = parameters.theta
             c.frictionDip = parameters.frictionDip
             c.frictionStrike = parameters.frictionStrike
@@ -198,26 +198,26 @@ export namespace ArchFacade {
         if (type == 'ArchDisplacementConstraintNode') {
 
             if (parameters.direction == 'compression' && parameters.type == 'max')
-                return arche.MaxDispl(parameters.axis, parameters.value)
+                return arch.MaxDispl(parameters.axis, parameters.value)
             if (parameters.direction == 'compression' && parameters.type == 'min')
-                return arche.MinDispl(parameters.axis, parameters.value)
+                return arch.MinDispl(parameters.axis, parameters.value)
             if (parameters.direction == 'traction' && parameters.type == 'max')
-                return arche.MaxTraction(parameters.axis, parameters.value)
+                return arch.MaxTraction(parameters.axis, parameters.value)
             if (parameters.direction == 'traction' && parameters.type == 'min')
-                return arche.MinTraction(parameters.axis, parameters.value)
+                return arch.MinTraction(parameters.axis, parameters.value)
         }
 
         if (type == 'ArchDisplacementNormConstraintNode') {
 
             if (parameters.direction == 'compression' && parameters.type == 'max')
-                return arche.MaxNormDispl(parameters.value)
+                return arch.MaxNormDispl(parameters.value)
             if (parameters.direction == 'traction' && parameters.type == 'max')
-                return arche.MaxNormTraction(parameters.value)
+                return arch.MaxNormTraction(parameters.value)
         }
         
         if (type == "ArchAndersonianRemoteNode") {
 
-            let r = new arche.AndersonianRemote()
+            let r = new arch.AndersonianRemote()
             r.stress = true
             r.h = parameters.hSigma
             r.H = parameters.HSigma
@@ -233,9 +233,9 @@ export namespace ArchFacade {
             let surfaceData: Surface = parameters
             let positions = Array.from(new Float32Array(surfaceData.positions))
             let indexes =Array.from(new Uint16Array(surfaceData.indexes))
-            let surface = new arche.Surface( positions,  indexes )
+            let surface = new arch.Surface( positions,  indexes )
             surfaceData.constraints.forEach( constraint => {
-                surface.addConstraint( factoryFct(constraint.type, constraint.parameters, arche, factoryFct))
+                surface.addConstraint( factoryFct(constraint.type, constraint.parameters, arch, factoryFct))
             })
             
             let bcData = surfaceData.boundaryCondition.parameters
@@ -260,15 +260,15 @@ export namespace ArchFacade {
 
         if (type == "ArchModelNode") {
         
-            let model = new arche.Model()
+            let model = new arch.Model()
             model.setHalfSpace(false)
-            let material = factoryFct("ArchMaterialNode", parameters.material.parameters, arche, factoryFct)
+            let material = factoryFct("ArchMaterialNode", parameters.material.parameters, arch, factoryFct)
             model.setMaterial(material)
 
-            let surfaces = parameters.surfaces.map( s => factoryFct("ArchSurfaceNode", s, arche, factoryFct))
+            let surfaces = parameters.surfaces.map( s => factoryFct("ArchSurfaceNode", s, arch, factoryFct))
             surfaces.forEach( s => model.addSurface(s))
 
-            let remotes = parameters.remotes.map( r => factoryFct(r.type, r.parameters, arche, factoryFct))
+            let remotes = parameters.remotes.map( r => factoryFct(r.type, r.parameters, arch, factoryFct))
             remotes.forEach( r => model.addRemote(r)) 
 
             return model

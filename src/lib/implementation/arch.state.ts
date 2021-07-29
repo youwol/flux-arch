@@ -3,7 +3,7 @@ import { Interfaces } from '@youwol/flux-files'
 import { filter, map, mergeMap, scan, switchMap, take, tap, withLatestFrom } from 'rxjs/operators'
 import * as _ from 'lodash'
 import { extractNewObservationMeshNodes, findChild, findChildren} from './utils'
-import { ArchFacade } from '../arche.facades'
+import { ArchFacade } from '../arch.facades'
 import { RootArchNode, ArchMeshNode, 
     ArchNode, ArchRealizationNode, ArchDiscontinuityMeshNode, 
     ArchObservationMeshNode, 
@@ -14,7 +14,7 @@ import { from, Observable, ReplaySubject, Subscription } from 'rxjs'
 import { Environment, ProjectState, Solution, needSolve, TreeViewState} from './data'
 import { BufferGeometry, Mesh } from 'three'
 import { encodeGocadTS } from '@youwol/io'
-import { buildModel } from './arche-builders'
+import { buildModel } from './arch-builders'
 import { uuidv4 } from '@youwol/flux-core'
 import { Visu3dState } from './visu3d.state'
     

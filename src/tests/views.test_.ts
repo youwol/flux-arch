@@ -11,7 +11,7 @@ import { getActions } from '../lib/views/tree-elements.view'
 import * as fs from 'fs'
 import { WorkflowManager } from '../lib/workflow-manager.module'
 import { WorkflowStep } from '../lib/workflow-step.plugin'
-import { ProjectMgrOutput } from '../lib/implementation/arche.state'
+import { ProjectMgrOutput } from '../lib/implementation/arch.state'
 import { of } from 'rxjs'
 
 
@@ -75,7 +75,7 @@ test('project view', (done) => {
             let headerDiv = discDiv.querySelector("#header")
             let dropZone = headerDiv.querySelector(".yw-drop-zone")
             //headerDiv.dispatchEvent(new DragEvent('drop'))
-            let dataPath = ""//getAbsoluteTestDataPath('geophysics/arche/model_test_S1/S1.ts')
+            let dataPath = ""//getAbsoluteTestDataPath('geophysics/arch/model_test_S1/S1.ts')
             dropZone['ondragenter']({target:dropZone})
             dropZone['ondragover']({target:dropZone, preventDefault: () => {}})
             dropZone['ondragleave']({target:dropZone})

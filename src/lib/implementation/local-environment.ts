@@ -5,7 +5,7 @@ import { ArchRealizationNode, ArchObservationMeshNode, ProcessingType } from './
 
 import { decodeGocadTS} from '@youwol/io'
 import { DataFrame } from '@youwol/dataframe'
-import { ArchFacade } from '../arche.facades'
+import { ArchFacade } from '../arch.facades'
 import * as _ from 'lodash'
 import { AUTO_GENERATED} from '../../auto_generated'
 import { Environment, Solution } from './data'
@@ -21,7 +21,7 @@ export class LocalSolution implements Solution{
 export class WasmWorker{
 
     fetchWasm() {
-        return fetch(`/api/cdn-backend/libraries/youwol/${AUTO_GENERATED.name}/${AUTO_GENERATED.version}/assets/arche.js`)
+        return fetch(`/api/cdn-backend/libraries/youwol/${AUTO_GENERATED.name}/${AUTO_GENERATED.version}/assets/arch.js`)
         .then( d => d.text())
     }
     createWorker(){
@@ -58,13 +58,13 @@ export class LocalEnvironment extends Environment{
         let taskId = uuidv4()
         
         this.wasmWorker.fetchWasm()
-        .then(archeSrcContent => {            
+        .then(archSrcContent => {            
             worker.postMessage({
                 task: 'solve',
                 taskId,
                 data: model,
-                archeSrcContent,
-                archeFactoryFct: "return " + ArchFacade.factory.toString(),
+                archSrcContent,
+                archFactoryFct: "return " + ArchFacade.factory.toString(),
                 solutionId: taskId
             }) 
         })
@@ -91,24 +91,24 @@ export class LocalEnvironment extends Environment{
         console.log("##### Start resolve task", meshId)
         from(this.wasmWorker.fetchWasm()).pipe(
             //mergeMap( d => from(d.text())),
-            mergeMap( (archeSrcContent) => {
+            mergeMap( (archSrcContent) => {
                 return this.drive.readAsText(meshFileId).pipe( map(content=> {
                     return { 
-                        archeSrcContent,
+                        archSrcContent,
                         mesh: undefined //( content, { collapse: false })[0]
                     }
                 }))
             })
-        ).subscribe( ({archeSrcContent, mesh}) => { 
+        ).subscribe( ({archSrcContent, mesh}) => { 
             let grid = new Float32Array(new SharedArrayBuffer( 4 * mesh.positions.length))
             grid.set(Float32Array.from(mesh.positions),0)
             let message = {
                 task: 'resolve',
                 taskId,
                 data: {  grid},
-                archeSrcContent,
+                archSrcContent,
                 solutionId:solution.solutionId,
-                archeFactoryFct: "return " + ArchFacade.factory.toString(),
+                archFactoryFct: "return " + ArchFacade.factory.toString(),
             }
             console.log("MESSAGE",message)
             worker.postMessage(message)
@@ -137,10 +137,10 @@ export class LocalEnvironment extends Environment{
 
 
 export function processArchTaskInWorker({
-        data: { task, taskId, archeSrcContent, data, config, archeFactoryFct, solutionId }
+        data: { task, taskId, archSrcContent, data, config, archFactoryFct, solutionId }
     }:
-    { data: { task: string, taskId:string, archeSrcContent: string, config: any, data: ArchFacade.Model | { solutionId: string, grids: Array<ArrayBuffer> }, 
-        archeFactoryFct: string, solutionId: string }
+    { data: { task: string, taskId:string, archSrcContent: string, config: any, data: ArchFacade.Model | { solutionId: string, grids: Array<ArrayBuffer> }, 
+        archFactoryFct: string, solutionId: string }
     },
     _GlobalScope = undefined  
     ) {
@@ -148,32 +148,32 @@ export function processArchTaskInWorker({
     let GlobalScope = _GlobalScope ? _GlobalScope : self as any
     let timings = []
     let messages = []
-    if(!GlobalScope.archeSolutions)
-        GlobalScope.archeSolutions = {}
+    if(!GlobalScope.archSolutions)
+        GlobalScope.archSolutions = {}
 
     let t0 = performance.now()
     var exports ={}
     
-    new Function('document','exports','__dirname', archeSrcContent)( GlobalScope, exports, "")
+    new Function('document','exports','__dirname', archSrcContent)( GlobalScope, exports, "")
     let ArchModule = exports['ArchModule']
 
     let t1 = performance.now()
     timings.push({ title: `Parse Arch source`, dt: t1 - t0 })
 
-    let archeFactory = typeof(archeFactoryFct) == 'string' ? new Function(archeFactoryFct)() : archeFactoryFct
+    let archFactory = typeof(archFactoryFct) == 'string' ? new Function(archFactoryFct)() : archFactoryFct
 
-    let solve = (data, config, archeFactory, arche) => {
-        let model = archeFactory("ArchModelNode", data, arche, archeFactory )
-        let solver = new arche.Solver(model, 'seidel', 1e-9,200)
+    let solve = (data, config, archFactory, arch) => {
+        let model = archFactory("ArchModelNode", data, arch, archFactory )
+        let solver = new arch.Solver(model, 'seidel', 1e-9,200)
         solver.run()
-        GlobalScope.archeSolutions[solutionId] = model
+        GlobalScope.archSolutions[solutionId] = model
         console.log("DONE WITH PROCESS TASK INWORKER", task, taskId, solutionId)
         GlobalScope.postMessage({  messages, timings, taskId })
     }
 
     let resolve = (data) => {
-        console.log("Start resolution task", taskId, solutionId, GlobalScope.archeSolutions)
-        let model = GlobalScope.archeSolutions[solutionId]
+        console.log("Start resolution task", taskId, solutionId, GlobalScope.archSolutions)
+        let model = GlobalScope.archSolutions[solutionId]
         let ptCount = data.grid.length / 3
         let gridResult = new Float32Array( 6 * ptCount )
         for(let i=0;i<ptCount;i++){
@@ -186,11 +186,11 @@ export function processArchTaskInWorker({
         GlobalScope.postMessage({  stress:gridResult , taskId, messages, timings }, gridResult.buffer)
     }
 
-    ArchModule().then( (arche) => {
+    ArchModule().then( (arch) => {
         let t2 = performance.now()
         timings.push({ title: `Wasm runtime initialized`, dt: t2 - t1 })
         if( task == "solve")
-            solve(data, config, archeFactory, arche)
+            solve(data, config, archFactory, arch)
         if( task == "resolve")
             resolve(data)
     })

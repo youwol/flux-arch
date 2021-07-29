@@ -1,12 +1,12 @@
 
 import { Runner} from "@youwol/flux-core"
 import { skip, take } from 'rxjs/operators'
-import { ProjectMgrOutput } from '../lib/implementation/arche.state'
+import { ProjectMgrOutput } from '../lib/implementation/arch.state'
 import { ArchDiscontinuityNode, ArchFolderRemoteNode, 
      ArchAndersonianRemoteNode, ArchCoulombConstraintNode, ArchCoulombOrthoConstraintNode } from '../lib/implementation/tree-nodes'
 import { findChild } from '../lib/implementation/utils'
 import { getActions } from '../lib/views/tree-elements.view'
-import { ArchFacade } from '../lib/arche.facades'
+import { ArchFacade } from '../lib/arch.facades'
 import * as _ from 'lodash'
 import { addOneChildNodeWithSolutionCheck, createWorkflowGraphBase } from './test-utils'
 import { MockEnvironment } from './mock-environment'

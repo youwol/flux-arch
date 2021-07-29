@@ -3,7 +3,7 @@
 
 import { pack } from './main';
 import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, freeContract, Context } from '@youwol/flux-core'
-import { ArchFacade } from './arche.facades';
+import { ArchFacade } from './arch.facades';
 
 
 export namespace ModuleMaterial {

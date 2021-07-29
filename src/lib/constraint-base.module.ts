@@ -1,6 +1,6 @@
 
 import { Context, freeContract, ModuleFlux, Pipe} from '@youwol/flux-core'
-import { ArchFacade } from './arche.facades';
+import { ArchFacade } from './arch.facades';
 
 
 export namespace ConstraintBase {

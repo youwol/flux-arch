@@ -5,7 +5,7 @@ import { ReplaySubject, Subscription, Observable, combineLatest } from 'rxjs';
 import { filter, map, scan, switchMap, tap } from 'rxjs/operators';
 import { ProjectMgr } from './project-mgr.module';
 import { ProjectState, TreeViewState } from './implementation/data';
-import { ProjectMgrOutput } from './implementation/arche.state';
+import { ProjectMgrOutput } from './implementation/arch.state';
 import { ImmutableTree } from '@youwol/fv-tree';
 import { WorkflowStep } from './workflow-step.plugin';
 import { child$, render } from '@youwol/flux-view';

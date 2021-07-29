@@ -3,7 +3,7 @@ import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, uuidv4 } from '@
 import { from, Observable, of } from 'rxjs';
 import { Environment, Solution } from '../lib/implementation/data';
 //import { MockDriveImplementation } from '../../../shared/test/mock-drive';
-import { ArchFacade } from '../lib/arche.facades';
+import { ArchFacade } from '../lib/arch.facades';
 import { Interfaces } from '@youwol/flux-files';
 import * as path from 'path'
 import { decodeGocadTS } from '@youwol/io';
