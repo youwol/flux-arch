@@ -1,0 +1,362 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>ModelSolver | @youwol/flux-arch</title>
+	<meta name="description" content="Documentation for @youwol/flux-arch">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">@youwol/flux-arch</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">@youwol/flux-arch</a>
+				</li>
+				<li>
+					<a href="../modules/lib_types_arch.html">lib/types.arch</a>
+				</li>
+				<li>
+					<a href="lib_types_arch.modelsolver.html">ModelSolver</a>
+				</li>
+			</ul>
+			<h1>Interface ModelSolver</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<dl class="tsd-comment-tags">
+						<dt>brief</dt>
+						<dd><p>This class is still a work in progress and does not work yet!</p>
+							<p>Create a special solver that can be reused any time if the
+								remote, the boundary values of the surface discontinuities, the young
+							modulus or the density are changed.</p>
+							<p>It avoids to build the system matrix each time the geometry and the boundary
+								conditions of the surface discontinuities as well as the young modulus and the
+								density don&#39;t change. Also, discontinuities cannot be added or removed from the
+								model, otherwise, the system have to be rebuilt (and therefore, this class is
+							useless).</p>
+							<p>This class is meant to be used for superposition, for example, for teaching
+							purpose, or for investgating new ideas.</p>
+							<p>Usage</p>
+						</dd>
+						<dt>example</dt>
+						<dd><p>const solver = arch.ModelSolver(model, 1e-9, 200)</p>
+							<p>remote.setFunction( (x,y,z) =&gt; [1, 0, 0, 0, 0, 0] )
+								solver.run()
+								model.postprocess(true, false, true, &quot;U&quot;, &quot;E&quot;, &quot;S&quot;)
+							const U1 = grid.getAttribute(&#39;vector3&#39;, &#39;U&#39;, false)</p>
+							<p>remote.setFunction( (x,y,z) =&gt; [0, 1, 0, 0, 0, 0] )
+								solver.run()
+								model.postprocess(true, false, true, &quot;U&quot;, &quot;E&quot;, &quot;S&quot;)
+							const U2 = grid.getAttribute(&#39;vector3&#39;, &#39;U&#39;, false)</p>
+							<p>// ... etc</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">ModelSolver</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="lib_types_arch.modelsolver.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="lib_types_arch.modelsolver.html#run" class="tsd-kind-icon">run</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="lib_types_arch.modelsolver.html#setdirty" class="tsd-kind-icon">set<wbr>Dirty</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">constructor<span class="tsd-signature-symbol">(</span>model<span class="tsd-signature-symbol">: </span><a href="lib_types_arch.model.html" class="tsd-signature-type" data-tsd-kind="Interface">Model</a>, solverName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">String</span>, tol<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, maxIter<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/lib/types.arch.ts:363</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>brief</dt>
+									<dd><p>Construct a solver for the model which allows to call multiple time run()
+										without rebuilding the system each time if and only if:</p>
+										<ul>
+											<li>the number of triangles in the model does not change</li>
+											<li>the geometry of the surfaces changed</li>
+											<li>the bc type of each triangle does not change</li>
+											<li>we do not change the poisson&#39;s ratio</li>
+										</ul>
+										<p>On the other hand, it is possible to</p>
+										<ul>
+											<li>change the remote</li>
+											<li>add new remotes</li>
+											<li>add pressure in discontinuities if traction was prescribed along the normal direction</li>
+										</ul>
+										<p>If a changed is detected in the model (the number of triangles changed, the bc type of at least
+										one triangle changed, the geometry of surfaces changed), then the system matrix is rebuild.</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>model: <a href="lib_types_arch.model.html" class="tsd-signature-type" data-tsd-kind="Interface">Model</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The model</p>
+									</div>
+								</li>
+								<li>
+									<h5>solverName: <span class="tsd-signature-type">String</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The name of the solver to use for the computation
+										(&#39;seidel&#39;, &#39;jacobi&#39;, &#39;gmres&#39;, &#39;cgls&#39;). Default is &#39;seidel&#39; (if solverName is unknown).</p>
+									</div>
+								</li>
+								<li>
+									<h5>tol: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The tolerence of the solver (usually 1e-9)</p>
+									</div>
+								</li>
+								<li>
+									<h5>maxIter: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The maximum nulber of iterations (usually 200)</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="run" class="tsd-anchor"></a>
+					<h3>run</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">run<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/lib/types.arch.ts:370</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>brief</dt>
+									<dd><p>Each time the remote(s), the boundary values of
+											the surface discontinuities, the young modulus or the density are changed,
+										you can call this method to recompute the solution.</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="setdirty" class="tsd-anchor"></a>
+					<h3>set<wbr>Dirty</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Dirty<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/lib/types.arch.ts:384</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>brief</dt>
+									<dd><p>Set the solver as dirty meaning that the underlaying system matrix
+										will be rebuild. This happens when, for example:</p>
+										<ul>
+											<li>the number of triangles in the model changed (automatically detected)</li>
+											<li>the bc type of at least one triangle changed (automatically detected)</li>
+											<li>the poisson&#39;s ratio changed                  (automatically detected)</li>
+											<li>the geometry of at least one surface changed (not detected for now!!!)</li>
+										</ul>
+										<p>For instance, if you change the geometry of a surface (deformation,
+											translation, scale, rotation...), then as it is not detected, you will have to
+										make sure to call setDirty().</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/lib_types_arch.html">lib/types.arch</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.bemsurface.html" class="tsd-kind-icon">Bem<wbr>Surface</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.grid.html" class="tsd-kind-icon">Grid</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.inequality.html" class="tsd-kind-icon">Inequality</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.material.html" class="tsd-kind-icon">Material</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.model.html" class="tsd-kind-icon">Model</a>
+					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.modelsolver.html" class="tsd-kind-icon">Model<wbr>Solver</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="lib_types_arch.modelsolver.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="lib_types_arch.modelsolver.html#run" class="tsd-kind-icon">run</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="lib_types_arch.modelsolver.html#setdirty" class="tsd-kind-icon">set<wbr>Dirty</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.timer.html" class="tsd-kind-icon">Timer</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.userremote.html" class="tsd-kind-icon">User<wbr>Remote</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#buildgrid" class="tsd-kind-icon">build<wbr>Grid</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#buildsurface" class="tsd-kind-icon">build<wbr>Surface</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#createconstraint" class="tsd-kind-icon">create<wbr>Constraint</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#createuserdic" class="tsd-kind-icon">create<wbr>User<wbr>Dic</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#createuserremote" class="tsd-kind-icon">create<wbr>User<wbr>Remote</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#createusertic" class="tsd-kind-icon">create<wbr>User<wbr>Tic</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

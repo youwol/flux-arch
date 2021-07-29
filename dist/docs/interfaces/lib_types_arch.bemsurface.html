@@ -1,0 +1,406 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>BemSurface | @youwol/flux-arch</title>
+	<meta name="description" content="Documentation for @youwol/flux-arch">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">@youwol/flux-arch</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">@youwol/flux-arch</a>
+				</li>
+				<li>
+					<a href="../modules/lib_types_arch.html">lib/types.arch</a>
+				</li>
+				<li>
+					<a href="lib_types_arch.bemsurface.html">BemSurface</a>
+				</li>
+			</ul>
+			<h1>Interface BemSurface</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">BemSurface</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="lib_types_arch.bemsurface.html#addconstraint" class="tsd-kind-icon">add<wbr>Constraint</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="lib_types_arch.bemsurface.html#getcomputeddisplacement" class="tsd-kind-icon">get<wbr>Computed<wbr>Displacement</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="lib_types_arch.bemsurface.html#setbc" class="tsd-kind-icon">setBC</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="lib_types_arch.bemsurface.html#setdispl" class="tsd-kind-icon">set<wbr>Displ</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="addconstraint" class="tsd-anchor"></a>
+					<h3>add<wbr>Constraint</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Constraint<span class="tsd-signature-symbol">(</span>c<span class="tsd-signature-symbol">: </span><a href="lib_types_arch.inequality.html" class="tsd-signature-type" data-tsd-kind="Interface">Inequality</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/lib/types.arch.ts:183</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>brief</dt>
+									<dd><p>Add a pre-defined or a user-defined inequality constraint to this surface</p>
+									</dd>
+									<dt>see</dt>
+									<dd><p>createConstraint to add to this surface</p>
+									</dd>
+									<dt>see</dt>
+									<dd><p>createUserDic</p>
+									</dd>
+									<dt>see</dt>
+									<dd><p>createUserTic</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>c: <a href="lib_types_arch.inequality.html" class="tsd-signature-type" data-tsd-kind="Interface">Inequality</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The constraint</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="getcomputeddisplacement" class="tsd-anchor"></a>
+					<h3>get<wbr>Computed<wbr>Displacement</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Computed<wbr>Displacement<span class="tsd-signature-symbol">(</span>local<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, atTriangles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/lib/types.arch.ts:174</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>brief</dt>
+									<dd><p>Get the Computed displacement on a BemSurface after solving the model.
+										Note that this attribute is provided at triangles, not at vertices.</p>
+									</dd>
+									<dt>example</dt>
+									<dd><p>// Get the displacement field at nodes in global coordinate system
+											const displ = surface.getComputedDisplacement(false, false)
+											for (let i=0; i&lt;displ.length; i+=3) { // notice the increment
+											console.log(displ[i], displ[i+1], displ[i+2])
+										}</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>local: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>True if you want displacement vectors in local coordinate system (e.g., to
+											display iso-contours on the surface), false for the global coordinate system (e.g., if
+										you wan to deform the surface according to the displacement field)</p>
+									</div>
+								</li>
+								<li>
+									<h5>atTriangles: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>True if you want the returned displacement field to be at triangles,
+										otherwise it will be defined (interpolate) at vertices.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
+							<p>An array of packed displacement vector [x,y,z...x,y,z]</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="setbc" class="tsd-anchor"></a>
+					<h3>setBC</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">setBC<span class="tsd-signature-symbol">(</span>axis<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/lib/types.arch.ts:148</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>brief</dt>
+									<dd><p>Set the boundary type and value for each axis of the triangles making
+										a surface discontinuity.</p>
+										<p>For instance, in Okada convention, setting, for the x-axis, the boundary condition type to
+										traction and its value &gt; 0 is equivalent to applying a &quot;pressure&quot;.</p>
+									</dd>
+									<dt>example</dt>
+									<dd><p>const rho = 2100
+											const g = 9.81
+											surface.setBC(0, &quot;free&quot;  , 0)
+											surface.setBC(1, &quot;locked&quot;, 0)
+										surface.setBC(2, &quot;free&quot;  , (x,y,z) =&gt; 1e3 + rho<em>g</em>z)</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>axis: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The axis index (from 0 to 2 with 0 being the z-axis, 1 the y axis and 2 the x-axis)</p>
+									</div>
+								</li>
+								<li>
+									<h5>type: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The type of boundary condition for the considered axis. For traction condition,
+											value can be either &quot;t&quot;, &quot;0&quot;, &quot;free&quot;, &quot;traction&quot;, &quot;neumann&quot; or &quot;unknown&quot;. All these values have the same
+											meaning. For displacement condition, value can be either &quot;b&quot;, &quot;1&quot;, &quot;displ&quot;, &quot;displacement&quot;, &quot;fixed&quot;,
+											&quot;dirichlet&quot;, &quot;locked&quot; or &quot;imposed&quot;. All these values have the same meaning.
+											When an axis is free, it means that the provided boundary value will a traction component (along the axis)
+											since the displacement is unknown. Similarly, when the boundary condition is &quot;locked&quot;, the
+										provided value is an imposed displacement along the axis.</p>
+									</div>
+								</li>
+								<li>
+									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The boundary value for the considered axis. It can be either a constant (number or string)
+											or a callback with parameter (x,y,z), the center of the considered triangle, and returning a number.
+										If the value is a callbak, then the signature is <code>double cb(double x, double y, double z)</code>.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="setdispl" class="tsd-anchor"></a>
+					<h3>set<wbr>Displ</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Displ<span class="tsd-signature-symbol">(</span>normal<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, strike<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, dip<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in src/lib/types.arch.ts:156</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set the current displacement based on attribute names for each local axis</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>normal: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Attribute name</p>
+									</div>
+								</li>
+								<li>
+									<h5>strike: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Attribute name</p>
+									</div>
+								</li>
+								<li>
+									<h5>dip: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Attribute name</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/lib_types_arch.html">lib/types.arch</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.bemsurface.html" class="tsd-kind-icon">Bem<wbr>Surface</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="lib_types_arch.bemsurface.html#addconstraint" class="tsd-kind-icon">add<wbr>Constraint</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="lib_types_arch.bemsurface.html#getcomputeddisplacement" class="tsd-kind-icon">get<wbr>Computed<wbr>Displacement</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="lib_types_arch.bemsurface.html#setbc" class="tsd-kind-icon">setBC</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="lib_types_arch.bemsurface.html#setdispl" class="tsd-kind-icon">set<wbr>Displ</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.grid.html" class="tsd-kind-icon">Grid</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.inequality.html" class="tsd-kind-icon">Inequality</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.material.html" class="tsd-kind-icon">Material</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.model.html" class="tsd-kind-icon">Model</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.modelsolver.html" class="tsd-kind-icon">Model<wbr>Solver</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.timer.html" class="tsd-kind-icon">Timer</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="lib_types_arch.userremote.html" class="tsd-kind-icon">User<wbr>Remote</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#buildgrid" class="tsd-kind-icon">build<wbr>Grid</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#buildsurface" class="tsd-kind-icon">build<wbr>Surface</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#createconstraint" class="tsd-kind-icon">create<wbr>Constraint</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#createuserdic" class="tsd-kind-icon">create<wbr>User<wbr>Dic</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#createuserremote" class="tsd-kind-icon">create<wbr>User<wbr>Remote</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/lib_types_arch.html#createusertic" class="tsd-kind-icon">create<wbr>User<wbr>Tic</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

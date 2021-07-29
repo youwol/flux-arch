@@ -72,7 +72,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&lt;</span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a><span class="tsd-signature-symbol">&gt;</span>
+						<span class="tsd-signature-type">State</span><span class="tsd-signature-symbol">&lt;</span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">TreeViewState</span>
@@ -135,14 +135,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Tree<wbr>View<wbr>State<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, root<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.rootarchenode.html" class="tsd-signature-type" data-tsd-kind="Class">RootArcheNode</a>, environment<span class="tsd-signature-symbol">: </span><a href="lib_implementation_data.environment.html" class="tsd-signature-type" data-tsd-kind="Class">Environment</a>, emitUpdate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="lib_implementation_data.treeviewstate.html" class="tsd-signature-type" data-tsd-kind="Class">TreeViewState</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Tree<wbr>View<wbr>State<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, root<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.rootarchnode.html" class="tsd-signature-type" data-tsd-kind="Class">RootArchNode</a>, environment<span class="tsd-signature-symbol">: </span><a href="lib_implementation_data.environment.html" class="tsd-signature-type" data-tsd-kind="Class">Environment</a>, emitUpdate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="lib_implementation_data.treeviewstate.html" class="tsd-signature-type" data-tsd-kind="Class">TreeViewState</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides ImmutableTree.State&lt;ArcheNode&gt;.constructor</p>
+								<p>Overrides ImmutableTree.State&lt;ArchNode&gt;.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/9b5b9e3/src/lib/implementation/data.ts#L101">src/lib/implementation/data.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/ea17bf9/src/lib/implementation/data.ts#L101">src/lib/implementation/data.ts:101</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -151,7 +151,7 @@
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>root: <a href="lib_implementation_tree_nodes.rootarchenode.html" class="tsd-signature-type" data-tsd-kind="Class">RootArcheNode</a></h5>
+									<h5>root: <a href="lib_implementation_tree_nodes.rootarchnode.html" class="tsd-signature-type" data-tsd-kind="Class">RootArchNode</a></h5>
 								</li>
 								<li>
 									<h5>environment: <a href="lib_implementation_data.environment.html" class="tsd-signature-type" data-tsd-kind="Class">Environment</a></h5>
@@ -181,7 +181,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="directupdates_" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> direct<wbr>Updates$</h3>
-					<div class="tsd-signature tsd-kind-icon">direct<wbr>Updates$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReplaySubject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Updates</span><span class="tsd-signature-symbol">&lt;</span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<div class="tsd-signature tsd-kind-icon">direct<wbr>Updates$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReplaySubject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Updates</span><span class="tsd-signature-symbol">&lt;</span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from ImmutableTree.State.directUpdates$</p>
 						<ul>
@@ -220,14 +220,14 @@
 					<div class="tsd-signature tsd-kind-icon">resolve$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>count<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>ids<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/9b5b9e3/src/lib/implementation/data.ts#L99">src/lib/implementation/data.ts:99</a></li>
+							<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/ea17bf9/src/lib/implementation/data.ts#L99">src/lib/implementation/data.ts:99</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="root_" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> root$</h3>
-					<div class="tsd-signature tsd-kind-icon">root$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReplaySubject</span><span class="tsd-signature-symbol">&lt;</span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<div class="tsd-signature tsd-kind-icon">root$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReplaySubject</span><span class="tsd-signature-symbol">&lt;</span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from ImmutableTree.State.root$</p>
 						<ul>
@@ -238,7 +238,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="selectednode_" class="tsd-anchor"></a>
 					<h3>selected<wbr>Node$</h3>
-					<div class="tsd-signature tsd-kind-icon">selected<wbr>Node$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReplaySubject</span><span class="tsd-signature-symbol">&lt;</span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">selected<wbr>Node$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ReplaySubject</span><span class="tsd-signature-symbol">&lt;</span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from ImmutableTree.State.selectedNode$</p>
 						<ul>
@@ -252,7 +252,7 @@
 					<div class="tsd-signature tsd-kind-icon">solve$<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>count<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/9b5b9e3/src/lib/implementation/data.ts#L98">src/lib/implementation/data.ts:98</a></li>
+							<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/ea17bf9/src/lib/implementation/data.ts#L98">src/lib/implementation/data.ts:98</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -263,23 +263,23 @@
 					<a name="addchild" class="tsd-anchor"></a>
 					<h3>add<wbr>Child</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Child<span class="tsd-signature-symbol">(</span>parent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, childNode<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, emitUpdate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Child<span class="tsd-signature-symbol">(</span>parent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, childNode<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, emitUpdate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides ImmutableTree.State.addChild</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/9b5b9e3/src/lib/implementation/data.ts#L120">src/lib/implementation/data.ts:120</a></li>
+									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/ea17bf9/src/lib/implementation/data.ts#L120">src/lib/implementation/data.ts:120</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>parent: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h5>
+									<h5>parent: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h5>
 								</li>
 								<li>
-									<h5>childNode: <a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h5>
+									<h5>childNode: <a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h5>
 								</li>
 								<li>
 									<h5>emitUpdate: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
@@ -293,19 +293,19 @@
 					<a name="dropfile" class="tsd-anchor"></a>
 					<h3>drop<wbr>File</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">drop<wbr>File<span class="tsd-signature-symbol">(</span>parentNode<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, filename<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, blob<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Blob</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">drop<wbr>File<span class="tsd-signature-symbol">(</span>parentNode<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, filename<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, blob<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Blob</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/9b5b9e3/src/lib/implementation/data.ts#L136">src/lib/implementation/data.ts:136</a></li>
+									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/ea17bf9/src/lib/implementation/data.ts#L136">src/lib/implementation/data.ts:136</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>parentNode: <a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h5>
+									<h5>parentNode: <a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h5>
 								</li>
 								<li>
 									<h5>filename: <span class="tsd-signature-type">string</span></h5>
@@ -340,7 +340,7 @@
 					<a name="getchildren" class="tsd-anchor"></a>
 					<h3>get<wbr>Children</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Children<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, then<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, children<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Children<span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, then<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, children<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -353,24 +353,24 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>node: <a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h5>
+									<h5>node: <a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> then: <span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, children<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> then: <span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, children<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-signature">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-external">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, children<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>node<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, children<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>node: <a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h5>
+															<h5>node: <a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h5>
 														</li>
 														<li>
-															<h5>children: <a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a><span class="tsd-signature-symbol">[]</span></h5>
+															<h5>children: <a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a><span class="tsd-signature-symbol">[]</span></h5>
 														</li>
 													</ul>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -412,7 +412,7 @@
 					<a name="getnode" class="tsd-anchor"></a>
 					<h3>get<wbr>Node</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Node<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Node<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -428,7 +428,7 @@
 									<h5>id: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -436,7 +436,7 @@
 					<a name="getparent" class="tsd-anchor"></a>
 					<h3>get<wbr>Parent</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Parent<span class="tsd-signature-symbol">(</span>nodeId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Parent<span class="tsd-signature-symbol">(</span>nodeId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -452,7 +452,7 @@
 									<h5>nodeId: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -478,7 +478,7 @@
 					<a name="reducepath" class="tsd-anchor"></a>
 					<h3>reduce<wbr>Path</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">reduce<wbr>Path<span class="tsd-signature-symbol">(</span>start<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, extractFct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>NodeType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">reduce<wbr>Path<span class="tsd-signature-symbol">(</span>start<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, extractFct<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>NodeType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -491,7 +491,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>start: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h5>
+									<h5>start: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h5>
 								</li>
 								<li>
 									<h5>extractFct: <span class="tsd-signature-symbol">(</span>NodeType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span></h5>
@@ -523,20 +523,20 @@
 					<a name="removenode" class="tsd-anchor"></a>
 					<h3>remove<wbr>Node</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">remove<wbr>Node<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, emitUpdate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>Node<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, emitUpdate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides ImmutableTree.State.removeNode</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/9b5b9e3/src/lib/implementation/data.ts#L124">src/lib/implementation/data.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/ea17bf9/src/lib/implementation/data.ts#L124">src/lib/implementation/data.ts:124</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>target: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h5>
+									<h5>target: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h5>
 								</li>
 								<li>
 									<h5>emitUpdate: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
@@ -550,20 +550,20 @@
 					<a name="replaceattributes" class="tsd-anchor"></a>
 					<h3>replace<wbr>Attributes</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">replace<wbr>Attributes<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, newAttributes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, emitUpdate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">replace<wbr>Attributes<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, newAttributes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, emitUpdate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides ImmutableTree.State.replaceAttributes</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/9b5b9e3/src/lib/implementation/data.ts#L132">src/lib/implementation/data.ts:132</a></li>
+									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/ea17bf9/src/lib/implementation/data.ts#L132">src/lib/implementation/data.ts:132</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>target: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h5>
+									<h5>target: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h5>
 								</li>
 								<li>
 									<h5>newAttributes: <span class="tsd-signature-type">any</span></h5>
@@ -580,20 +580,20 @@
 					<a name="replacenode" class="tsd-anchor"></a>
 					<h3>replace<wbr>Node</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">replace<wbr>Node<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, newNode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, emitUpdate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">replace<wbr>Node<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, newNode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, emitUpdate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides ImmutableTree.State.replaceNode</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/9b5b9e3/src/lib/implementation/data.ts#L128">src/lib/implementation/data.ts:128</a></li>
+									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/ea17bf9/src/lib/implementation/data.ts#L128">src/lib/implementation/data.ts:128</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>target: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h5>
+									<h5>target: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h5>
 								</li>
 								<li>
 									<h5>newNode: <span class="tsd-signature-type">any</span></h5>
@@ -610,7 +610,7 @@
 					<a name="reset" class="tsd-anchor"></a>
 					<h3>reset</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">reset<span class="tsd-signature-symbol">(</span>root<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a>, emitUpdate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">reset<span class="tsd-signature-symbol">(</span>root<span class="tsd-signature-symbol">: </span><a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a>, emitUpdate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -623,7 +623,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>root: <a href="lib_implementation_tree_nodes.archenode.html" class="tsd-signature-type" data-tsd-kind="Class">ArcheNode</a></h5>
+									<h5>root: <a href="lib_implementation_tree_nodes.archnode.html" class="tsd-signature-type" data-tsd-kind="Class">ArchNode</a></h5>
 								</li>
 								<li>
 									<h5>emitUpdate: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
@@ -679,7 +679,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/9b5b9e3/src/lib/implementation/data.ts#L101">src/lib/implementation/data.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/youwol/flux-arch/blob/ea17bf9/src/lib/implementation/data.ts#L101">src/lib/implementation/data.ts:101</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
