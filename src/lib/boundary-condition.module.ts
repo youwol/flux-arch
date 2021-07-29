@@ -52,7 +52,7 @@ export namespace ModuleBoundaryCondition {
         readonly strikeAxis: AxisBC = new AxisBC({type:'free', field: "return (x,y,z) => 0"})
 
         @Property({ description: "" })
-        readonly normalAxis: AxisBC = new AxisBC({type:'free', field: "return (x,y,z) => -9.81*z"})
+        readonly normalAxis: AxisBC = new AxisBC({type:'free', field: "return (x,y,z) => 0"})
 
         @Property({ description: "emit initial value" })
         readonly emitInitialValue : boolean = true
