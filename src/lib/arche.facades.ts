@@ -169,7 +169,10 @@ export namespace ArcheFacade {
     }
 
     export class Solution{
-        constructor(public readonly solutionId: string, public readonly workerId: string){}
+        constructor(
+            public readonly model: Model,
+            public readonly burgers: Array<SharedArrayBuffer>
+            ){}
     }
 
 
