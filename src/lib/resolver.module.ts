@@ -11,45 +11,67 @@ import { forkJoin, Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { KeplerMesh } from '@youwol/flux-kepler';
 import { createFluxThreeObject3D, defaultMaterial } from '@youwol/flux-three';
+import { WorkerContext } from '@youwol/flux-core/src/lib/worker-pool';
+import { ProgressViewData } from './views/progress.view';
+import { access } from 'node:fs';
 
 export namespace ModuleResolver {
 
+    enum PropertyTarget{
+        Stress = 'Stress',
+        Displ = 'Displ',
+        Strain = 'Strain'
+    }
+
     interface WorkerArguments {
         positions : Float32Array
-        modelId: string
+        solution: ArcheFacade.Solution,
+        property: PropertyTarget
     }
+
     function resolveInWorker( { args, taskId, context, workerScope }:{
         args: WorkerArguments, 
         taskId: string,
         workerScope: any,
-        context: Context
+        context: WorkerContext
     }){
         context.info("start resolving the solution on provided positions",
-            {positions: args.positions,
-            modelId: args.modelId})
-            
-        let positions = args.positions
-        let ptCount =  positions.length / 3
-        context.info(`mesh with ${ptCount} points`)
-        let model = workerScope[args.modelId]
-        let sharedArray = new SharedArrayBuffer(6 * ptCount * 4 )
-        let gridResult = new Float32Array( sharedArray )
-        for(let i=0;i<ptCount;i++){
-            let [x,y,z] = [positions[3*i], positions[3*i+1], positions[3*i+2]]
-            let stress = model.stressAt(x,y,z)
-            stress.forEach( (v,j) => {
-                gridResult[6*i + j] = v 
+            {   positions: args.positions, 
+                scene: args.solution.model,
+                burgers: args.solution.burgers
             })
-        }
-        context.info("Done resolving the solution on provided positions",
-        {   positions: args.positions,
-            stress:gridResult,
-            modelId: args.modelId
+        let typedArrays = args.solution.burgers.map( burger => new Float64Array(burger) )
+        let arch = workerScope["arche"]
+        let archFactory = workerScope["@youwol/flux-arche.archeFactory"]
+        let positions = args.positions
+
+        let model = archFactory("ArcheModelNode", args.solution.model, arch)
+        context.info("Recreate solution", {typedArrays})
+        const solution = arch.Solution.create(model, typedArrays)
+
         solution.onProgress( (ptCount, progress) => {
             context.info(`${args.property} progress: ${progress}%`)  
             context.sendData({progress})
         })
-        return gridResult
+
+        context.info(`Compute ${args.property}`)
+        let computeDict = {
+            'Stress' : () => solution.stress(positions),
+            'Displ' : () => solution.displ(positions),
+            'Strain' : () => solution.strain(positions)            
+        }
+        try{
+            let property = computeDict[args.property]()
+            context.info("Done resolving the solution on provided positions",
+                {   positions: args.positions,
+                    [args.property]: property
+                })
+            return property
+        }
+        catch(e){
+            console.error(e) 
+            throw e
+        }
     }
 
     
@@ -70,7 +92,31 @@ export namespace ModuleResolver {
         @Property({ description: "Display name" })
         readonly displayName: string = "Resolved"
 
-        constructor(params: { objectId?: string, displayName?: string } = {}) {
+        @Property({ description: "Compute stress" })
+        readonly stress: boolean = true
+
+        @Property({ description: "Compute strain" })
+        readonly strain: boolean = true
+
+        @Property({ description: "Compute displacement" })
+        readonly displ: boolean = true
+
+        getTargetProperties() : PropertyTarget[]{
+            return [
+                this.stress ? PropertyTarget.Stress : undefined,
+                this.strain ? PropertyTarget.Strain : undefined,
+                this.displ ? PropertyTarget.Displ : undefined,
+            ].filter( d => d)
+        }
+
+        constructor(params: { 
+            objectId?: string, 
+            displayName?: string, 
+            stress?:boolean, 
+            strain?:boolean, 
+            displ?:boolean} = 
+            {}
+            ) {
             Object.assign(this, params)
         }
     }
@@ -78,7 +124,8 @@ export namespace ModuleResolver {
     let contractSolution = expectSingle({
         when: expectInstanceOf({
             typeName: "Solution",
-            Type: ArcheFacade.Solution
+            Type: ArcheFacade.Solution,
+            attNames:["solution"]
         })
     })
     
@@ -116,8 +163,8 @@ export namespace ModuleResolver {
         pack: pack,
         namespace: ModuleResolver,
         id: "ModuleResolver",
-        displayName: "Resolver",
-        description: "Arche resolver"
+        displayName: "Post-process",
+        description: "Arche post-process"
     })
     @BuilderView({
         namespace: ModuleResolver,
@@ -145,12 +192,32 @@ export namespace ModuleResolver {
         resolve(solution: ArcheFacade.Solution, meshes: Mesh[], configuration: PersistentData, context: Context){
 
             let solutions$ = meshes.map( (mesh: Mesh) => {
-                return this.resolveMesh$(solution, mesh, context)
-            })
+                return configuration
+                .getTargetProperties()
+                .map( property => this.resolveMesh$(property, solution, mesh, context))
+            }).flat()
+
             forkJoin(solutions$)
             .subscribe(
-                (keplerObjects) => {
+                (allDfs: Array<[Mesh, DataFrame, PropertyTarget]>) => {
                 
+                    let keplerObjects = meshes.map( (mesh) => {
+                        let series = allDfs
+                        .filter( ([m]) => mesh === m)
+                        .reduce( (acc,[,df]) => ({...acc, ...df.series}), {})
+                        let df = DataFrame.create({
+                            series
+                        })
+                        context.info("Dataframe created", df)
+                        let keplerMesh = new KeplerMesh(mesh.geometry, defaultMaterial(), df)
+                        context.info("Mesh created", keplerMesh)
+                        let obj = createFluxThreeObject3D({
+                            object: keplerMesh,
+                            id:mesh.name+"_resolved",
+                            displayName: mesh.userData.displayName+" resolved"
+                        })
+                        return obj
+                    })
                     let group = new Group()
                     group.add(...keplerObjects)
                     let obj = createFluxThreeObject3D({
@@ -167,55 +234,52 @@ export namespace ModuleResolver {
             })
         }
 
-        resolveMesh$( solution: ArcheFacade.Solution, mesh:Mesh, context: Context): Observable<KeplerMesh>{
+        resolveMesh$( 
+            property: PropertyTarget, 
+            solution: ArcheFacade.Solution, 
+            mesh:Mesh, 
+            context: Context): Observable<[Mesh, DataFrame, PropertyTarget]>{
 
 
             let workerPool = this.environment.workerPool
             
-            return context.withChild("resolve on a mesh", (context) => {
+            return context.withChild(`resolve ${property} on mesh`, (context) => {
 
                 context.info("Input mesh", new Mesh(mesh.geometry, new MeshStandardMaterial({wireframe:true})) )
                 let positions = mesh.geometry.getAttribute('position').array as Float32Array
                 let view = new Float32Array(new SharedArrayBuffer( 4 * positions.length ))
                 view.set(positions,0)
 
-                let stream$ = workerPool.schedule<WorkerArguments>({
+                let channel$ = workerPool.schedule<WorkerArguments>({
                     title: 'RESOLVE',
                     entryPoint: resolveInWorker,
-                    targetWorkerId: solution.workerId,
                     args:{
-                        modelId: solution.solutionId,
-                        positions: view
+                        solution,
+                        positions: view,
+                        property
                     },
                     context
                 })
-                
-                return stream$.pipe( 
                 let progress$ = channel$.pipe( 
                     filter( ({type}) => type == "Data"),
                     map( ({data}) => data.progress)
                 )
                 let buildingPlot = new ProgressViewData(progress$)
                 context.info("Post-process progress", buildingPlot)
+
+                return channel$.pipe( 
                     filter( ({type}) => type == "Exit"),
                     map( ({data}) => {
-
+                        
                         let df = DataFrame.create({
                             series:{
-                                stress: Serie.create({ array: data.result, itemSize: 6 }),
+                                [property]: Serie.create({ array: data.result, itemSize: property == PropertyTarget.Displ ? 3 : 6 }),
                                 positions: Serie.create({ array: positions, itemSize: 3 })
                             }                  
                         })
                         context.info("Dataframe created", df)
-                        let keplerMesh = new KeplerMesh(mesh.geometry, defaultMaterial(), df)
-                        let obj = createFluxThreeObject3D({
-                            object: keplerMesh,
-                            id:mesh.name+"_resolved",
-                            displayName: mesh.userData.displayName+" resolved"
-                        })
-                        context.info("Mesh created", mesh)
 
-                        return obj as KeplerMesh
+                        return [mesh,df,property]
                     })
                 )
             })
