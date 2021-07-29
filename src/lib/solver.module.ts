@@ -1,10 +1,17 @@
 
 
 
-import { arche, pack } from './main';
-import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, freeContract, Context, ModuleError, expectInstanceOf, expectSingle } from '@youwol/flux-core'
+import { pack } from './main';
+import { Flux, BuilderView, ModuleFlux, Pipe, Schema, Property, 
+    Context, ModuleError, expectInstanceOf, expectSingle } from '@youwol/flux-core'
 import { ArcheFacade } from './arche.facades';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
+import { WorkerContext } from '@youwol/flux-core/src/lib/worker-pool';
+import { ProgressViewData, ConvergencePlotData } from './views/progress.view';
+import { BufferAttribute, BufferGeometry, Group, Object3D } from 'three';
+import { DataFrame, Serie } from '@youwol/dataframe';
+import { KeplerMesh } from '@youwol/flux-kepler';
+import { createFluxThreeObject3D, defaultMaterial } from '@youwol/flux-three';
 
 export namespace ModuleSolver {
 
@@ -16,7 +23,7 @@ export namespace ModuleSolver {
         args: WorkerArguments, 
         taskId: string,
         workerScope: any,
-        context: Context
+        context: WorkerContext
     }) {
         let arche = workerScope["arche"]
 
@@ -31,8 +38,7 @@ export namespace ModuleSolver {
             args.model.solver.parameters.maxIteration
             )
 
-        context.info("start solver")
-        solver.run()
+        context.info("Start solver")
         solver.onProgress((a, b, step)=> {
             if(step===1){
                 context.info(`Building system: ${b}%`) 
@@ -43,11 +49,20 @@ export namespace ModuleSolver {
                 context.sendData({step:'IteratingStep', iteration:a, residue:b})
             }
         })
+        try{
+            let solution = solver.run()
+            context.info("Solver done") 
 
-        context.info("solver done")
-        workerScope[taskId] = model
-        
-        return taskId
+            let burgers = solution.burgers(true, true)
+            let burgersDisplay = solution.burgers(true, false)
+
+            return {burgers, burgersDisplay}
+        }
+        catch(e){
+            console.error(e) 
+            console.log(e)
+            throw e
+        }
     }
 
 
@@ -68,6 +83,9 @@ export namespace ModuleSolver {
 
         @Property({ description: "Tolerance" })
         readonly tolerance: number = 1e-9
+
+        @Property({ description: "Id of the object3D created that represents displacements" })
+        readonly burgersObjectId: string = "burgersObject3D"
 
         getSolver(){
             return new ArcheFacade.Solver( 
@@ -110,32 +128,29 @@ export namespace ModuleSolver {
                 id: "input",
                 description: `Triggering this input execute the solver using the provided scene.`,
                 contract: contractScene,
-                onTriggered: ({ data, configuration, context }) => this.solve(data, configuration, context)
+                onTriggered: ({ data, configuration, context }) => this.solveMultiThreaded(data, configuration, context)
             })
             this.solution$ = this.addOutput({ id: "solution" })
-        }
-
-        solve(scene: ArcheFacade.Scene, config: PersistentData, context: Context) {
-
-            this.solveMultiThreaded(scene, config, context)
         }
 
         solveMultiThreaded(scene: ArcheFacade.Scene, configuration: PersistentData, context: Context) {
 
             let workerPool = this.environment.workerPool
-            workerPool.schedule<WorkerArguments>({
+            let model = new ArcheFacade.Model({
+                surfaces: scene.surfaces,
+                material: scene.material,
+                remotes: scene.remotes,
+                solver: configuration.getSolver()
+            })
+            let channel$ = workerPool.schedule<WorkerArguments>({
                 title: 'SOLVE',
                 entryPoint: solveInWorker,
                 args:{ 
-                    model: new ArcheFacade.Model({
-                        surfaces: scene.surfaces,
-                        material: scene.material,
-                        remotes: scene.remotes,
-                        solver: configuration.getSolver()
-                    })
+                    model
                 },
                 context
-            }).pipe( 
+            })
+
             let buildingProgress$ = channel$.pipe( 
                 filter( ({type, data}) => type == "Data" && data.step == "BuildingStep"),
                 map( ({data}) => data.progress)
@@ -151,12 +166,16 @@ export namespace ModuleSolver {
                 this.environment)
             context.info("Convergence progress", convergencePlot)
 
+            channel$.pipe( 
                 filter( ({type}) => type == "Exit")
             ).subscribe( 
                 ({data}) => {
                     context.info("Result retrieved", data.result)
                     this.solution$.next({ 
-                        data: new ArcheFacade.Solution(data.result, data.workerId), 
+                        data: { 
+                            solution: new ArcheFacade.Solution(model, data.result.burgers),
+                            object: this.createBurgersObjects(scene, data.result.burgersDisplay,configuration, context)
+                        }, 
                         context 
                     })
                     context.terminate()
@@ -166,6 +185,48 @@ export namespace ModuleSolver {
                     context.terminate()
                 }
             )
+        }
+
+
+        createBurgersObjects(
+            scene:ArcheFacade.Scene, 
+            results: Array<ArrayBuffer>, 
+            configuration: PersistentData,
+            context: Context ): Object3D {
+            
+            return context.withChild("Create 3D objects of discontinuities displacement", (ctx) => {
+
+                let keplerObjects = scene.surfaces.map( (surface, i) => {
+                    let geometry = new BufferGeometry()
+                    let positions = new BufferAttribute(surface.positions,3)
+                    geometry.setAttribute('position',positions)
+                    geometry.setIndex(new BufferAttribute(surface.indexes,1))
+                    let array = new Float64Array(results[i])
+                    let df = DataFrame.create({
+                        series:{ 
+                            burgers: Serie.create({
+                                array,
+                                itemSize:3 
+                            })
+                        }
+                    })
+                    let keplerMesh = new KeplerMesh(geometry, defaultMaterial(), df)
+                    let obj = createFluxThreeObject3D({
+                        object: keplerMesh,
+                        id:`${configuration.burgersObjectId}_${i}`,
+                        displayName:`${configuration.burgersObjectId}_${i}`
+                    })
+                    return obj
+                })
+                let group = new Group()
+                group.add(...keplerObjects)
+                let obj = createFluxThreeObject3D({
+                    object: group,
+                    id: configuration.burgersObjectId,
+                    displayName: configuration.burgersObjectId
+                }) as Group
+                return obj
+            })
         }
     }
 }
