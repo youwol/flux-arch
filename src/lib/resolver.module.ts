@@ -45,6 +45,9 @@ export namespace ModuleResolver {
         {   positions: args.positions,
             stress:gridResult,
             modelId: args.modelId
+        solution.onProgress( (ptCount, progress) => {
+            context.info(`${args.property} progress: ${progress}%`)  
+            context.sendData({progress})
         })
         return gridResult
     }
@@ -188,6 +191,12 @@ export namespace ModuleResolver {
                 })
                 
                 return stream$.pipe( 
+                let progress$ = channel$.pipe( 
+                    filter( ({type}) => type == "Data"),
+                    map( ({data}) => data.progress)
+                )
+                let buildingPlot = new ProgressViewData(progress$)
+                context.info("Post-process progress", buildingPlot)
                     filter( ({type}) => type == "Exit"),
                     map( ({data}) => {
 

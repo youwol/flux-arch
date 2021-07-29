@@ -33,6 +33,16 @@ export namespace ModuleSolver {
 
         context.info("start solver")
         solver.run()
+        solver.onProgress((a, b, step)=> {
+            if(step===1){
+                context.info(`Building system: ${b}%`) 
+                context.sendData({step:'BuildingStep', progress:b})
+            }
+            else{
+                context.info(`Iteration ${a}: ${b.toExponential(4)}`)
+                context.sendData({step:'IteratingStep', iteration:a, residue:b})
+            }
+        })
 
         context.info("solver done")
         workerScope[taskId] = model
@@ -126,6 +136,21 @@ export namespace ModuleSolver {
                 },
                 context
             }).pipe( 
+            let buildingProgress$ = channel$.pipe( 
+                filter( ({type, data}) => type == "Data" && data.step == "BuildingStep"),
+                map( ({data}) => data.progress)
+            )
+            let convergenceProgress$ = channel$.pipe( 
+                filter( ({type, data}) => type == "Data" && data.step == "IteratingStep"),
+                map( ({data}) => data)
+            )
+            let buildingPlot = new ProgressViewData(buildingProgress$)
+            context.info("Building system progress", buildingPlot)
+
+            let convergencePlot = new ConvergencePlotData(convergenceProgress$,configuration.tolerance, configuration.maxIteration,
+                this.environment)
+            context.info("Convergence progress", convergencePlot)
+
                 filter( ({type}) => type == "Exit")
             ).subscribe( 
                 ({data}) => {
