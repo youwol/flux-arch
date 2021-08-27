@@ -174,7 +174,7 @@ export namespace ModuleSolver {
                     this.solution$.next({ 
                         data: { 
                             solution: new ArchFacade.Solution(model, data.result.burgers),
-                            object: this.createBurgersObjects(scene, data.result.burgersDisplay,configuration, context)
+                            burgersObject3D: this.createBurgersObjects(scene, data.result.burgersDisplay,configuration, context)
                         }, 
                         context 
                     })
