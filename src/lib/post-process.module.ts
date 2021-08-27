@@ -205,15 +205,19 @@ export namespace ModulePostProcess {
                         let series = allDfs
                         .filter( ([m]) => mesh === m)
                         .reduce( (acc,[,df]) => ({...acc, ...df.series}), {})
+                        let id = `${configuration.objectId}_${i}`
                         let df = DataFrame.create({
-                            series
+                            series,
+                            userData:{
+                                name: id
+                            }
                         })
                         context.info("Dataframe created", df)
                         let keplerMesh = new KeplerMesh(mesh.geometry, defaultMaterial(), df)
                         context.info("Mesh created", keplerMesh)
                         let obj = createFluxThreeObject3D({
                             object: keplerMesh,
-                            id:`${configuration.objectId}_${i}`,
+                            id:id,
                             displayName:`${configuration.displayName}_${i}`
                         })
                         return obj
