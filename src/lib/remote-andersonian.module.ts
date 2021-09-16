@@ -19,19 +19,19 @@ export namespace ModuleRemoteAndersonian {
     export class PersistentData {
 
         @Property({ 
-            description: "The magnitude of the maximum horizontal stress value.",
+            description: "The magnitude of the maximum horizontal stress.",
             min: 0
         })
         readonly HSigma:  number = 0
 
         @Property({ 
-            description: "The magnitude of the minimum horizontal stress value.",
+            description: "The magnitude of the minimum horizontal stress.",
             min: 0
         })
         readonly hSigma: number = 0
 
         @Property({ 
-            description: "The magnitude of the vertical stress value.",
+            description: "The magnitude of the vertical stress.",
             min:0
         })
         readonly vSigma: number = 0
