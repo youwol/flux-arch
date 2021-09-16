@@ -18,19 +18,32 @@ export namespace ModuleRemoteAndersonian {
     })
     export class PersistentData {
 
-        @Property({ description: "" })
+        @Property({ 
+            description: "The magnitude of the maximum horizontal stress value.",
+            min: 0
+        })
         readonly HSigma:  number = 0
 
-        @Property({ description: "" })
+        @Property({ 
+            description: "The magnitude of the minimum horizontal stress value.",
+            min: 0
+        })
         readonly hSigma: number = 0
 
-        @Property({ description: "" })
+        @Property({ 
+            description: "The magnitude of the vertical stress value.",
+            min:0
+        })
         readonly vSigma: number = 0
 
-        @Property({ description: "" })
+        @Property({ 
+            description: "The orientation in degrees of the maximum horizontal stress according to the North (global y-axis) and clock-wise.",
+            min:0,
+            max:360
+        })
         readonly theta: number = 0
 
-        @Property({ description: "emit initial value" })
+        @Property({ description: "Whether or not the module emit the saved configuration when the module is loaded." })
         readonly emitInitialValue : boolean = true
 
         constructor(params : {

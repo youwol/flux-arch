@@ -16,16 +16,26 @@ export namespace ModuleMaterial {
     })
     export class PersistentData {
 
-        @Property({ description: "Poisson coefficient" })
+        @Property({ 
+            description: "Poisson ratio",
+            min:0,
+            max:1 
+        })
         readonly poisson: number = 0.25
 
-        @Property({ description: "Young modulus" })
+        @Property({ 
+            description: "Young modulus",
+            min: 0
+        })
         readonly young: number = 1
 
-        @Property({ description: "Density" })
+        @Property({ 
+            description: "Density",
+            min: 0
+        })
         readonly density: number = 1000
 
-        @Property({ description: "emit initial value" })
+        @Property({ description: "Whether or not the module emit the saved configuration when the module is loaded." })
         readonly emitInitialValue : boolean = true
 
         constructor(params : 

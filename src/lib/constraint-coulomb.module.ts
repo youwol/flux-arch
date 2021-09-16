@@ -12,13 +12,20 @@ export namespace ModuleConstraintCoulomb {
     })
     export class PersistentData {
 
-        @Property({description:""})
+        @Property({
+            description:"The static sliding friction coefficient.",
+            min: 0,
+            max: 1
+        })
         friction: number = 0
 
-        @Property({description:""})
+        @Property({
+            description:"The cohesion",
+            min: 0
+        })
         cohesion: number = 0
 
-        @Property({description:""})
+        @Property({description:"Whether or not the module emit the saved configuration when the module is loaded."})
         emitInitialValue: boolean = true
 
         constructor(params : {

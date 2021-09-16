@@ -78,10 +78,16 @@ export namespace ModuleSolver {
         @Property({ description: "Solver type", enum: ["seidel"] })
         readonly type: string = 'seidel'
 
-        @Property({ description: "Maximum iteration" })
+        @Property({ 
+            description: "Maximum number of iteration",
+            min:0
+        })
         readonly maxIteration: number = 200
 
-        @Property({ description: "Tolerance" })
+        @Property({ 
+            description: "Tolerance",
+            min:0
+        })
         readonly tolerance: number = 1e-9
 
         @Property({ description: "Id of the object3D created that represents displacements" })

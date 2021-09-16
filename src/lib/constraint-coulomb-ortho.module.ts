@@ -11,16 +11,28 @@ export namespace ModuleConstraintCoulombOrtho {
     })
     export class PersistentData {
 
-        @Property({description:""})
+        @Property({
+            description:"The rotation angle (in degrees) of the orthotropy",
+            min: 0,
+            max: 180
+        })
         theta: number = 0
 
-        @Property({description:""})
+        @Property({
+            description:"The static sliding friction coefficient along the dip axis",
+            min: 0,
+            max: 1
+        })
         frictionDip: number = 0
 
-        @Property({description:""})
+        @Property({
+            description:"The static sliding friction coefficient along the strike axis",
+            min: 0,
+            max: 1
+        })
         frictionStrike: number = 0
         
-        @Property({description:""})
+        @Property({description:"Whether or not the module emit the saved configuration when the module is loaded."})
         emitInitialValue: boolean = true
 
         constructor( params: 
