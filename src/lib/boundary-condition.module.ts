@@ -69,9 +69,9 @@ export namespace ModuleBoundaryCondition {
             if(dipAxis)
                 this.dipAxis = new AxisBC(dipAxis) 
             if(strikeAxis)
-                this.dipAxis = new AxisBC(strikeAxis) 
+                this.strikeAxis = new AxisBC(strikeAxis) 
             if(normalAxis)
-                this.dipAxis = new AxisBC(normalAxis)
+                this.normalAxis = new AxisBC(normalAxis)
         }
     }
 
