@@ -1,6 +1,6 @@
 {
     "name": "@youwol/flux-arch",
-    "version": "0.0.7",
+    "version": "0.0.7-next",
     "description": "Collection of modules for geo-mechanical analysis using 3D Displacement Discontinuity Method (DDM)",
     "author": "",
     "keywords": [
